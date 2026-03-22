@@ -1,13 +1,11 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Sparkles, Eye, EyeOff, ArrowRight } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import { ROUTES, APP_NAME } from '@/utils/constants'
+import { ROUTES } from '@/utils/constants'
 
 export function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -34,107 +32,130 @@ export function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-dark-950 flex items-center justify-center px-6">
-      {/* Background glows */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-primary-500/5 rounded-full blur-[120px]" />
-      </div>
-
-      <div className="relative w-full max-w-md animate-scale-in">
-        {/* Logo */}
-        <div className="flex items-center justify-center gap-3 mb-10">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary-400 to-primary-600 flex items-center justify-center">
-            <Sparkles className="w-6 h-6 text-dark-950" />
-          </div>
-          <span className="text-2xl font-bold text-white tracking-tight">{APP_NAME}</span>
-        </div>
-
-        {/* Card */}
-        <div className="card p-8">
-          <div className="text-center mb-8">
-            <h1 className="text-2xl font-bold text-white mb-2">Bem-vindo de volta</h1>
-            <p className="text-dark-300 text-sm">Entre na sua conta para continuar</p>
-          </div>
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {error && (
-              <div className="p-3 rounded-xl bg-danger-600/10 border border-danger-600/20 text-danger-500 text-sm text-center animate-fade-in">
-                {error}
-              </div>
-            )}
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-dark-200 mb-2">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="seu@email.com"
-                className="input-field"
-                required
-              />
+    <>
+      <style dangerouslySetInnerHTML={{__html: `
+        .font-headline { font-family: 'Space Grotesk', sans-serif; }
+        .font-body { font-family: 'Inter', sans-serif; }
+        .font-label { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+          display: inline-block;
+          line-height: 1;
+        }
+        .brand-glow {
+          box-shadow: 0 0 40px rgba(251, 191, 36, 0.2);
+        }
+      `}} />
+      <main className="bg-[#0c0c0c] text-[#e5e2e1] font-body min-h-screen flex flex-col md:flex-row-reverse overflow-hidden">
+        {/* Right Column (Visual) */}
+        <section className="hidden md:flex md:w-1/2 items-center justify-center p-12 bg-zinc-950 border-l border-zinc-900/50 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(251,191,36,0.05)_0%,_transparent_70%)]"></div>
+          <div className="relative z-10 text-center flex flex-col items-center">
+            <div className="w-32 h-32 bg-[#fbbf24] rounded-3xl flex items-center justify-center brand-glow mb-10">
+              <span className="material-symbols-outlined text-black text-6xl">content_cut</span>
             </div>
+            <h2 className="font-headline text-4xl lg:text-5xl font-bold tracking-tighter text-white mb-2 leading-tight uppercase">
+              Gerencie sua
+            </h2>
+            <h2 className="font-headline text-4xl lg:text-5xl font-bold tracking-tighter text-[#fbbf24] mb-6 leading-tight uppercase">
+              Barbearia
+            </h2>
+            <p className="text-[#a0a0a0] text-base lg:text-lg font-normal max-w-sm opacity-60">
+              Dashboard completo, agendamentos em tempo real e muito mais.
+            </p>
+          </div>
+        </section>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-dark-200 mb-2">
-                Senha
-              </label>
-              <div className="relative">
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="input-field pr-12"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-dark-400 hover:text-dark-200 transition-colors"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-end">
-              <Link
-                to={ROUTES.FORGOT_PASSWORD}
-                className="text-sm text-primary-400 hover:text-primary-300 transition-colors"
-              >
-                Esqueceu a senha?
+        {/* Left Column (Login Form) */}
+        <section className="flex-grow flex flex-col items-center justify-center p-8 md:p-16 bg-[#0c0c0c] min-h-screen">
+          <div className="w-full max-w-md space-y-10">
+            {/* Back Link */}
+            <div className="mb-4">
+              <Link to="/" className="flex items-center gap-2 text-[#a0a0a0] hover:text-[#fbbf24] transition-colors text-sm">
+                <span className="material-symbols-outlined text-sm">arrow_back</span>
+                Voltar ao início
               </Link>
             </div>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary w-full justify-center py-3 text-base disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? (
-                <div className="w-5 h-5 border-2 border-dark-950 border-t-transparent rounded-full animate-spin" />
-              ) : (
-                <>
-                  Entrar
-                  <ArrowRight className="w-5 h-5" />
-                </>
-              )}
-            </button>
-          </form>
+            {/* Header */}
+            <div className="space-y-6">
+              <div className="flex items-center gap-2">
+                <div className="bg-[#fbbf24] p-1.5 rounded-lg">
+                  <span className="material-symbols-outlined text-black text-xl">content_cut</span>
+                </div>
+                <span className="font-headline text-2xl font-black tracking-tight text-white uppercase italic">agendai</span>
+              </div>
+              <div>
+                <h1 className="font-headline text-3xl font-bold tracking-tight text-white mb-2 uppercase">Bem-vindo de volta</h1>
+                <p className="text-[#a0a0a0] text-sm">Entre na sua conta para acessar o painel</p>
+              </div>
+            </div>
 
-          <p className="text-center text-sm text-dark-400 mt-6">
-            Não tem uma conta?{' '}
-            <Link to={ROUTES.REGISTER} className="text-primary-400 hover:text-primary-300 font-medium transition-colors">
-              Cadastre-se grátis
-            </Link>
-          </p>
-        </div>
-      </div>
-    </div>
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-sm text-center animate-fade-in font-body">
+                  {error}
+                </div>
+              )}
+
+              {/* Email Field */}
+              <div className="space-y-2">
+                <label className="block font-medium text-sm text-[#e5e2e1]">Email</label>
+                <input
+                  className="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg py-3.5 px-4 text-[#e5e2e1] placeholder:text-zinc-600 focus:ring-1 focus:ring-[#fbbf24]/40 focus:border-[#fbbf24]/40 transition-all outline-none"
+                  placeholder="seu@email.com"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </div>
+
+              {/* Password Field */}
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <label className="block font-medium text-sm text-[#e5e2e1]">Senha</label>
+                  <Link
+                    to={ROUTES.FORGOT_PASSWORD}
+                    className="text-xs font-medium text-[#fbbf24] hover:underline transition-colors"
+                  >
+                    Esqueceu a senha?
+                  </Link>
+                </div>
+                <input
+                  className="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg py-3.5 px-4 text-[#e5e2e1] placeholder:text-zinc-600 focus:ring-1 focus:ring-[#fbbf24]/40 focus:border-[#fbbf24]/40 transition-all outline-none"
+                  placeholder="••••••••"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </div>
+
+              <div className="pt-2">
+                <button
+                  className="w-full bg-[#fbbf24] text-black font-headline font-bold py-4 rounded-lg hover:bg-amber-400 active:scale-[0.98] transition-all tracking-wide text-sm flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed uppercase"
+                  type="submit"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <div className="w-6 h-6 border-2 border-black/30 border-t-black rounded-full animate-spin" />
+                  ) : (
+                    'Entrar'
+                  )}
+                </button>
+              </div>
+            </form>
+
+            <div className="text-center">
+              <p className="text-sm text-[#a0a0a0]">
+                Não tem uma conta? <Link to={ROUTES.REGISTER} className="text-[#fbbf24] font-semibold hover:underline">Criar conta grátis</Link>
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </>
   )
 }
