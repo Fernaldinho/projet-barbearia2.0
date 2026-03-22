@@ -17,7 +17,7 @@ export function LandingPage() {
         {/* TopNavBar */}
         <nav className="fixed top-0 w-full z-50 bg-[#131313]/90 backdrop-blur-xl border-b border-white/10 shadow-[0_0_40px_rgba(229,226,225,0.06)]">
           <div className="flex justify-between items-center max-w-7xl mx-auto px-8 py-4">
-            <span className="font-headline text-2xl font-bold tracking-tighter text-[#ffbf00]">The Nocturnal Atelier</span>
+            <span className="font-headline text-2xl font-bold tracking-tighter text-[#ffbf00]">agendai</span>
             <div className="hidden md:flex items-center space-x-8 font-headline text-sm tracking-widest uppercase">
               <a className="text-[#ffbf00] border-b-2 border-[#ffbf00] pb-1" href="#home">Home</a>
               <a className="text-neutral-400 hover:text-white transition-colors" href="#features">Features</a>
@@ -203,7 +203,7 @@ export function LandingPage() {
             </div>
             <div className="relative z-10 max-w-4xl mx-auto px-8 text-center pt-10">
               <h2 className="font-headline text-4xl md:text-6xl mb-8 leading-tight">Pronto para transformar sua experiência?</h2>
-              <p className="font-body text-[#d4c5ab] text-lg mb-10">Junte-se a centenas de barbearias que já modernizaram sua gestão com o Atelier.</p>
+              <p className="font-body text-[#d4c5ab] text-lg mb-10">Junte-se a centenas de barbearias que já modernizaram sua gestão com o agendai.</p>
               <div className="flex justify-center">
                 <Link to={ROUTES.REGISTER} className="gold-gradient text-[#261a00] px-12 py-5 rounded-sm font-bold uppercase tracking-widest text-sm shadow-[0_20px_50px_rgba(255,191,0,0.2)] hover:scale-105 active:scale-95 transition-transform duration-200">
                   Criar minha conta grátis
@@ -218,7 +218,7 @@ export function LandingPage() {
         <footer className="bg-[#0a0a0a] w-full py-16 px-8 border-t border-white/5">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
             <div className="col-span-1 md:col-span-1">
-              <span className="font-headline text-xl text-[#ffbf00] mb-4 block">The Nocturnal Atelier</span>
+              <span className="font-headline text-xl text-[#ffbf00] mb-4 block">agendai</span>
               <p className="font-body text-xs tracking-wide text-neutral-500 leading-relaxed max-w-xs">
                 Software de gestão para estabelecimentos que valorizam o ritual, a tradição e a tecnologia.
               </p>
@@ -250,7 +250,7 @@ export function LandingPage() {
           </div>
           <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="font-body text-[10px] tracking-wide text-neutral-500">
-              © {new Date().getFullYear()} The Nocturnal Atelier. Built for the Modern Heirloom.
+              © {new Date().getFullYear()} agendai. Built for Efficiency.
             </p>
           </div>
         </footer>
