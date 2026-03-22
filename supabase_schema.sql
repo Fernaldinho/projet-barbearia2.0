@@ -21,11 +21,10 @@ CREATE TABLE companies (
   logo_url TEXT,
   address TEXT,
   plan TEXT DEFAULT 'free',
+  created_by UUID REFERENCES auth.users(id),
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-
--- Table: users (Public Profile linked to Auth)
 CREATE TABLE users (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
@@ -124,17 +123,17 @@ RETURNS UUID AS $$
   SELECT company_id FROM public.users WHERE id = auth.uid();
 $$ LANGUAGE sql STABLE SECURITY DEFINER;
 
--- Policies for companies (Users can only see/update their own company)
+-- Policies for companies (Users can see/update their own company OR companies they created)
 CREATE POLICY "Users can view their own company" ON companies 
-  FOR SELECT USING (id = get_my_company());
+  FOR SELECT USING (id = get_my_company() OR created_by = auth.uid());
 
 CREATE POLICY "Owners can update their company" ON companies 
-  FOR UPDATE USING (id = get_my_company());
+  FOR UPDATE USING (id = get_my_company() OR created_by = auth.uid());
 
 -- Allow authenticated users to create a company (needed for onboarding)
 CREATE POLICY "Authenticated users can create companies" ON companies
   FOR INSERT TO authenticated
-  WITH CHECK (true);
+  WITH CHECK (auth.uid() = created_by);
 
 -- Multi-tenant isolation policies (Users only see data from their company)
 CREATE POLICY "Tenant access: users" ON users FOR ALL USING (company_id = get_my_company());

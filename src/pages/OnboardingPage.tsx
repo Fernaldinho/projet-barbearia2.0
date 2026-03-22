@@ -38,6 +38,7 @@ export default function OnboardingPage() {
             slug,
             phone: formData.phone,
             email: formData.email,
+            created_by: user.id
           }
         ])
         .select()
