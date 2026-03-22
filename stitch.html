@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-background": "#e5e2e1",
+              "primary-fixed-dim": "#fbbc00",
+              "background": "#131313",
+              "tertiary-fixed-dim": "#00d9fc",
+              "primary-fixed": "#ffdfa0",
+              "inverse-primary": "#795900",
+              "surface-bright": "#393939",
+              "primary": "#ffe2ab",
+              "on-secondary": "#3c2f00",
+              "on-secondary-fixed-variant": "#574500",
+              "tertiary-container": "#04dcff",
+              "surface-container-lowest": "#0e0e0e",
+              "surface-dim": "#131313",
+              "on-tertiary-fixed": "#001f26",
+              "secondary-fixed": "#ffe088",
+              "surface-variant": "#353534",
+              "inverse-on-surface": "#313030",
+              "outline-variant": "#504532",
+              "on-primary": "#402d00",
+              "on-primary-fixed-variant": "#5c4300",
+              "surface": "#131313",
+              "inverse-surface": "#e5e2e1",
+              "on-primary-container": "#6d5000",
+              "surface-container-high": "#2a2a2a",
+              "on-surface-variant": "#d4c5ab",
+              "secondary": "#e9c349",
+              "primary-container": "#ffbf00",
+              "tertiary": "#b4efff",
+              "on-tertiary-container": "#005d6d",
+              "on-primary-fixed": "#261a00",
+              "on-tertiary-fixed-variant": "#004e5c",
+              "surface-container-highest": "#353534",
+              "secondary-container": "#af8d11",
+              "surface-container-low": "#1c1b1b",
+              "on-tertiary": "#003640",
+              "secondary-fixed-dim": "#e9c349",
+              "on-secondary-fixed": "#241a00",
+              "outline": "#9c8f78",
+              "on-surface": "#e5e2e1",
+              "surface-tint": "#fbbc00",
+              "on-error-container": "#ffdad6",
+              "on-secondary-container": "#342800",
+              "on-error": "#690005",
+              "error": "#ffb4ab",
+              "error-container": "#93000a",
+              "surface-container": "#201f1f",
+              "tertiary-fixed": "#aaedff"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      body { background-color: #131313; color: #e5e2e1; font-family: 'Inter', sans-serif; }
+      .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24; }
+      .glass-card { background: rgba(53, 53, 52, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(80, 69, 50, 0.15); }
+      .gold-gradient { background: linear-gradient(135deg, #ffe2ab 0%, #ffbf00 100%); }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-neutral-900/60 backdrop-blur-xl border-b border-white/10 shadow-[0_0_40px_rgba(229,226,225,0.06)]">
+<div class="flex justify-between items-center max-w-7xl mx-auto px-8 py-4">
+<span class="font-serif text-2xl font-bold tracking-tighter text-amber-400">The Nocturnal Atelier</span>
+<div class="hidden md:flex items-center space-x-8 font-serif text-sm tracking-widest uppercase">
+<a class="text-amber-400 border-b-2 border-amber-400 pb-1" href="#">Home</a>
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">Features</a>
+<a class="text-neutral-400 hover:text-white transition-colors" href="#">Pricing</a>
+</div>
+<button class="gold-gradient text-on-primary-fixed px-6 py-2 rounded font-medium text-sm tracking-wide uppercase active:scale-95 duration-200">
+                Começar agora
+            </button>
+</div>
+</nav>
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center pt-20 overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-30 grayscale contrast-125" data-alt="Interior de uma barbearia de luxo com cadeiras de couro e iluminação âmbar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDfIlN8xfT_O6VPq2XHMDC6jZ4Sx1xlN_Mo_9g2vQ8pxG2gKsKBDi5RimqjpvEsjI7Ieh-iEvFN-WgWY6JuvAN7jVUf-RTJxWtqNusfiL6x1Zc3XqrWKFQYLOuB9S1rFte-LKr9BiR4qUO3hYqBCxeD-zmfKGJWpe483fz_c0W-yaxOJ3vzanzVMDRD3ozGCpPtPI2PFDdYnu1TZxuJWRBgpZY8PefIFKdfVnLyt2h1bY1wYXdgNLKCgnM38tEWv9_iYRo0e31Mf-s"/>
+<div class="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent"></div>
+</div>
+<div class="relative z-10 max-w-7xl mx-auto px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<div class="lg:col-span-8">
+<h1 class="font-headline text-5xl md:text-7xl lg:text-8xl leading-[1.1] mb-6 tracking-tight">
+                        Eleve o Patamar da sua <span class="text-primary italic">Barbearia</span>
+</h1>
+<p class="font-body text-lg md:text-xl text-on-surface-variant max-w-2xl mb-10 leading-relaxed">
+                        A gestão de herança moderna encontra a tecnologia de ponta. Controle agendamentos, finanças e estoque com a precisão de uma lâmina afiada.
+                    </p>
+<div class="flex flex-wrap gap-4">
+<button class="gold-gradient text-on-primary-fixed px-8 py-4 rounded font-bold uppercase tracking-wider text-sm shadow-xl hover:brightness-110 transition-all active:scale-95">
+                            Começar grátis
+                        </button>
+<button class="bg-surface-container-highest/60 backdrop-blur-md border border-outline-variant/30 text-primary px-8 py-4 rounded font-bold uppercase tracking-wider text-sm hover:bg-surface-container-high transition-all active:scale-95">
+                            Acessar Dashboard
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Bento Grid -->
+<section class="py-24 bg-surface-container-lowest relative">
+<div class="max-w-7xl mx-auto px-8">
+<div class="mb-16">
+<span class="font-label text-primary tracking-[0.3em] uppercase text-xs block mb-4">A Excelência no Detalhe</span>
+<h2 class="font-headline text-4xl md:text-5xl">Funcionalidades Sob Medida</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Feature 1 -->
+<div class="glass-card p-8 group hover:border-primary/40 transition-all duration-500">
+<div class="w-12 h-12 flex items-center justify-center rounded bg-primary/10 text-primary mb-6 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">calendar_month</span>
+</div>
+<h3 class="font-headline text-xl mb-3">Agendamento Flexível</h3>
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">Sincronização em tempo real e interface intuitiva para seus clientes reservarem em segundos.</p>
+</div>
+<!-- Feature 2 -->
+<div class="glass-card p-8 group hover:border-primary/40 transition-all duration-500">
+<div class="w-12 h-12 flex items-center justify-center rounded bg-primary/10 text-primary mb-6 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">analytics</span>
+</div>
+<h3 class="font-headline text-xl mb-3">Gestão Inteligente</h3>
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">Controle total sobre sua equipe, comissões e performance individual em um único painel.</p>
+</div>
+<!-- Feature 3 -->
+<div class="glass-card p-8 group hover:border-primary/40 transition-all duration-500">
+<div class="w-12 h-12 flex items-center justify-center rounded bg-primary/10 text-primary mb-6 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">inventory_2</span>
+</div>
+<h3 class="font-headline text-xl mb-3">Catálogo Dinâmico</h3>
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">Gestão de produtos e serviços com controle automático de estoque e alertas de reposição.</p>
+</div>
+<!-- Feature 4 -->
+<div class="glass-card p-8 group hover:border-primary/40 transition-all duration-500">
+<div class="w-12 h-12 flex items-center justify-center rounded bg-primary/10 text-primary mb-6 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">payments</span>
+</div>
+<h3 class="font-headline text-xl mb-3">Insights Financeiros</h3>
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">Relatórios detalhados de faturamento, custos e lucratividade para decisões precisas.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="py-24 bg-surface overflow-hidden">
+<div class="max-w-7xl mx-auto px-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+<div class="max-w-xl">
+<span class="font-label text-secondary tracking-[0.3em] uppercase text-xs block mb-4">Investimento</span>
+<h2 class="font-headline text-4xl md:text-5xl mb-6">Planos que acompanham seu crescimento</h2>
+</div>
+<div class="flex p-1 bg-surface-container rounded gap-1">
+<button class="px-6 py-2 bg-primary text-on-primary text-xs font-bold uppercase rounded">Mensal</button>
+<button class="px-6 py-2 text-on-surface-variant text-xs font-bold uppercase rounded hover:text-on-surface transition-colors">Anual</button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+<!-- Starter Plan -->
+<div class="p-10 border border-outline-variant/10 bg-surface-container-low flex flex-col">
+<span class="font-label text-on-surface-variant text-xs tracking-widest uppercase mb-4">Starter</span>
+<div class="mb-8">
+<span class="text-4xl font-headline italic">R$ 89</span>
+<span class="text-on-surface-variant font-body text-sm">/mês</span>
+</div>
+<ul class="space-y-4 mb-12 flex-grow">
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                Até 2 profissionais
+                            </li>
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                Agendamento Online
+                            </li>
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                Gestão de Clientes
+                            </li>
+</ul>
+<button class="w-full py-4 border border-outline-variant text-on-surface font-bold uppercase tracking-widest text-xs hover:bg-white/5 transition-colors">
+                            Selecionar
+                        </button>
+</div>
+<!-- Professional Plan -->
+<div class="p-10 bg-surface-container-high border-2 border-primary relative flex flex-col shadow-2xl scale-105 z-10">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 gold-gradient text-on-primary-fixed px-4 py-1 text-[10px] font-bold uppercase tracking-widest rounded-full">Mais Popular</div>
+<span class="font-label text-primary text-xs tracking-widest uppercase mb-4">Professional</span>
+<div class="mb-8">
+<span class="text-4xl font-headline italic">R$ 159</span>
+<span class="text-on-surface-variant font-body text-sm">/mês</span>
+</div>
+<ul class="space-y-4 mb-12 flex-grow">
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Até 10 profissionais
+                            </li>
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Dashboard Financeiro
+                            </li>
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Marketing por SMS/Email
+                            </li>
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                Gestão de Comissões
+                            </li>
+</ul>
+<button class="w-full py-4 gold-gradient text-on-primary-fixed font-bold uppercase tracking-widest text-xs hover:brightness-110 transition-all">
+                            Começar agora
+                        </button>
+</div>
+<!-- Elite Plan -->
+<div class="p-10 border border-outline-variant/10 bg-surface-container-low flex flex-col">
+<span class="font-label text-on-surface-variant text-xs tracking-widest uppercase mb-4">Elite</span>
+<div class="mb-8">
+<span class="text-4xl font-headline italic">R$ 299</span>
+<span class="text-on-surface-variant font-body text-sm">/mês</span>
+</div>
+<ul class="space-y-4 mb-12 flex-grow">
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                Profissionais ilimitados
+                            </li>
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                Multi-unidades
+                            </li>
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                API de Integração
+                            </li>
+<li class="flex items-center gap-3 text-sm">
+<span class="material-symbols-outlined text-primary text-lg">check_circle</span>
+                                Gerente de conta dedicado
+                            </li>
+</ul>
+<button class="w-full py-4 border border-outline-variant text-on-surface font-bold uppercase tracking-widest text-xs hover:bg-white/5 transition-colors">
+                            Falar com especialista
+                        </button>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-24 relative overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-20 contrast-125" data-alt="Close de navalha clássica e produtos de barbearia premium" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO9NQc9maAT4Wc1Oo-KpQMVEbxRkbG7TwRj-ltY--25WPI2MzL2xhw2u-qJUEohwtWB6KxxjlvuHzAPvkStwCFhkM9rpeDDIBZPNsf42V4MZo2tP5eD4FO74qnmT1wQ4wYu_QZLssUCA02RuDlmOvUzndoJz5xIbltVtL0ymqN4mEfJeGRVW6qu-kZ1znrp6-6WW13cariuyaG2qkamgUAW08hsaJiz32d6WBfJL-tSmgiTxgIgu_Ock4BfbT9U_yC-00YlScZepw"/>
+</div>
+<div class="relative z-10 max-w-4xl mx-auto px-8 text-center">
+<h2 class="font-headline text-4xl md:text-6xl mb-8 leading-tight">Pronto para transformar sua experiência?</h2>
+<p class="font-body text-on-surface-variant text-lg mb-10">Junte-se a centenas de barbearias que já modernizaram sua gestão com o Atelier.</p>
+<div class="flex justify-center">
+<button class="gold-gradient text-on-primary-fixed px-12 py-5 rounded-sm font-bold uppercase tracking-widest text-sm shadow-[0_20px_50px_rgba(255,191,0,0.2)]">
+                        Criar minha conta grátis
+                    </button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-[#0e0e0e] w-full py-16 px-8 border-t border-white/5">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-7xl mx-auto">
+<div class="col-span-1 md:col-span-1">
+<span class="font-serif text-xl text-amber-400 mb-4 block">The Nocturnal Atelier</span>
+<p class="font-sans text-xs tracking-wide text-neutral-500 leading-relaxed max-w-xs">
+                    Software de gestão para estabelecimentos que valorizam o ritual, a tradição e a tecnologia.
+                </p>
+</div>
+<div>
+<h4 class="font-label text-amber-500 text-[10px] tracking-[0.3em] uppercase mb-6">Plataforma</h4>
+<ul class="space-y-3 font-sans text-xs tracking-wide">
+<li><a class="text-neutral-500 hover:text-amber-200 transition-colors" href="#">Agendamento</a></li>
+<li><a class="text-neutral-500 hover:text-amber-200 transition-colors" href="#">Financeiro</a></li>
+<li><a class="text-neutral-500 hover:text-amber-200 transition-colors" href="#">Estoque</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label text-amber-500 text-[10px] tracking-[0.3em] uppercase mb-6">Empresa</h4>
+<ul class="space-y-3 font-sans text-xs tracking-wide">
+<li><a class="text-neutral-500 hover:text-amber-200 transition-colors" href="#">Sobre Nós</a></li>
+<li><a class="text-neutral-500 hover:text-amber-200 transition-colors" href="#">Carreiras</a></li>
+<li><a class="text-neutral-500 hover:text-amber-200 transition-colors" href="#">Blog Editorial</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label text-amber-500 text-[10px] tracking-[0.3em] uppercase mb-6">Suporte</h4>
+<ul class="space-y-3 font-sans text-xs tracking-wide">
+<li><a class="text-neutral-500 hover:text-amber-200 transition-colors" href="#">Central de Ajuda</a></li>
+<li><a class="text-neutral-500 hover:text-amber-200 transition-colors" href="#">Privacidade</a></li>
+<li><a class="text-neutral-500 hover:text-amber-200 transition-colors" href="#">Termos de Uso</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-8 mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="font-sans text-[10px] tracking-wide text-neutral-500">
+                © 2024 The Nocturnal Atelier. Built for the Modern Heirloom.
+            </p>
+<div class="flex gap-6">
+<a class="text-neutral-500 hover:text-amber-400 transition-colors" href="#"><span class="material-symbols-outlined text-lg">public</span></a>
+<a class="text-neutral-500 hover:text-amber-400 transition-colors" href="#"><span class="material-symbols-outlined text-lg">share</span></a>
+</div>
+</div>
+</footer>
+</body></html>
