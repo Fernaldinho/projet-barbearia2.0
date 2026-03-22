@@ -223,22 +223,9 @@ export function LandingPage() {
                 <div className="w-3 h-3 rounded-full bg-gray-700"></div>
                 <div className="w-3 h-3 rounded-full bg-gray-700"></div>
              </div>
-             {/* Abstract Dashboard UI */}
-             <div className="p-6 grid grid-cols-12 gap-6 opacity-60 group-hover:opacity-100 transition-opacity duration-1000">
-               <div className="col-span-3 hidden md:flex flex-col gap-4">
-                 <div className="w-full h-8 bg-white/5 rounded-md"></div>
-                 <div className="w-3/4 h-8 bg-white/5 rounded-md"></div>
-                 <div className="w-5/6 h-8 bg-white/5 rounded-md"></div>
-                 <div className="w-full h-8 bg-amber-500/20 rounded-md mt-4"></div>
-               </div>
-               <div className="col-span-12 md:col-span-9 flex flex-col gap-6">
-                 <div className="grid grid-cols-3 gap-4">
-                   <div className="h-24 bg-white/5 rounded-xl border border-white/5 flex items-center px-4"><div className="w-1/2 h-6 bg-white/10 rounded-full"></div></div>
-                   <div className="h-24 bg-gradient-to-br from-amber-500/10 to-transparent rounded-xl border border-amber-500/20 flex items-center px-4"><div className="w-2/3 h-6 bg-amber-500/20 rounded-full"></div></div>
-                   <div className="h-24 bg-white/5 rounded-xl border border-white/5 flex items-center px-4"><div className="w-1/3 h-6 bg-white/10 rounded-full"></div></div>
-                 </div>
-                 <div className="h-64 bg-white/5 rounded-xl border border-white/5"></div>
-               </div>
+             {/* App Preview Image */}
+             <div className="relative w-full overflow-hidden flex items-center justify-center p-2 opacity-80 group-hover:opacity-100 transition-opacity duration-700">
+               <img src="/dashboard-mockup.png" alt="Painel do BarberPro" className="w-full rounded-lg shadow-[0_0_50px_rgba(251,191,36,0.15)] border border-white/5" />
              </div>
           </div>
         </div>
