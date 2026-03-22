@@ -107,28 +107,28 @@ export function DashboardPage() {
   const userName = user?.user_metadata?.full_name || 'Usuário'
 
   return (
-    <div className="space-y-[24px] animate-fade-in">
-      {/* Header + Period Filter */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-[16px] mb-[24px]">
+    <div className="space-y-[32px] animate-fade-in pb-10">
+      {/* Editorial Header */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div>
-          <h1 className="!mb-1">
-            {greeting()}, {userName.split(' ')[0]}! 👋
+          <h1 className="text-4xl lg:text-5xl font-bold text-white font-headline leading-tight tracking-tight">
+            {greeting()}, <span className="text-primary-container">{userName.split(' ')[0]}</span>.
           </h1>
-          <p>
-            Aqui está o resumo do seu negócio.
+          <p className="text-lg text-on-surface-variant font-medium mt-2 max-w-xl">
+            Sua barbearia está com <span className="text-white font-bold">{metrics.attendanceRate}%</span> de ocupação hoje. Aqui está o que está acontecendo.
           </p>
         </div>
 
         {/* Period selector */}
-        <div className="flex items-center bg-dark-800 rounded-xl p-[4px] border border-dark-700 h-[40px]">
+        <div className="flex items-center bg-surface-container-low rounded-2xl p-1.5 h-auto self-start lg:self-center backdrop-blur-md">
           {(Object.keys(periodLabels) as Period[]).map((p) => (
             <button
               key={p}
               onClick={() => setPeriod(p)}
-              className={`px-[16px] h-[32px] rounded-lg text-small font-medium transition-all ${
+              className={`px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all ${
                 period === p
-                  ? 'bg-primary-500/10 text-primary-500'
-                  : 'text-dark-400 hover:text-white'
+                  ? 'bg-primary-container text-on-primary-fixed shadow-lg shadow-primary-container/20'
+                  : 'text-on-surface-variant hover:text-white'
               }`}
             >
               {periodLabels[p]}
@@ -137,65 +137,62 @@ export function DashboardPage() {
         </div>
       </div>
 
-      {/* Stats Cards */}
-      {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[16px]">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="card p-[24px] h-[120px] animate-pulse">
-              <div className="w-10 h-10 rounded-xl bg-dark-700 mb-3" />
-              <div className="w-20 h-6 rounded bg-dark-700 mb-1" />
-              <div className="w-28 h-3 rounded bg-dark-700" />
-            </div>
-          ))}
-        </div>
-      ) : (
-        <StatsCards metrics={metrics} />
-      )}
-
-      {/* Charts Row */}
-      {chartsLoading ? (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[16px]">
-          {[...Array(2)].map((_, i) => (
-            <div key={i} className="card p-[24px] h-[300px] animate-pulse">
-              <div className="w-32 h-5 rounded bg-dark-700 mb-4" />
-              <div className="w-full h-[220px] rounded bg-dark-800" />
-            </div>
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[16px]">
-          <RevenueChart data={revenueData} />
-          <AppointmentsChart data={appointmentsData} />
-        </div>
-      )}
-
-      {/* Bottom Row: Top Services + Today Schedule */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-[16px]">
-        {chartsLoading ? (
-          <div className="card p-[24px] h-[260px] animate-pulse">
-            <div className="w-32 h-5 rounded bg-dark-700 mb-4" />
-            <div className="space-y-3">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-8 rounded bg-dark-800" />
-              ))}
-            </div>
-          </div>
-        ) : (
-          <TopServices data={topServicesData} />
-        )}
-
+      {/* Stats Cards Section */}
+      <section>
         {loading ? (
-          <div className="card p-[24px] h-[260px] animate-pulse">
-            <div className="w-32 h-5 rounded bg-dark-700 mb-4" />
-            <div className="space-y-2">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-14 rounded bg-dark-800" />
-              ))}
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="h-[140px] rounded-2xl bg-surface-container-low animate-pulse" />
+            ))}
           </div>
         ) : (
-          <TodaySchedule appointments={todayScheduleData} />
+          <StatsCards metrics={metrics} />
         )}
+      </section>
+
+      {/* Main Grid: Split Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        
+        {/* Left Column: Appointments (Large) */}
+        <div className="lg:col-span-2 space-y-8">
+          {loading ? (
+            <div className="h-[400px] rounded-2xl bg-surface-container-low animate-pulse" />
+          ) : (
+            <TodaySchedule appointments={todayScheduleData} />
+          )}
+
+          {/* Revenue Chart Section */}
+          <section className="p-[24px] rounded-2xl bg-surface-container-low">
+             <h3 className="!mb-6 font-headline text-xl text-white">Fluxo de Caixa</h3>
+             {chartsLoading ? (
+               <div className="h-[250px] w-full bg-surface-container/30 rounded-xl animate-pulse" />
+             ) : (
+               <RevenueChart data={revenueData} />
+             )}
+          </section>
+        </div>
+
+        {/* Right Column: Insights & Performance (Small) */}
+        <div className="space-y-8">
+          {/* Appointments Distribution Chart */}
+          <section className="p-[24px] rounded-2xl bg-surface-container-low">
+            <h3 className="!mb-6 font-headline text-lg text-white">Demanda por Período</h3>
+            {chartsLoading ? (
+               <div className="h-[200px] w-full bg-surface-container/30 rounded-xl animate-pulse" />
+             ) : (
+               <AppointmentsChart data={appointmentsData} />
+             )}
+          </section>
+
+          {/* Top Services */}
+          <section>
+            {chartsLoading ? (
+              <div className="h-[300px] rounded-2xl bg-surface-container-low animate-pulse" />
+            ) : (
+              <TopServices data={topServicesData} />
+            )}
+          </section>
+        </div>
       </div>
     </div>
   )
