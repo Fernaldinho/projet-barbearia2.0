@@ -1,4 +1,4 @@
-import { Clock, Loader2, Sparkles, MessageCircle } from 'lucide-react'
+import { Clock, Loader2, Sparkles } from 'lucide-react'
 import type { TimeSlot } from '@/lib/availability'
 import { cn } from '@/utils/helpers'
 
@@ -93,15 +93,6 @@ export function TimeSelector({ slots, selectedTime, loading, isDayClosed, onSele
           </>
         )}
 
-        {/* WhatsApp Reminder Footer */}
-        <div className="mt-8 pt-8 border-t border-white/[0.03] flex items-center gap-4">
-           <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-500">
-              <MessageCircle className="w-5 h-5 fill-emerald-500/20" />
-           </div>
-           <p className="text-xs text-[#D3C5AC]/60 font-medium leading-relaxed">
-             Um lembrete será enviado via <span className="text-white font-bold">WhatsApp</span> 2 horas antes do atendimento.
-           </p>
-        </div>
       </div>
     </div>
   )
