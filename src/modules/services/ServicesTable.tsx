@@ -99,6 +99,3 @@ export function ServicesTable({ services, onEdit, onDelete }: ServicesTableProps
     </div>
   )
 }
-
-
-
