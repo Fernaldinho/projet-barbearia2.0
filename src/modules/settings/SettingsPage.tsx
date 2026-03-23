@@ -1,146 +1,222 @@
 import { useState } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useCompany } from '@/contexts/CompanyContext'
-import { Building2, User, Bell, Shield, Palette } from 'lucide-react'
+import { Building2, User, Bell, Shield, Palette, Store, Lock, BellRing, Settings as SettingsIcon, Info, Edit, Trash2 } from 'lucide-react'
+import { cn } from '@/utils/helpers'
 
 const tabs = [
-  { id: 'profile', label: 'Perfil', icon: User },
-  { id: 'company', label: 'Empresa', icon: Building2 },
-  { id: 'notifications', label: 'Notificações', icon: Bell },
-  { id: 'security', label: 'Segurança', icon: Shield },
-  { id: 'appearance', label: 'Aparência', icon: Palette },
+  { id: 'company', label: 'PERFIL DA BARBEARIA', icon: <Store className="w-5 h-4" /> },
+  { id: 'security', label: 'SEGURANÇA', icon: <Lock className="w-5 h-4" /> },
+  { id: 'notifications', label: 'NOTIFICAÇÕES', icon: <BellRing className="w-5 h-4" /> },
+  { id: 'appearance', label: 'APARÊNCIA', icon: <Palette className="w-5 h-4" /> },
 ]
 
 export function SettingsPage() {
   const { user } = useAuth()
   const { company } = useCompany()
-  const [activeTab, setActiveTab] = useState('profile')
+  const [activeTab, setActiveTab] = useState('company')
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-white">Configurações</h1>
-        <p className="text-dark-300 mt-1">Gerencie as configurações da sua conta e empresa</p>
+    <div className="animate-fade-in pb-20 space-y-16 mt-8">
+      {/* Search Header Style (Consistent) */}
+      <div className="flex items-center px-4 lg:px-0 mb-12">
+        <div className="relative flex items-center group flex-1 max-w-xl">
+          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#fbbf24] transition-colors">search</span>
+          <input 
+            className="w-full bg-[#0e0e0e] border-none py-3.5 pl-12 pr-6 rounded-full text-sm focus:ring-1 focus:ring-[#fbbf24] placeholder:text-zinc-600 transition-all outline-none text-[#E5E2E1]" 
+            placeholder="Pesquisar nas configurações..." 
+            type="text"
+          />
+        </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6">
-        {/* Sidebar Tabs */}
-        <div className="lg:w-60 flex-shrink-0">
-          <div className="card p-2 space-y-1">
+      <div className="max-w-7xl mx-auto px-4 lg:px-0">
+        <div className="mb-16">
+          <span className="text-xs font-label text-[#fbbf24] uppercase tracking-[0.3em] font-black mb-4 block">Preferências do Sistema</span>
+          <h2 className="text-6xl font-headline font-black text-[#E5E2E1] tracking-tighter uppercase leading-none">Configurações</h2>
+        </div>
+
+        <div className="flex flex-col lg:flex-row gap-16 items-start">
+          {/* Vertical Tabs */}
+          <nav className="w-full lg:w-72 space-y-3 flex-shrink-0">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                className={cn(
+                  "w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all font-black text-[10px] tracking-widest text-left uppercase border border-transparent shadow-lg",
                   activeTab === tab.id
-                    ? 'bg-primary-500/10 text-primary-400'
-                    : 'text-dark-300 hover:bg-dark-800 hover:text-white'
-                }`}
+                    ? "bg-[#fbbf24] text-[#402D00] shadow-[#fbbf24]/10"
+                    : "bg-[#1C1B1B] text-zinc-500 hover:text-white hover:border-white/5"
+                )}
               >
-                <tab.icon className="w-4 h-4" />
+                {tab.icon}
                 {tab.label}
               </button>
             ))}
+          </nav>
+
+          {/* Form Area (Bento Grid Style) */}
+          <div className="flex-1 space-y-8 min-w-0">
+            {activeTab === 'company' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                 <section className="col-span-1 md:col-span-2 bg-[#1C1B1B] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
+                  <div className="flex justify-between items-start mb-12">
+                    <div>
+                      <h3 className="text-2xl font-black font-headline text-white uppercase tracking-tighter mb-2">Perfil da Barbearia</h3>
+                      <p className="text-zinc-500 text-sm font-medium">Gerencie as informações públicas e de contato do seu negócio.</p>
+                    </div>
+                    <div className="w-24 h-24 rounded-2xl bg-[#0e0e0e] relative overflow-hidden group cursor-pointer border border-white/5 shadow-inner">
+                      {company?.logo_url ? (
+                        <img src={company.logo_url} alt="Logo" className="w-full h-full object-cover grayscale" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-zinc-900 text-[#fbbf24]/40">
+                          <span className="material-symbols-outlined text-4xl">storefront</span>
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span className="material-symbols-outlined text-white">edit</span>
+                      </div>
+                    </div>
+                  </div>
+                  <form className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Nome do Estabelecimento</label>
+                      <input 
+                        className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none" 
+                        type="text" 
+                        defaultValue={company?.name || ''}
+                      />
+                    </div>
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Telefone de Contato</label>
+                      <input 
+                        className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none" 
+                        type="text" 
+                        defaultValue={company?.phone || ''}
+                      />
+                    </div>
+                    <div className="col-span-1 md:col-span-2 space-y-3">
+                      <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Endereço Completo</label>
+                      <input 
+                        className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none" 
+                        type="text" 
+                        defaultValue={company?.address || ''}
+                      />
+                    </div>
+                  </form>
+                </section>
+              </div>
+            )}
+
+            {activeTab === 'security' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <section className="bg-[#1C1B1B] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-4 mb-10">
+                      <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner">
+                        <span className="material-symbols-outlined text-[#fbbf24]">lock_reset</span>
+                      </div>
+                      <h3 className="text-xl font-black font-headline text-white uppercase tracking-tighter">Segurança</h3>
+                    </div>
+                    <div className="space-y-6">
+                      <div className="space-y-3">
+                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Senha Atual</label>
+                        <input className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none" placeholder="••••••••" type="password"/>
+                      </div>
+                      <div className="space-y-3">
+                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Nova Senha</label>
+                        <input className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none" placeholder="Min. 8 caracteres" type="password"/>
+                      </div>
+                    </div>
+                  </div>
+                  <button className="mt-12 bg-[#2a2a2a] text-white hover:bg-[#333] transition-all px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest active:scale-95">
+                    Atualizar Senha
+                  </button>
+                </section>
+
+                <section className="bg-gradient-to-br from-[#1C1B1B] to-[#131313] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
+                  <div className="flex items-center gap-4 mb-10">
+                    <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner">
+                      <Info className="w-6 h-6 text-[#fbbf24]" />
+                    </div>
+                    <h3 className="text-xl font-black font-headline text-white uppercase tracking-tighter">Info</h3>
+                  </div>
+                  <p className="text-zinc-500 text-sm leading-relaxed mb-6 font-medium">
+                    Suas senhas são criptografadas e nunca compartilhadas. Ative a autenticação de dois fatores para proteção extra.
+                  </p>
+                  <div className="p-6 bg-[#0e0e0e] rounded-3xl border border-white/[0.02]">
+                    <p className="text-xs font-bold text-zinc-400 mb-2 uppercase tracking-widest">Último Acesso</p>
+                    <p className="text-sm font-black text-white">Hoje às 14:32</p>
+                  </div>
+                </section>
+              </div>
+            )}
+
+            {activeTab === 'notifications' && (
+              <section className="bg-[#1C1B1B] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
+                <div className="flex items-center gap-4 mb-12">
+                  <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner">
+                    <BellRing className="w-6 h-6 text-[#fbbf24]" />
+                  </div>
+                  <h3 className="text-xl font-black font-headline text-white uppercase tracking-tighter">Notificações</h3>
+                </div>
+                <div className="space-y-8">
+                  {[
+                    { label: 'Alertas de Agendamento', sub: 'Receba avisos por e-mail e push em tempo real' },
+                    { label: 'Resumo Semanal', sub: 'Estatísticas completas de desempenho da loja' },
+                    { label: 'Lembretes SMS', sub: 'Enviar lembretes para clientes 2h antes do corte' },
+                  ].map((pref, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-6 rounded-3xl bg-[#0e0e0e] border border-white/[0.02] hover:border-white/5 transition-all group">
+                      <div>
+                        <p className="font-black text-[#E5E2E1] text-base group-hover:text-[#fbbf24] transition-colors">{pref.label}</p>
+                        <p className="text-xs text-zinc-500 mt-1 font-medium">{pref.sub}</p>
+                      </div>
+                      <div className="relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 cursor-pointer shadow-inner bg-[#fbbf24]">
+                        <span className="inline-block h-5 w-5 transform rounded-full bg-[#1c1b1b] transition-transform duration-300 translate-x-6 shadow" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {activeTab === 'appearance' && (
+              <section className="bg-[#1C1B1B] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner">
+                    <Palette className="w-6 h-6 text-[#fbbf24]" />
+                  </div>
+                  <h3 className="text-xl font-black font-headline text-white uppercase tracking-tighter">Aparência</h3>
+                </div>
+                <p className="text-zinc-500 text-sm font-medium mb-10">Personalize a identidade visual do seu painel e da página pública.</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
+                  {['Noir', 'Classic', 'Royal'].map(theme => (
+                    <div key={theme} className={cn(
+                      "aspect-video rounded-2xl border transition-all cursor-pointer flex items-center justify-center font-black text-[10px] uppercase tracking-widest",
+                      theme === 'Noir' ? "bg-black border-[#fbbf24]/40 text-[#fbbf24]" : "bg-[#2a2a2a] border-white/5 text-zinc-500"
+                    )}>
+                      {theme} Theme
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {/* Action Bar */}
+            <div className="flex justify-end gap-6 mt-12 bg-[#0e0e0e]/40 p-6 rounded-[2rem] border border-white/5 backdrop-blur-xl sticky bottom-4 z-10 shadow-2xl">
+              <button className="px-8 py-4 text-zinc-500 font-black text-[10px] tracking-widest uppercase hover:text-white transition-all">Descartar</button>
+              <button className="px-12 py-4 bg-[#fbbf24] text-[#402D00] font-black text-[10px] tracking-widest uppercase rounded-full hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 shadow-xl shadow-[#fbbf24]/10">
+                Salvar Alterações
+              </button>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Content */}
-        <div className="flex-1">
-          {activeTab === 'profile' && (
-            <div className="card p-6 space-y-6">
-              <h2 className="text-xl font-bold text-white">Perfil</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-dark-200 mb-2">Nome</label>
-                  <input
-                    type="text"
-                    defaultValue={user?.user_metadata?.full_name || ''}
-                    className="input-field"
-                    placeholder="Seu nome completo"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-dark-200 mb-2">Email</label>
-                  <input
-                    type="email"
-                    defaultValue={user?.email || ''}
-                    className="input-field"
-                    disabled
-                  />
-                  <p className="text-xs text-dark-500 mt-1">O email não pode ser alterado</p>
-                </div>
-                <button className="btn-primary">Salvar alterações</button>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'company' && (
-            <div className="card p-6 space-y-6">
-              <h2 className="text-xl font-bold text-white">Empresa</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-dark-200 mb-2">Nome da Barbearia</label>
-                  <input type="text" defaultValue={company?.name || ''} className="input-field" placeholder="Nome da sua barbearia" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-dark-200 mb-2">Telefone</label>
-                  <input type="tel" defaultValue={company?.phone || ''} className="input-field" placeholder="(00) 00000-0000" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-dark-200 mb-2">Endereço</label>
-                  <input type="text" defaultValue={company?.address || ''} className="input-field" placeholder="Endereço completo" />
-                </div>
-                <button className="btn-primary">Salvar alterações</button>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'notifications' && (
-            <div className="card p-6">
-              <h2 className="text-xl font-bold text-white mb-6">Notificações</h2>
-              <div className="space-y-4">
-                {['Novos agendamentos', 'Cancelamentos', 'Lembretes', 'Relatórios semanais'].map((item) => (
-                  <div key={item} className="flex items-center justify-between p-4 rounded-xl bg-dark-800">
-                    <span className="text-sm text-dark-200">{item}</span>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input type="checkbox" defaultChecked className="sr-only peer" />
-                      <div className="w-11 h-6 bg-dark-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary-500" />
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'security' && (
-            <div className="card p-6 space-y-6">
-              <h2 className="text-xl font-bold text-white">Segurança</h2>
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-dark-200 mb-2">Senha atual</label>
-                  <input type="password" className="input-field" placeholder="••••••••" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-dark-200 mb-2">Nova senha</label>
-                  <input type="password" className="input-field" placeholder="Mínimo 6 caracteres" />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-dark-200 mb-2">Confirmar nova senha</label>
-                  <input type="password" className="input-field" placeholder="Repita a nova senha" />
-                </div>
-                <button className="btn-primary">Alterar senha</button>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'appearance' && (
-            <div className="card p-6">
-              <h2 className="text-xl font-bold text-white mb-6">Aparência</h2>
-              <p className="text-dark-400 text-sm">Opções de personalização estarão disponíveis em breve.</p>
-            </div>
-          )}
-        </div>
+      {/* AI Decoration Pulse */}
+      <div className="fixed bottom-0 right-0 p-12 pointer-events-none opacity-20 -z-10">
+        <div className="w-[500px] h-[500px] bg-[#fbbf24]/5 rounded-full blur-[120px] animate-pulse"></div>
       </div>
     </div>
   )

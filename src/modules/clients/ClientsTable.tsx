@@ -1,6 +1,6 @@
 import type { Client } from '@/types'
-import { getInitials } from '@/utils/helpers'
-import { Edit, Trash2, Phone, Mail } from 'lucide-react'
+import { History, Edit, Trash2 } from 'lucide-react'
+import { cn } from '@/utils/helpers'
 
 interface ClientsTableProps {
   clients: Client[]
@@ -11,82 +11,60 @@ interface ClientsTableProps {
 export function ClientsTable({ clients, onEdit, onDelete }: ClientsTableProps) {
   if (clients.length === 0) {
     return (
-      <div className="card p-12 text-center">
-        <p className="text-dark-400 text-lg mb-2">Nenhum cliente cadastrado</p>
-        <p className="text-dark-500 text-sm">Adicione seu primeiro cliente para começar.</p>
+      <div className="p-20 text-center bg-[#1C1B1B] rounded-[2.5rem] border border-dashed border-[#4F4633]/20 shadow-inner">
+        <p className="text-zinc-500 font-medium">Nenhum cliente encontrado na busca premium.</p>
       </div>
     )
   }
 
   return (
-    <div className="table-container">
+    <div className="bg-[#1C1B1B] rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/5">
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="border-b border-dark-700 bg-dark-900">
-              <th className="text-left text-xs font-semibold text-dark-400 uppercase tracking-wider px-6 py-4">Cliente</th>
-              <th className="text-left text-xs font-semibold text-dark-400 uppercase tracking-wider px-6 py-4">Contato</th>
-              <th className="text-left text-xs font-semibold text-dark-400 uppercase tracking-wider px-6 py-4">Observações</th>
-              <th className="text-right text-xs font-semibold text-dark-400 uppercase tracking-wider px-6 py-4">Ações</th>
+            <tr className="bg-[#0e0e0e]/50 border-b border-white/5">
+              <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Cliente</th>
+              <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Contato</th>
+              <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Última Visita</th>
+              <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Gasto Total</th>
+              <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 text-right">Ações</th>
             </tr>
           </thead>
-          <tbody>
-            {clients.map((client, index) => (
-              <tr 
-                key={client.id} 
-                className={`border-b border-dark-700/50 hover:bg-dark-700/30 transition-colors ${index % 2 === 0 ? 'bg-dark-800' : 'bg-dark-800/80'}`}
-              >
-                <td className="px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-dark-900 border border-dark-700 flex items-center justify-center flex-shrink-0">
-                      <span className="text-xs font-bold text-primary-400">{getInitials(client.name)}</span>
+          <tbody className="divide-y divide-white/[0.03]">
+            {clients.map((client) => (
+              <tr key={client.id} className="hover:bg-white/[0.02] transition-all group">
+                <td className="px-10 py-8">
+                  <div className="flex items-center gap-5">
+                    <div className="w-12 h-12 rounded-full bg-[#353534] flex items-center justify-center overflow-hidden border border-white/5 shadow-inner grow-0 shrink-0">
+                      <span className="text-sm font-black text-[#fbbf24]">{client.name.substring(0, 2).toUpperCase()}</span>
                     </div>
-                    <span className="font-medium text-white">{client.name}</span>
+                    <div>
+                      <p className="font-bold text-[#E5E2E1] text-lg group-hover:text-[#fbbf24] transition-colors">{client.name}</p>
+                      <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold mt-1">Membro Platinum</p>
+                    </div>
                   </div>
                 </td>
-                <td className="px-6 py-4">
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-sm text-dark-200 whitespace-nowrap">
-                      <Phone className="w-3.5 h-3.5 text-dark-500" />
-                      {client.phone}
-                    </div>
-                    {client.email && (
-                      <div className="flex items-center gap-2 text-sm text-dark-400 whitespace-nowrap">
-                        <Mail className="w-3.5 h-3.5 text-dark-500" />
-                        {client.email}
-                      </div>
-                    )}
-                  </div>
+                <td className="px-10 py-8 text-base text-zinc-400 font-medium">{client.phone}</td>
+                <td className="px-10 py-8 text-base text-zinc-400 font-medium">14 Out, 2023</td>
+                <td className="px-10 py-8">
+                  <span className="text-[#fbbf24] font-black font-headline text-lg tracking-tighter">R$ 1.450,00</span>
                 </td>
-                <td className="px-6 py-4">
-                  <span className="text-sm text-dark-400 max-w-[200px] truncate block" title={client.notes || ''}>
-                    {client.notes || '-'}
-                  </span>
-                </td>
-                <td className="px-6 py-4 text-right">
-                  <div className="flex items-center justify-end gap-2">
-                    <a
-                      href={`https://wa.me/${client.phone?.replace(/\\D/g, '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-dark-400 hover:text-success-500 transition-colors flex items-center justify-center p-2 rounded-lg hover:bg-dark-700 w-9 h-9"
-                      title="Chamar no WhatsApp"
-                    >
-                      <Phone className="w-4 h-4" />
-                    </a>
-                    <button
-                      onClick={() => onEdit(client)}
-                      className="text-dark-400 hover:text-white transition-colors flex items-center justify-center p-2 rounded-lg hover:bg-dark-700 w-9 h-9"
-                      title="Editar"
-                    >
-                      <Edit className="w-4 h-4" />
+                <td className="px-10 py-8 text-right">
+                  <div className="flex justify-end gap-3 opacity-40 group-hover:opacity-100 transition-all">
+                    <button className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl text-zinc-400 hover:text-white transition-all shadow-lg active:scale-95">
+                      <History className="w-5 h-5" />
                     </button>
-                    <button
-                      onClick={() => onDelete(client.id)}
-                      className="text-dark-400 hover:text-danger-500 transition-colors flex items-center justify-center p-2 rounded-lg hover:bg-dark-700 w-9 h-9"
-                      title="Excluir"
+                    <button 
+                      onClick={() => onEdit(client)}
+                      className="p-3 bg-white/5 hover:bg-[#fbbf24]/10 rounded-2xl text-zinc-400 hover:text-[#fbbf24] transition-all shadow-lg active:scale-95"
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Edit className="w-5 h-5" />
+                    </button>
+                    <button 
+                      onClick={() => onDelete(client.id)}
+                      className="p-3 bg-white/5 hover:bg-red-500/10 rounded-2xl text-zinc-400 hover:text-red-500 transition-all shadow-lg active:scale-95"
+                    >
+                      <Trash2 className="w-5 h-5" />
                     </button>
                   </div>
                 </td>
@@ -94,6 +72,22 @@ export function ClientsTable({ clients, onEdit, onDelete }: ClientsTableProps) {
             ))}
           </tbody>
         </table>
+      </div>
+      
+      {/* Pagination Style */}
+      <div className="px-10 py-10 bg-[#0e0e0e]/20 flex justify-between items-center border-t border-white/5">
+        <p className="text-xs text-zinc-600 font-bold uppercase tracking-widest">
+          Mostrando <span className="text-[#E5E2E1]">{clients.length}</span> de {clients.length} clientes premium
+        </p>
+        <div className="flex gap-3">
+          <button className="w-12 h-12 flex items-center justify-center rounded-2xl border border-white/5 text-zinc-500 hover:text-[#fbbf24] hover:bg-[#fbbf24]/5 transition-all active:scale-95">
+            <span className="material-symbols-outlined">chevron_left</span>
+          </button>
+          <button className="w-12 h-12 flex items-center justify-center rounded-2xl bg-[#fbbf24] text-[#402D00] font-black shadow-xl shadow-[#fbbf24]/10 active:scale-95">1</button>
+          <button className="w-12 h-12 flex items-center justify-center rounded-2xl border border-white/5 text-zinc-500 hover:text-[#fbbf24] transition-all active:scale-95">
+            <span className="material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
       </div>
     </div>
   )

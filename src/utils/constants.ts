@@ -18,6 +18,7 @@ export const ROUTES = {
   BLOCKED_TIMES: '/blocked-times',
   SETTINGS: '/settings',
   BILLING: '/billing',
+  PUBLIC_PAGE: '/public-page',
   ONBOARDING: '/onboarding',
 } as const
 

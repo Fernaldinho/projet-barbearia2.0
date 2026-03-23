@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
-import { Plus, Users2, Edit, Trash2, ToggleLeft, ToggleRight } from 'lucide-react'
+import { useEffect, useState, useCallback } from 'react'
+import { Plus, UserPlus, Star, MoreHorizontal, CheckCircle2, AlertCircle } from 'lucide-react'
 import { useCompany } from '@/contexts/CompanyContext'
 import { StaffForm } from './StaffForm'
 import { getStaff, createStaff, updateStaff, toggleStaffActive, deleteStaff } from './staff.api'
 import type { Staff, StaffFormData } from '@/types'
+import { cn } from '@/utils/helpers'
 
 export function StaffPage() {
   const { company } = useCompany()
@@ -12,14 +13,18 @@ export function StaffPage() {
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<Staff | null>(null)
 
-  const load = async () => {
+  const load = useCallback(async () => {
     if (!company?.id) return
-    try { setStaffList(await getStaff(company.id)) }
+    setLoading(true)
+    try { 
+      const data = await getStaff(company.id)
+      setStaffList(data) 
+    }
     catch (e) { console.error(e) }
     finally { setLoading(false) }
-  }
+  }, [company?.id])
 
-  useEffect(() => { load() }, [company?.id])
+  useEffect(() => { load() }, [load])
 
   const handleCreate = async (data: StaffFormData) => {
     if (!company?.id) return
@@ -47,77 +52,188 @@ export function StaffPage() {
   }
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-white mb-0">Equipe</h1>
-          <p className="text-dark-300 mt-1">Gerencie os profissionais da sua empresa</p>
+    <div className="animate-fade-in pb-20 space-y-16 mt-8">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row justify-between items-end gap-8 px-4 lg:px-0">
+        <div className="space-y-4">
+          <span className="text-xs tracking-[0.3em] uppercase font-label text-[#fbbf24] font-bold block">Equipe de Elite</span>
+          <h1 className="text-6xl font-black font-headline tracking-tighter text-[#E5E2E1] uppercase leading-none">Profissionais</h1>
+          <p className="text-[#D3C5AC] text-lg font-light leading-relaxed max-w-2xl">
+            Gerencie sua equipe de especialistas com visão 360°. Acompanhe performance, horários e avaliações.
+          </p>
         </div>
-        <button onClick={() => setShowForm(true)} className="btn-primary w-full sm:w-auto justify-center">
-          <Plus className="w-5 h-5" /> Novo Profissional
+        <button 
+          onClick={() => setShowForm(true)} 
+          className="bg-[#fbbf24] text-[#402D00] font-headline font-bold px-8 py-4 rounded-full flex items-center gap-3 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 group"
+        >
+          <span className="material-symbols-outlined group-hover:rotate-90 transition-transform">add</span>
+          NOVO PROFISSIONAL
         </button>
       </div>
 
-      {/* Info */}
-      <div className="card p-4 border-dark-700/30">
-        <div className="flex items-start gap-3">
-          <div className="w-8 h-8 rounded-lg bg-info-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <Users2 className="w-4 h-4 text-info-500" />
+      {/* Professionals Grid */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 px-4 lg:px-0">
+        {loading ? (
+          [...Array(2)].map((_, i) => (
+            <div key={i} className="bg-[#1c1b1b] rounded-[2rem] h-[240px] animate-pulse" />
+          ))
+        ) : staffList.length === 0 ? (
+          <div className="xl:col-span-2 flex flex-col items-center justify-center py-20 bg-[#1c1b1b]/50 rounded-[2rem] border border-dashed border-[#4F4633]/20">
+            <UserPlus className="w-12 h-12 text-[#4F4633]/40 mb-4" />
+            <p className="text-[#D3C5AC]/60 font-medium">Nenhum profissional cadastrado.</p>
+          </div>
+        ) : (
+          staffList.map((s) => (
+            <div 
+              key={s.id} 
+              className={cn(
+                "bg-[#1C1B1B] rounded-[2rem] p-8 group hover:bg-[#201F1F] transition-all duration-500 flex items-start gap-8 border border-transparent hover:border-[#4F4633]/20 cursor-pointer relative",
+                !s.active && "opacity-60"
+              )}
+              onClick={() => setEditing(s)}
+            >
+              <div className="relative shrink-0">
+                <div className="w-28 h-28 rounded-2xl overflow-hidden bg-[#353534] flex items-center justify-center relative shadow-inner">
+                  {s.avatar_url ? (
+                    <img src={s.avatar_url} alt={s.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                  ) : (
+                    <span className="text-4xl font-headline font-black text-[#fbbf24]/50">{s.name.charAt(0)}</span>
+                  )}
+                </div>
+                <div className={cn(
+                  "absolute -bottom-2 -right-2 font-bold text-[10px] px-3 py-1 rounded-lg uppercase font-label tracking-tighter",
+                  s.active ? "bg-[#fbbf24] text-[#402D00]" : "bg-zinc-600 text-white"
+                )}>
+                  {s.active ? 'Ativo' : 'Folga'}
+                </div>
+              </div>
+
+              <div className="flex-1 min-w-0 space-y-6">
+                <div className="flex justify-between items-start">
+                  <div className="truncate pr-4">
+                    <h3 className="text-2xl font-bold font-headline text-[#E5E2E1] truncate group-hover:text-[#fbbf24] transition-colors">{s.name}</h3>
+                    <p className="text-[#fbbf24]/60 text-xs font-label uppercase tracking-[0.2em] mt-1">{s.role || 'Barbeiro Especialista'}</p>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-[#fbbf24]">
+                    <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                    <span className="font-headline font-black text-lg">4.9</span>
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  <div className="bg-[#0e0e0e] px-4 py-3 rounded-2xl flex flex-col flex-1">
+                    <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-1">Agendamentos</span>
+                    <span className="text-sm font-black text-[#E5E2E1]">128/mês</span>
+                  </div>
+                  <div className="bg-[#0e0e0e] px-4 py-3 rounded-2xl flex flex-col flex-1">
+                    <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-1">Especialidade</span>
+                    <span className="text-sm font-black text-[#E5E2E1]">Master Fade</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-2">
+                  <div className="flex items-center gap-2">
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); handleDelete(s.id); }}
+                      className="p-2 rounded-xl text-zinc-600 hover:bg-red-500/10 hover:text-red-500 transition-all"
+                    >
+                      <span className="material-symbols-outlined text-xl">delete</span>
+                    </button>
+                  </div>
+
+                  {/* Status Toggle (Stitch Style) */}
+                  <div 
+                    onClick={(e) => { e.stopPropagation(); handleToggle(s.id, s.active); }}
+                    className={cn(
+                      "relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 cursor-pointer shadow-inner",
+                      s.active ? "bg-[#fbbf24]" : "bg-[#353534]"
+                    )}
+                  >
+                    <span className={cn(
+                      "inline-block h-5 w-5 transform rounded-full bg-[#1c1b1b] transition-transform duration-300 shadow",
+                      s.active ? "translate-x-6" : "translate-x-1"
+                    )} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+
+        {/* Invite Card */}
+        <div 
+          onClick={() => setShowForm(true)}
+          className="border-2 border-dashed border-[#4F4633]/20 rounded-[2rem] p-10 flex flex-col items-center justify-center text-center gap-6 hover:border-[#fbbf24]/40 hover:bg-[#fbbf24]/5 transition-all duration-300 cursor-pointer group"
+        >
+          <div className="w-20 h-20 rounded-full bg-[#1c1b1b] flex items-center justify-center text-zinc-600 group-hover:text-[#fbbf24] transition-all duration-500 shadow-inner group-hover:scale-110">
+            <span className="material-symbols-outlined text-4xl">person_add</span>
           </div>
           <div>
-            <p className="text-sm font-medium text-white">Profissionais da equipe</p>
-            <p className="text-xs text-dark-400 mt-1">
-              Cada profissional pode ter seu próprio horário de trabalho e receber agendamentos individualmente.
-            </p>
+            <p className="font-bold font-headline text-2xl text-[#E5E2E1]">Recrutar talento</p>
+            <p className="text-zinc-500 text-sm font-medium mt-2">Expanda sua equipe com novos especialistas</p>
           </div>
         </div>
       </div>
 
-      {loading ? (
-        <div className="card p-8 text-center">
-          <div className="w-8 h-8 border-2 border-primary-500 border-t-transparent rounded-full animate-spin mx-auto" />
-        </div>
-      ) : staffList.length === 0 ? (
-        <div className="card p-12 text-center">
-          <div className="w-16 h-16 rounded-2xl bg-dark-800 border border-dark-700 flex items-center justify-center mx-auto mb-4">
-            <Users2 className="w-8 h-8 text-dark-500" />
+      {/* Performance Summary Section */}
+      <div className="px-4 lg:px-0">
+        <section className="bg-[#1C1B1B] rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl">
+          <div className="p-10 border-b border-[#4F4633]/10 flex justify-between items-center">
+            <h2 className="text-3xl font-black font-headline uppercase tracking-tighter text-[#E5E2E1]">Fatos & Performance</h2>
+            <button className="text-zinc-600 hover:text-white transition-colors">
+              <span className="material-symbols-outlined">more_horiz</span>
+            </button>
           </div>
-          <p className="text-dark-400 text-lg mb-2">Nenhum profissional</p>
-          <p className="text-dark-500 text-sm">Adicione profissionais para começar a gerenciar agendamentos por pessoa.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {staffList.map((s) => (
-            <div key={s.id} className={`card p-5 ${!s.active ? 'opacity-50' : ''}`}>
-              <div className="flex items-start justify-between mb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary-500/20 to-primary-700/20 border border-primary-500/10 flex items-center justify-center">
-                    <span className="text-lg font-bold text-primary-400">{s.name.charAt(0).toUpperCase()}</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-white">{s.name}</p>
-                    {s.role && <p className="text-xs text-dark-400">{s.role}</p>}
-                  </div>
-                </div>
-                <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${s.active ? 'bg-success-500/10 text-success-500' : 'bg-dark-700 text-dark-400'}`}>
-                  {s.active ? 'Ativo' : 'Inativo'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2 pt-3 border-t border-dark-700/30">
-                <button onClick={() => setEditing(s)} className="p-2 rounded-lg text-dark-400 hover:bg-dark-700 hover:text-white transition-all" title="Editar">
-                  <Edit className="w-4 h-4" />
-                </button>
-                <button onClick={() => handleToggle(s.id, s.active)} className="p-2 rounded-lg text-dark-400 hover:bg-dark-700 hover:text-white transition-all" title={s.active ? 'Desativar' : 'Ativar'}>
-                  {s.active ? <ToggleRight className="w-4 h-4 text-success-500" /> : <ToggleLeft className="w-4 h-4" />}
-                </button>
-                <button onClick={() => handleDelete(s.id)} className="p-2 rounded-lg text-dark-400 hover:bg-danger-600/10 hover:text-danger-500 transition-all ml-auto" title="Excluir">
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="text-[10px] uppercase tracking-[0.2em] text-[#D3C5AC]/40 font-bold bg-[#131313]/30">
+                  <th className="px-10 py-6 font-medium">Profissional</th>
+                  <th className="px-10 py-6 font-medium">Taxa de Ocupação</th>
+                  <th className="px-10 py-6 font-medium">Retenção</th>
+                  <th className="px-10 py-6 font-medium">Receita Estimada</th>
+                  <th className="px-10 py-6 font-medium text-right">Disponibilidade</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#4F4633]/10">
+                {staffList.map((s) => (
+                  <tr key={s.id} className="hover:bg-white/[0.02] transition-colors group">
+                    <td className="px-10 py-8">
+                      <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-xl bg-[#0e0e0e] flex items-center justify-center text-sm font-black text-[#fbbf24] border border-white/5 shadow-inner">
+                          {s.name.substring(0,2).toUpperCase()}
+                        </div>
+                        <span className="text-base font-bold text-[#E5E2E1] group-hover:text-[#fbbf24] transition-colors">{s.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-10 py-8">
+                      <div className="flex items-center gap-4">
+                        <div className="w-32 h-1.5 bg-[#0e0e0e] rounded-full overflow-hidden shadow-inner">
+                          <div className="bg-[#fbbf24] h-full w-[85%] rounded-full shadow-[0_0_10px_rgba(251,191,36,0.2)]"></div>
+                        </div>
+                        <span className="text-xs font-black text-[#fbbf24]">85%</span>
+                      </div>
+                    </td>
+                    <td className="px-10 py-8 text-base font-black text-[#E5E2E1]">92%</td>
+                    <td className="px-10 py-8 text-base font-black text-[#fbbf24]">R$ 12.450</td>
+                    <td className="px-10 py-8 text-right">
+                      <div className="flex items-center justify-end gap-3">
+                        <div className={cn(
+                          "w-2 h-2 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]",
+                          s.active ? "bg-emerald-500" : "bg-zinc-600"
+                        )} />
+                        <span className="text-xs uppercase font-bold tracking-widest text-[#D3C5AC]/60">
+                          {s.active ? 'Disponível' : 'Ausente'}
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
 
       {showForm && <StaffForm onSubmit={handleCreate} onClose={() => setShowForm(false)} />}
       {editing && <StaffForm initialData={editing} onSubmit={handleUpdate} onClose={() => setEditing(null)} />}

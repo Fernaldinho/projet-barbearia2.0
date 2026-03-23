@@ -13,6 +13,7 @@ const routeTitles: Record<string, string> = {
   '/blocked-times': 'BLOQUEIOS',
   '/billing': 'FATURAMENTO',
   '/settings': 'CONFIGURAÇÕES',
+  '/public-page': 'PÁGINA PÚBLICA',
 }
 
 interface NavbarProps {

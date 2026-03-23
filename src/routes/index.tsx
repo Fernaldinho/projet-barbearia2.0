@@ -22,6 +22,7 @@ import { BusinessHoursPage } from '@/modules/business-hours/BusinessHoursPage'
 import { BlockedTimesPage } from '@/modules/blocked-times/BlockedTimesPage'
 import { BillingPage } from '@/modules/billing/BillingPage'
 import { SettingsPage } from '@/modules/settings/SettingsPage'
+import { PublicPage } from '@/modules/public/PublicPage'
 
 export const router = createBrowserRouter([
   // Public routes
@@ -99,6 +100,10 @@ export const router = createBrowserRouter([
       {
         path: '/settings',
         element: <SettingsPage />,
+      },
+      {
+        path: '/public-page',
+        element: <PublicPage />,
       },
     ],
   },
