@@ -44,7 +44,7 @@ export function StaffForm({ initialData, onSubmit, onClose }: StaffFormProps) {
       setAvatarUrl(publicUrl)
     } catch (err: any) {
       console.error('Error uploading:', err)
-      setError('Falha ao enviar imagem. Verifique se o bucket "avatars" existe.')
+      setError(`Erro no upload: ${err.message || 'Verifique se o bucket "avatars" existe e tem as políticas de acesso.'}`)
     } finally {
       setUploading(false)
     }

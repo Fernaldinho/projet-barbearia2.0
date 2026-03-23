@@ -9,6 +9,7 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { user, loading } = useAuth()
+  const { company, loading: companyLoading } = useCompany()
   const location = useLocation()
 
   if (loading) {
@@ -25,8 +26,6 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   if (!user) {
     return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />
   }
-
-  const { company, loading: companyLoading } = useCompany()
 
   if (companyLoading) {
     return (
