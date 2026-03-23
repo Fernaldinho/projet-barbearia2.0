@@ -98,6 +98,7 @@ export interface Staff {
 export interface StaffFormData {
   name: string
   role: string
+  avatar_url?: string
 }
 
 // ============================================

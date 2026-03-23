@@ -31,6 +31,7 @@ export async function createStaff(companyId: string, formData: StaffFormData): P
       company_id: companyId,
       name: formData.name,
       role: formData.role || null,
+      avatar_url: formData.avatar_url || null,
     })
     .select()
     .single()
@@ -45,6 +46,7 @@ export async function updateStaff(id: string, formData: StaffFormData): Promise<
     .update({
       name: formData.name,
       role: formData.role || null,
+      avatar_url: formData.avatar_url || null,
       updated_at: new Date().toISOString(),
     })
     .eq('id', id)
