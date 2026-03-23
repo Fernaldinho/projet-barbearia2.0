@@ -55,6 +55,17 @@ export function ServicesPage() {
     setEditingService(service)
   }
 
+  const handleToggleStatus = async (service: Service) => {
+    try {
+      await updateService(service.id, {
+        is_active: !service.is_active
+      })
+      await loadServices()
+    } catch (err) {
+      console.error('Error toggling service status:', err)
+    }
+  }
+
   const filteredServices = services.filter(s => 
     s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     s.description?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -106,6 +117,7 @@ export function ServicesPage() {
             services={filteredServices} 
             onEdit={handleEdit} 
             onDelete={handleDelete} 
+            onToggleStatus={handleToggleStatus}
           />
         )}
       </div>
