@@ -2,7 +2,11 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useCompany } from '@/contexts/CompanyContext'
 import { supabase } from '@/lib/supabase'
-import { Building2, User, Bell, Shield, Palette, Store, Lock, BellRing, Settings as SettingsIcon, Info, Edit, Trash2, CheckCircle2 } from 'lucide-react'
+import { 
+  Building2, User, Bell, Shield, Palette, Store, Lock, 
+  BellRing, Settings as SettingsIcon, Info, Edit, Trash2, 
+  CheckCircle2, Copy, ExternalLink 
+} from 'lucide-react'
 import { cn } from '@/utils/helpers'
 import { toast } from 'react-hot-toast'
 
@@ -21,6 +25,7 @@ export function SettingsPage() {
 
   // Company State
   const [companyName, setCompanyName] = useState('')
+  const [companySlug, setCompanySlug] = useState('')
   const [companyPhone, setCompanyPhone] = useState('')
   const [companyAddress, setCompanyAddress] = useState('')
 
@@ -42,6 +47,7 @@ export function SettingsPage() {
   useEffect(() => {
     if (company) {
       setCompanyName(company.name)
+      setCompanySlug(company.slug || '')
       setCompanyPhone(company.phone || '')
       setCompanyAddress(company.address || '')
     }
@@ -52,16 +58,23 @@ export function SettingsPage() {
     try {
       await updateCompany({
         name: companyName,
+        slug: companySlug.toLowerCase().replace(/[^a-z0-9-]/g, '-'),
         phone: companyPhone,
         address: companyAddress
       })
       toast.success('Configurações da empresa atualizadas!')
-    } catch (err) {
+    } catch (err: any) {
       console.error(err)
-      toast.error('Erro ao atualizar configurações.')
+      toast.error(err.message || 'Erro ao atualizar configurações.')
     } finally {
       setLoading(false)
     }
+  }
+
+  const copyBookingLink = () => {
+    const link = `${window.location.origin}/book/${companySlug}`
+    navigator.clipboard.writeText(link)
+    toast.success('Link copiado!')
   }
 
   const handleUpdatePassword = async () => {
@@ -134,7 +147,7 @@ export function SettingsPage() {
                   <div className="flex justify-between items-start mb-12">
                     <div>
                       <h3 className="text-2xl font-black font-headline text-white uppercase tracking-tighter mb-2">Perfil da Barbearia</h3>
-                      <p className="text-zinc-500 text-sm font-medium">Gerencie as informações públicas e de contato do seu negócio.</p>
+                      <p className="text-zinc-500 text-sm font-medium">Gerencie as informações públicas e o link da sua agenda.</p>
                     </div>
                     <div className="w-24 h-24 rounded-2xl bg-[#0e0e0e] relative overflow-hidden group cursor-pointer border border-white/5 shadow-inner">
                       {company?.logo_url ? (
@@ -159,6 +172,39 @@ export function SettingsPage() {
                         onChange={(e) => setCompanyName(e.target.value)}
                       />
                     </div>
+                    
+                    <div className="space-y-3">
+                      <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Link da Agenda (Link Personalizado)</label>
+                      <div className="flex flex-col sm:flex-row gap-3">
+                         <div className="relative group flex-1">
+                           <span className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600 text-xs font-bold transition-colors group-focus-within:text-[#fbbf24]">/book/</span>
+                           <input 
+                             className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl pl-16 pr-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none" 
+                             type="text" 
+                             value={companySlug}
+                             onChange={(e) => setCompanySlug(e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''))}
+                           />
+                         </div>
+                         <div className="flex gap-3">
+                            <button 
+                              onClick={copyBookingLink}
+                              className="bg-white/5 border border-white/5 text-zinc-400 hover:text-[#fbbf24] hover:border-[#fbbf24]/20 px-4 rounded-2xl transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest"
+                              title="Copiar Link"
+                            >
+                               <Copy className="w-4 h-4" /> Copiar
+                            </button>
+                            <a 
+                              href={`/book/${companySlug}`}
+                              target="_blank"
+                              className="bg-[#fbbf24]/10 border border-[#fbbf24]/20 text-[#fbbf24] hover:bg-[#fbbf24]/20 px-4 py-4 rounded-2xl transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest"
+                            >
+                               <ExternalLink className="w-4 h-4" /> Visualizar
+                            </a>
+                         </div>
+                      </div>
+                      <p className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest ml-1">Visualização: <span className="text-[#fbbf24]/40">{window.location.origin}/book/{companySlug}</span></p>
+                    </div>
+
                     <div className="space-y-3">
                       <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Telefone de Contato</label>
                       <input 
@@ -168,7 +214,7 @@ export function SettingsPage() {
                         onChange={(e) => setCompanyPhone(e.target.value)}
                       />
                     </div>
-                    <div className="col-span-1 md:col-span-2 space-y-3">
+                    <div className="space-y-3">
                       <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Endereço Completo</label>
                       <input 
                         className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none" 
