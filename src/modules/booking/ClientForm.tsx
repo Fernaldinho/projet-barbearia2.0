@@ -6,6 +6,7 @@ interface ClientFormProps {
   onSubmit: (data: { name: string; phone: string; email: string }) => void
   loading: boolean
   error: string | null
+  initialData?: { name: string; phone: string; email: string }
 }
 
 function formatPhone(value: string): string {
@@ -17,10 +18,10 @@ function formatPhone(value: string): string {
   return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3')
 }
 
-export function ClientForm({ onSubmit, loading, error }: ClientFormProps) {
-  const [name, setName] = useState('')
-  const [phone, setPhone] = useState('')
-  const [email, setEmail] = useState('')
+export function ClientForm({ onSubmit, loading, error, initialData }: ClientFormProps) {
+  const [name, setName] = useState(initialData?.name || '')
+  const [phone, setPhone] = useState(initialData?.phone || '')
+  const [email, setEmail] = useState(initialData?.email || '')
   const [localError, setLocalError] = useState<string | null>(null)
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react'
-import { useParams } from 'react-router-dom'
-import { Loader2, ArrowLeft, Sparkles, LayoutGrid, AlertCircle } from 'lucide-react'
+import { useParams, useNavigate } from 'react-router-dom'
+import { Loader2, ArrowLeft, Sparkles, LayoutGrid, AlertCircle, Scissors, User as UserIcon, ChevronRight } from 'lucide-react'
 
 import { getCompanyBySlug, getActiveServices, findOrCreateClient, createPublicBooking } from './booking.api'
 import { getActiveStaff } from '@/modules/staff/staff.api'
@@ -15,13 +15,16 @@ import { TimeSelector } from './TimeSelector'
 import { ClientForm } from './ClientForm'
 import { ConfirmationScreen } from './ConfirmationScreen'
 import { cn } from '@/utils/helpers'
+import { useAuth } from '@/contexts/AuthContext'
 
-type BookingStep = 'service' | 'staff' | 'date' | 'time' | 'client' | 'confirmation'
+type BookingStep = 'intro' | 'service' | 'staff' | 'date' | 'time' | 'client' | 'confirmation'
 
-const STEP_ORDER: BookingStep[] = ['service', 'staff', 'date', 'time', 'client', 'confirmation']
+const STEP_ORDER: BookingStep[] = ['intro', 'service', 'staff', 'date', 'time', 'client', 'confirmation']
 
 export function BookingPage() {
   const { slug } = useParams<{ slug: string }>()
+  const { user } = useAuth()
+  const navigate = useNavigate()
 
   // Data
   const [company, setCompany] = useState<Company | null>(null)
@@ -39,7 +42,7 @@ export function BookingPage() {
   const [clientName, setClientName] = useState('')
 
   // UI state
-  const [step, setStep] = useState<BookingStep>('service')
+  const [step, setStep] = useState<BookingStep>('intro')
   const [pageLoading, setPageLoading] = useState(true)
   const [slotsLoading, setSlotsLoading] = useState(false)
   const [bookingLoading, setBookingLoading] = useState(false)
@@ -53,6 +56,13 @@ export function BookingPage() {
     if (!slug) return
     loadCompany()
   }, [slug])
+
+  // Pre-fill client name if logged in
+  useEffect(() => {
+    if (user?.user_metadata?.full_name && !clientName) {
+      setClientName(user.user_metadata.full_name)
+    }
+  }, [user])
 
   const loadCompany = async () => {
     try {
@@ -100,6 +110,8 @@ export function BookingPage() {
   }, [step, loadSlots])
 
   const currentStepIndex = activeSteps.indexOf(step)
+  const progressSteps = activeSteps.filter(s => s !== 'intro' && s !== 'confirmation')
+  const currentProgressIndex = progressSteps.indexOf(step as any)
 
   const goBack = () => {
     if (currentStepIndex > 0) setStep(activeSteps[currentStepIndex - 1])
@@ -179,15 +191,13 @@ export function BookingPage() {
     )
   }
 
-  const stepsWithoutConfirmation = activeSteps.filter((s) => s !== 'confirmation')
-
   return (
     <div className="min-h-screen bg-black text-[#E5E2E1] font-body selection:bg-[#fbbf24] selection:text-[#402D00]">
       {/* Premium Header */}
       <header className="sticky top-0 z-30 bg-black/80 backdrop-blur-2xl border-b border-white/[0.03]">
         <div className="max-w-2xl mx-auto px-6 py-6 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            {step !== 'service' && step !== 'confirmation' && (
+            {step !== 'intro' && step !== 'confirmation' && (
               <button 
                 onClick={goBack} 
                 className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-zinc-400 hover:text-white transition-all active:scale-90"
@@ -213,22 +223,22 @@ export function BookingPage() {
         </div>
       </header>
 
-      {/* Modern Progress Bar */}
-      {step !== 'confirmation' && (
+      {/* Modern Progress Bar (only during selection) */}
+      {step !== 'intro' && step !== 'confirmation' && (
         <div className="max-w-2xl mx-auto px-6 py-8">
            <div className="flex items-center gap-2">
-             {stepsWithoutConfirmation.map((_, i) => (
+             {progressSteps.map((_, i) => (
                 <div key={i} className="flex-1 h-1.5 relative rounded-full overflow-hidden bg-white/5">
                    <div className={cn(
                      "absolute inset-y-0 left-0 transition-all duration-700 ease-out",
-                     i <= currentStepIndex ? "w-full bg-[#fbbf24]" : "w-0"
+                     i <= currentProgressIndex ? "w-full bg-[#fbbf24]" : "w-0"
                    )} />
                 </div>
              ))}
            </div>
            <div className="flex justify-between items-center mt-3">
              <span className="text-[10px] uppercase font-black tracking-widest text-[#fbbf24]">
-               Passo {currentStepIndex + 1} de {stepsWithoutConfirmation.length}
+               Passo {currentProgressIndex + 1} de {progressSteps.length}
              </span>
              <span className="text-[10px] uppercase font-black tracking-widest text-zinc-600">
                {step.replace('_', ' ')}
@@ -242,6 +252,57 @@ export function BookingPage() {
         "max-w-2xl mx-auto px-6 py-10 transition-all duration-500",
         step === 'confirmation' ? "py-16" : ""
       )}>
+        {step === 'intro' && (
+          <div className="animate-fade-in flex flex-col items-center justify-center py-10 space-y-12 text-center">
+             <div className="relative group">
+                <div className="w-24 h-24 rounded-[2.5rem] bg-[#fbbf24] flex items-center justify-center shadow-2xl shadow-[#fbbf24]/20 mb-2 transform group-hover:rotate-12 transition-transform duration-500">
+                    <Scissors className="w-12 h-12 text-[#402D00]" />
+                </div>
+                <div className="absolute -top-2 -right-2 w-8 h-8 rounded-xl bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/5">
+                    <Sparkles className="w-4 h-4 text-[#fbbf24]" />
+                </div>
+             </div>
+
+             <div className="space-y-4 max-w-sm mx-auto">
+                <h2 className="text-5xl font-black font-headline text-white uppercase tracking-tighter leading-[0.85]">
+                  Seja bem-vindo à <br/><span className="text-[#fbbf24]">{company.name}</span>
+                </h2>
+                <p className="text-[#D3C5AC] text-lg font-light leading-relaxed">Onde estilo encontra a precisão. Como deseja prosseguir hoje?</p>
+             </div>
+
+             <div className="flex flex-col gap-4 w-full max-w-xs">
+                {user ? (
+                  <div className="bg-[#1C1B1B] border border-[#fbbf24]/20 rounded-[2rem] p-8 mb-4 relative overflow-hidden group">
+                     <div className="absolute top-0 right-0 w-24 h-24 bg-[#fbbf24]/5 blur-3xl rounded-full -mr-12 -mt-12 group-hover:bg-[#fbbf24]/10 transition-all"></div>
+                     <p className="text-[9px] uppercase font-black tracking-[0.3em] text-[#fbbf24] mb-2 relative z-10">Sessão Ativa</p>
+                     <p className="text-xl font-headline font-black text-white uppercase relative z-10">{user.user_metadata?.full_name?.split(' ')[0] || 'Cliente'}</p>
+                     <p className="text-[10px] text-zinc-500 mt-1 pb-6 border-b border-white/5 relative z-10">{user.email}</p>
+                     <button onClick={() => setStep('service')} className="mt-6 w-full bg-[#fbbf24] text-[#402D00] py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-xl shadow-[#fbbf24]/10 hover:scale-105 active:scale-95 transition-all relative z-10">CONTINUAR AGENDAMENTO</button>
+                  </div>
+                ) : (
+                  <button 
+                    onClick={() => navigate('/portal')}
+                    className="w-full bg-white/5 border border-white/10 text-white py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-white/10 transition-all active:scale-95"
+                  >
+                     <UserIcon className="w-4 h-4" /> LOGIN / CADASTRO
+                  </button>
+                )}
+                
+                <button 
+                  onClick={() => setStep('service')}
+                  className={cn(
+                    "w-full py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all active:scale-95",
+                    user ? "text-zinc-600 hover:text-white" : "bg-[#fbbf24] text-[#402D00] shadow-2xl shadow-[#fbbf24]/20 hover:scale-105"
+                  )}
+                >
+                   {user ? 'AGENDAR NOVAMENTE' : 'AGENDAR SEM LOGIN'} {!user && <ChevronRight className="w-4 h-4" />}
+                </button>
+                
+                <p className="text-[9px] uppercase font-black tracking-[0.4em] text-zinc-700 pt-8 font-headline">Sua comodidade, nossa precisão.</p>
+             </div>
+          </div>
+        )}
+
         {step === 'service' && (
           <ServiceSelector services={services} selectedId={selectedService?.id || null} onSelect={handleServiceSelect} />
         )}
@@ -275,7 +336,16 @@ export function BookingPage() {
                <button onClick={() => setStep('service')} className="bg-white/5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white transition-all">Alterar</button>
             </div>
             
-            <ClientForm onSubmit={handleClientSubmit} loading={bookingLoading} error={error} />
+            <ClientForm 
+               onSubmit={handleClientSubmit} 
+               loading={bookingLoading} 
+               error={error} 
+               initialData={user ? { 
+                 name: user.user_metadata?.full_name || '', 
+                 email: user.email || '', 
+                 phone: user.user_metadata?.phone || '' 
+               } : undefined} 
+            />
           </div>
         )}
 
