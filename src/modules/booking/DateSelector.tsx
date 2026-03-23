@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
 import { ChevronLeft, ChevronRight, CalendarDays } from 'lucide-react'
+import { cn } from '@/utils/helpers'
 
 interface DateSelectorProps {
   selectedDate: string
@@ -39,19 +40,16 @@ export function DateSelector({ selectedDate, onSelect }: DateSelectorProps) {
 
     const days: { date: Date; dateStr: string; currentMonth: boolean }[] = []
 
-    // Previous month padding
     for (let i = startDayOfWeek - 1; i >= 0; i--) {
       const d = new Date(viewYear, viewMonth, -i)
       days.push({ date: d, dateStr: toDateStr(d), currentMonth: false })
     }
 
-    // Current month
     for (let i = 1; i <= daysInMonth; i++) {
       const d = new Date(viewYear, viewMonth, i)
       days.push({ date: d, dateStr: toDateStr(d), currentMonth: true })
     }
 
-    // Next month padding
     const remaining = 7 - (days.length % 7)
     if (remaining < 7) {
       for (let i = 1; i <= remaining; i++) {
@@ -82,41 +80,47 @@ export function DateSelector({ selectedDate, onSelect }: DateSelectorProps) {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="text-center mb-6">
-        <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center mx-auto mb-3">
-          <CalendarDays className="w-6 h-6 text-amber-400" />
-        </div>
-        <h2 className="text-xl font-bold text-white">Escolha a data</h2>
-        <p className="text-sm text-gray-400 mt-1">Selecione o dia do seu agendamento</p>
+    <div className="animate-fade-in space-y-12">
+      <div className="flex flex-col gap-4">
+        <h2 className="text-4xl lg:text-5xl font-black font-headline text-white uppercase tracking-tighter leading-none">
+          Qual o melhor <span className="text-[#fbbf24]">dia para você?</span>
+        </h2>
+        <p className="text-[#D3C5AC] text-lg font-light leading-relaxed max-w-xl">
+          Selecione a data ideal na nossa agenda de alta performance.
+        </p>
       </div>
 
-      {/* Calendar */}
-      <div className="bg-gray-800/50 border border-gray-700/50 rounded-2xl p-4">
-        {/* Month navigation */}
-        <div className="flex items-center justify-between mb-4">
-          <button onClick={goPrevMonth} className="p-2 rounded-xl text-gray-400 hover:bg-gray-700 hover:text-white transition-all">
-            <ChevronLeft className="w-5 h-5" />
+      <div className="bg-[#1C1B1B] border border-white/5 rounded-[3rem] p-8 shadow-2xl relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 w-32 h-32 bg-[#fbbf24]/5 blur-3xl -mr-16 -mt-16"></div>
+
+        <div className="flex items-center justify-between mb-8">
+          <button 
+            onClick={goPrevMonth} 
+            className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-zinc-400 hover:text-[#fbbf24] hover:bg-[#fbbf24]/10 transition-all active:scale-95"
+          >
+            <ChevronLeft className="w-6 h-6" />
           </button>
-          <p className="font-semibold text-white">
+          <p className="font-headline font-black text-xl text-white uppercase tracking-widest bg-white/5 px-6 py-2 rounded-full border border-white/[0.03]">
             {MONTH_LABELS[viewMonth]} {viewYear}
           </p>
-          <button onClick={goNextMonth} className="p-2 rounded-xl text-gray-400 hover:bg-gray-700 hover:text-white transition-all">
-            <ChevronRight className="w-5 h-5" />
+          <button 
+            onClick={goNextMonth} 
+            className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center text-zinc-400 hover:text-[#fbbf24] hover:bg-[#fbbf24]/10 transition-all active:scale-95"
+          >
+            <ChevronRight className="w-6 h-6" />
           </button>
         </div>
 
-        {/* Weekday headers */}
-        <div className="grid grid-cols-7 gap-1 mb-2">
+        <div className="grid grid-cols-7 gap-2 mb-4">
           {WEEKDAY_LABELS.map((label) => (
-            <div key={label} className="text-center text-xs font-semibold text-gray-500 py-1">
+            <div key={label} className="text-center text-[10px] font-black text-zinc-600 uppercase tracking-widest py-2">
               {label}
             </div>
           ))}
         </div>
 
-        {/* Days grid */}
-        <div className="grid grid-cols-7 gap-1">
+        <div className="grid grid-cols-7 gap-2">
           {calendarDays.map(({ dateStr, currentMonth }, i) => {
             const isPast = dateStr < todayStr
             const isSelected = dateStr === selectedDate
@@ -128,19 +132,21 @@ export function DateSelector({ selectedDate, onSelect }: DateSelectorProps) {
                 key={i}
                 onClick={() => !disabled && onSelect(dateStr)}
                 disabled={disabled}
-                className={`
-                  aspect-square flex items-center justify-center rounded-xl text-sm font-medium transition-all duration-200
-                  ${disabled
-                    ? 'text-gray-700 cursor-not-allowed'
+                className={cn(
+                  "aspect-square flex items-center justify-center rounded-[1.25rem] text-sm font-bold transition-all duration-300 relative",
+                  disabled 
+                    ? "opacity-10 cursor-not-allowed" 
                     : isSelected
-                      ? 'bg-amber-500 text-gray-900 shadow-lg shadow-amber-500/30 scale-105'
+                      ? "bg-[#fbbf24] text-[#402D00] shadow-[0_0_25px_rgba(251,191,36,0.3)] scale-110 z-10"
                       : isCurrentDay
-                        ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                  }
-                `}
+                        ? "bg-[#fbbf24]/10 text-[#fbbf24] border border-[#fbbf24]/20 hover:bg-[#fbbf24]/20"
+                        : "text-[#E5E2E1] hover:bg-white/10 hover:border-white/5 border border-transparent"
+                )}
               >
                 {new Date(dateStr + 'T12:00:00').getDate()}
+                {isCurrentDay && !isSelected && (
+                  <div className="absolute bottom-2 w-1 h-1 bg-[#fbbf24] rounded-full" />
+                )}
               </button>
             )
           })}

@@ -1,4 +1,5 @@
-import { CheckCircle2, Calendar, Clock, Scissors, MapPin, Users2 } from 'lucide-react'
+import { CheckCircle2, Calendar, Clock, Scissors, MapPin, Users2, Sparkles, Share2 } from 'lucide-react'
+import { cn } from '@/utils/helpers'
 
 interface ConfirmationScreenProps {
   companyName: string
@@ -30,84 +31,92 @@ export function ConfirmationScreen({
   }
 
   return (
-    <div className="text-center space-y-6">
-      {/* Success animation */}
-      <div className="relative">
-        <div className="w-20 h-20 rounded-full bg-emerald-500/10 border-2 border-emerald-500/30 flex items-center justify-center mx-auto animate-bounce-slow">
-          <CheckCircle2 className="w-10 h-10 text-emerald-400" />
+    <div className="animate-fade-in flex flex-col items-center justify-center py-10 space-y-12">
+      {/* Success Animation Container */}
+      <div className="relative group">
+        <div className="w-32 h-32 rounded-[2.5rem] bg-[#fbbf24] flex items-center justify-center shadow-[0_0_50px_rgba(251,191,36,0.2)] animate-scale-in">
+          <CheckCircle2 className="w-16 h-16 text-[#402D00] stroke-[2.5]" />
         </div>
-        <div className="absolute inset-0 w-20 h-20 rounded-full bg-emerald-500/10 mx-auto animate-ping opacity-30" />
+        <div className="absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-[#0e0e0e] border border-white/5 flex items-center justify-center text-[#fbbf24] animate-bounce-slow delay-300">
+           <Sparkles className="w-6 h-6 fill-[#fbbf24]" />
+        </div>
       </div>
 
-      <div>
-        <h2 className="text-2xl font-bold text-white mb-2">Agendamento confirmado!</h2>
-        <p className="text-gray-400">
-          Olá <span className="text-white font-medium">{clientName}</span>, seu agendamento foi realizado com sucesso.
+      <div className="text-center space-y-4 max-w-md mx-auto">
+        <h2 className="text-4xl lg:text-5xl font-black font-headline text-white uppercase tracking-tighter leading-tight">
+          Agendamento <span className="text-[#fbbf24]">confirmado!</span>
+        </h2>
+        <p className="text-[#D3C5AC] text-lg font-light leading-relaxed">
+          Olá <span className="text-white font-bold">{clientName}</span>, seu lugar na <span className="text-white font-bold">{companyName}</span> já está reservado.
         </p>
       </div>
 
-      {/* Details card */}
-      <div className="bg-gray-800/50 border border-gray-700/50 rounded-2xl p-5 text-left space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
-            <Scissors className="w-4 h-4 text-amber-400" />
-          </div>
-          <div>
-            <p className="text-xs text-gray-500">Serviço</p>
-            <p className="text-sm font-medium text-white">{serviceName}</p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
-            <Calendar className="w-4 h-4 text-amber-400" />
-          </div>
-          <div>
-            <p className="text-xs text-gray-500">Data</p>
-            <p className="text-sm font-medium text-white capitalize">{formatDate(date)}</p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
-            <Clock className="w-4 h-4 text-amber-400" />
-          </div>
-          <div>
-            <p className="text-xs text-gray-500">Horário</p>
-            <p className="text-sm font-medium text-white">{startTime}</p>
-          </div>
-        </div>
-
-        {staffName && (
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
-              <Users2 className="w-4 h-4 text-amber-400" />
+      {/* Ticket Style Details Card */}
+      <div className="w-full max-w-sm bg-[#1C1B1B] border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl relative">
+        <div className="absolute top-1/2 -left-3 w-6 h-6 bg-black rounded-full border-r border-white/5 -translate-y-1/2"></div>
+        <div className="absolute top-1/2 -right-3 w-6 h-6 bg-black rounded-full border-l border-white/5 -translate-y-1/2"></div>
+        
+        <div className="p-8 space-y-6">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-[1rem] bg-[#353534] flex items-center justify-center text-[#fbbf24] flex-shrink-0">
+              <Scissors className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-xs text-gray-500">Profissional</p>
-              <p className="text-sm font-medium text-white">{staffName}</p>
+              <p className="text-[10px] uppercase font-black tracking-widest text-zinc-500">Serviço</p>
+              <p className="text-base font-bold text-white uppercase">{serviceName}</p>
             </div>
           </div>
-        )}
 
-        {companyAddress && (
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-amber-500/10 flex items-center justify-center flex-shrink-0">
-              <MapPin className="w-4 h-4 text-amber-400" />
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-[1rem] bg-[#353534] flex items-center justify-center text-[#fbbf24] flex-shrink-0">
+              <Calendar className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-xs text-gray-500">Local</p>
-              <p className="text-sm font-medium text-white">{companyAddress}</p>
+              <p className="text-[10px] uppercase font-black tracking-widest text-zinc-500">Data</p>
+              <p className="text-base font-bold text-white capitalize">{formatDate(date)}</p>
             </div>
           </div>
-        )}
+
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-[1rem] bg-[#353534] flex items-center justify-center text-[#fbbf24] flex-shrink-0">
+              <Clock className="w-6 h-6" />
+            </div>
+            <div>
+              <p className="text-[10px] uppercase font-black tracking-widest text-zinc-500">Horário</p>
+              <p className="text-base font-bold text-white">{startTime}</p>
+            </div>
+          </div>
+
+          {staffName && (
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 rounded-[1rem] bg-[#353534] flex items-center justify-center text-[#fbbf24] flex-shrink-0">
+                <Users2 className="w-6 h-6" />
+              </div>
+              <div>
+                <p className="text-[10px] uppercase font-black tracking-widest text-zinc-500">Especialista</p>
+                <p className="text-base font-bold text-white">{staffName}</p>
+              </div>
+            </div>
+          )}
+
+          {companyAddress && (
+            <div className="flex items-center gap-4 pt-4 border-t border-white/[0.03]">
+              <div className="w-12 h-12 rounded-[1rem] bg-[#353534]/50 flex items-center justify-center text-zinc-600 flex-shrink-0">
+                <MapPin className="w-6 h-6" />
+              </div>
+              <p className="text-xs font-medium text-zinc-500 leading-relaxed">{companyAddress}</p>
+            </div>
+          )}
+        </div>
       </div>
 
-      <div className="bg-amber-500/5 border border-amber-500/10 rounded-xl p-4">
-        <p className="text-xs text-amber-400/80">
-          Agendamento realizado em <span className="font-semibold">{companyName}</span>. 
-          Em caso de impossibilidade, entre em contato para cancelar ou remarcar.
-        </p>
+      <div className="flex flex-col gap-4 w-full">
+         <button className="w-full bg-white/5 border border-white/10 text-white py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-white/10 transition-all">
+            <Share2 className="w-4 h-4" /> COMPARTILHAR
+         </button>
+         <button className="w-full text-zinc-600 py-2 font-black text-[10px] uppercase tracking-widest hover:text-white transition-colors">
+            Adicionar ao Google Agenda
+         </button>
       </div>
     </div>
   )

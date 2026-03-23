@@ -1,5 +1,6 @@
 import type { Staff } from '@/types'
-import { Users2 } from 'lucide-react'
+import { cn } from '@/utils/helpers'
+import { User, UserCircle } from 'lucide-react'
 
 interface StaffSelectorProps {
   staff: Staff[]
@@ -9,69 +10,106 @@ interface StaffSelectorProps {
 
 export function StaffSelector({ staff, selectedId, onSelect }: StaffSelectorProps) {
   return (
-    <div className="space-y-4">
-      <div className="text-center mb-6">
-        <div className="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center mx-auto mb-3">
-          <Users2 className="w-6 h-6 text-amber-400" />
-        </div>
-        <h2 className="text-xl font-bold text-white">Escolha o profissional</h2>
-        <p className="text-sm text-gray-400 mt-1">Selecione quem irá atendê-lo</p>
+    <div className="animate-fade-in space-y-12">
+      <div className="flex flex-col gap-4">
+        <h2 className="text-4xl lg:text-5xl font-black font-headline text-white uppercase tracking-tighter leading-none">
+          Com quem você quer <span className="text-[#fbbf24]">agendar?</span>
+        </h2>
+        <p className="text-[#D3C5AC] text-lg font-light leading-relaxed max-w-xl">
+          Selecione o seu barbeiro preferido ou escolha sem preferência para a primeira disponibilidade.
+        </p>
       </div>
 
-      <div className="space-y-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {/* "Any" option */}
         <button
           onClick={() => onSelect(null)}
-          className={`w-full text-left p-4 rounded-2xl border transition-all duration-200 ${
+          className={cn(
+            "group relative p-8 rounded-[2.5rem] border text-left transition-all duration-500 overflow-hidden",
             selectedId === null
-              ? 'border-amber-500/40 bg-amber-500/10 shadow-lg shadow-amber-500/5 scale-[1.01]'
-              : 'border-gray-700/50 bg-gray-800/50 hover:border-gray-600 hover:bg-gray-800'
-          }`}
+              ? "bg-[#fbbf24] border-transparent shadow-[0_0_40px_rgba(251,191,36,0.2)] scale-[1.02]" 
+              : "bg-[#1C1B1B] border-white/5 hover:border-[#fbbf24]/30 hover:bg-[#201F1F]"
+          )}
         >
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center flex-shrink-0">
-              <Users2 className="w-5 h-5 text-white" />
+          <div className="flex flex-col h-full justify-between gap-10">
+            <div className={cn(
+              "w-16 h-16 rounded-[1.25rem] flex items-center justify-center transition-all duration-500 group-hover:scale-110",
+              selectedId === null ? "bg-[#402D00] text-[#fbbf24]" : "bg-[#353534] text-[#fbbf24]"
+            )}>
+              <span className="material-symbols-outlined text-4xl">group</span>
             </div>
             <div>
-              <p className={`font-semibold ${selectedId === null ? 'text-amber-400' : 'text-white'}`}>
+              <h3 className={cn(
+                "text-2xl font-black font-headline uppercase tracking-tight mb-2",
+                selectedId === null ? "text-[#402D00]" : "text-[#E5E2E1]"
+              )}>
                 Sem preferência
+              </h3>
+              <p className={cn(
+                "text-xs leading-relaxed font-medium",
+                selectedId === null ? "text-[#402D00]/70" : "text-[#D3C5AC]/50"
+              )}>
+                O primeiro profissional disponível para você.
               </p>
-              <p className="text-xs text-gray-400 mt-0.5">Qualquer profissional disponível</p>
             </div>
           </div>
-          {selectedId === null && (
-            <div className="mt-3 pt-3 border-t border-amber-500/20">
-              <p className="text-xs text-amber-400/70 font-medium">✓ Selecionado</p>
-            </div>
-          )}
         </button>
 
-        {staff.map((s) => (
-          <button
-            key={s.id}
-            onClick={() => onSelect(s)}
-            className={`w-full text-left p-4 rounded-2xl border transition-all duration-200 ${
-              selectedId === s.id
-                ? 'border-amber-500/40 bg-amber-500/10 shadow-lg shadow-amber-500/5 scale-[1.01]'
-                : 'border-gray-700/50 bg-gray-800/50 hover:border-gray-600 hover:bg-gray-800'
-            }`}
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-700/20 border border-amber-500/10 flex items-center justify-center flex-shrink-0">
-                <span className="text-base font-bold text-amber-400">{s.name.charAt(0).toUpperCase()}</span>
+        {staff.map((s) => {
+          const isSelected = selectedId === s.id
+          return (
+            <button
+              key={s.id}
+              onClick={() => onSelect(s)}
+              className={cn(
+                "group relative p-8 rounded-[2.5rem] border text-left transition-all duration-500 overflow-hidden",
+                isSelected 
+                  ? "bg-[#fbbf24] border-transparent shadow-[0_0_40px_rgba(251,191,36,0.2)] scale-[1.02]" 
+                  : "bg-[#1C1B1B] border-white/5 hover:border-[#fbbf24]/30 hover:bg-[#201F1F]"
+              )}
+            >
+              <div className="flex flex-col h-full justify-between gap-10">
+                <div className="flex justify-between items-start">
+                  <div className={cn(
+                    "w-20 h-20 rounded-[1.25rem] overflow-hidden border transition-all duration-500 group-hover:scale-110",
+                    isSelected ? "border-[#402D00]/20" : "border-white/5"
+                  )}>
+                    {s.avatar_url ? (
+                      <img src={s.avatar_url} alt={s.name} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className={cn(
+                        "w-full h-full flex items-center justify-center bg-[#353534]",
+                        isSelected ? "bg-[#402D00] text-[#fbbf24]" : "text-zinc-600"
+                      )}>
+                        <User className="w-10 h-10" />
+                      </div>
+                    )}
+                  </div>
+                  {isSelected && (
+                    <div className="text-[#402D00]">
+                      <span className="material-symbols-outlined font-black">check_circle</span>
+                    </div>
+                  )}
+                </div>
+
+                <div>
+                  <h3 className={cn(
+                    "text-2xl font-black font-headline uppercase tracking-tight mb-1",
+                    isSelected ? "text-[#402D00]" : "text-[#E5E2E1]"
+                  )}>
+                    {s.name}
+                  </h3>
+                  <p className={cn(
+                    "text-xs font-black uppercase tracking-[0.2em]",
+                    isSelected ? "text-[#402D00]/60" : "text-[#fbbf24]"
+                  )}>
+                    {s.role || 'Barbeiro Especialista'}
+                  </p>
+                </div>
               </div>
-              <div>
-                <p className={`font-semibold ${selectedId === s.id ? 'text-amber-400' : 'text-white'}`}>{s.name}</p>
-                {s.role && <p className="text-xs text-gray-400 mt-0.5">{s.role}</p>}
-              </div>
-            </div>
-            {selectedId === s.id && (
-              <div className="mt-3 pt-3 border-t border-amber-500/20">
-                <p className="text-xs text-amber-400/70 font-medium">✓ Selecionado</p>
-              </div>
-            )}
-          </button>
-        ))}
+            </button>
+          )
+        })}
       </div>
     </div>
   )
