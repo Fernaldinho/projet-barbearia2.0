@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useCompany } from '@/contexts/CompanyContext'
-import { Building2, User, Bell, Shield, Palette, Store, Lock, BellRing, Settings as SettingsIcon, Info, Edit, Trash2 } from 'lucide-react'
+import { supabase } from '@/lib/supabase'
+import { Building2, User, Bell, Shield, Palette, Store, Lock, BellRing, Settings as SettingsIcon, Info, Edit, Trash2, CheckCircle2 } from 'lucide-react'
 import { cn } from '@/utils/helpers'
+import { toast } from 'react-hot-toast'
 
 const tabs = [
   { id: 'company', label: 'PERFIL DA BARBEARIA', icon: <Store className="w-5 h-4" /> },
@@ -13,8 +15,76 @@ const tabs = [
 
 export function SettingsPage() {
   const { user } = useAuth()
-  const { company } = useCompany()
+  const { company, updateCompany } = useCompany()
   const [activeTab, setActiveTab] = useState('company')
+  const [loading, setLoading] = useState(false)
+
+  // Company State
+  const [companyName, setCompanyName] = useState('')
+  const [companyPhone, setCompanyPhone] = useState('')
+  const [companyAddress, setCompanyAddress] = useState('')
+
+  // Security State
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+
+  // Appearance State
+  const [activeTheme, setActiveTheme] = useState('Noir')
+
+  // Notifications State
+  const [notifs, setNotifs] = useState({
+    alerts: true,
+    summary: false,
+    sms: true
+  })
+
+  // Initialize state from company data
+  useEffect(() => {
+    if (company) {
+      setCompanyName(company.name)
+      setCompanyPhone(company.phone || '')
+      setCompanyAddress(company.address || '')
+    }
+  }, [company])
+
+  const handleSaveCompany = async () => {
+    setLoading(true)
+    try {
+      await updateCompany({
+        name: companyName,
+        phone: companyPhone,
+        address: companyAddress
+      })
+      toast.success('Configurações da empresa atualizadas!')
+    } catch (err) {
+      console.error(err)
+      toast.error('Erro ao atualizar configurações.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleUpdatePassword = async () => {
+    if (newPassword.length < 6) {
+      toast.error('A senha deve ter pelo menos 6 caracteres.')
+      return
+    }
+    setLoading(true)
+    try {
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword
+      })
+      if (error) throw error
+      toast.success('Senha atualizada com sucesso!')
+      setNewPassword('')
+      setCurrentPassword('')
+    } catch (err) {
+      console.error(err)
+      toast.error('Erro ao atualizar senha.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="animate-fade-in pb-20 space-y-16 mt-8">
@@ -79,13 +149,14 @@ export function SettingsPage() {
                       </div>
                     </div>
                   </div>
-                  <form className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="space-y-3">
                       <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Nome do Estabelecimento</label>
                       <input 
                         className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none" 
                         type="text" 
-                        defaultValue={company?.name || ''}
+                        value={companyName}
+                        onChange={(e) => setCompanyName(e.target.value)}
                       />
                     </div>
                     <div className="space-y-3">
@@ -93,7 +164,8 @@ export function SettingsPage() {
                       <input 
                         className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none" 
                         type="text" 
-                        defaultValue={company?.phone || ''}
+                        value={companyPhone}
+                        onChange={(e) => setCompanyPhone(e.target.value)}
                       />
                     </div>
                     <div className="col-span-1 md:col-span-2 space-y-3">
@@ -101,10 +173,11 @@ export function SettingsPage() {
                       <input 
                         className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none" 
                         type="text" 
-                        defaultValue={company?.address || ''}
+                        value={companyAddress}
+                        onChange={(e) => setCompanyAddress(e.target.value)}
                       />
                     </div>
-                  </form>
+                  </div>
                 </section>
               </div>
             )}
@@ -120,34 +193,51 @@ export function SettingsPage() {
                       <h3 className="text-xl font-black font-headline text-white uppercase tracking-tighter">Segurança</h3>
                     </div>
                     <div className="space-y-6">
-                      <div className="space-y-3">
-                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Senha Atual</label>
-                        <input className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none" placeholder="••••••••" type="password"/>
+                      <div className="space-y-3 relative opacity-50">
+                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Senha Atual (Mock)</label>
+                        <input 
+                          disabled
+                          className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none" 
+                          placeholder="••••••••" 
+                          type="password"
+                          value={currentPassword}
+                          onChange={(e) => setCurrentPassword(e.target.value)}
+                        />
                       </div>
                       <div className="space-y-3">
                         <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Nova Senha</label>
-                        <input className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none" placeholder="Min. 8 caracteres" type="password"/>
+                        <input 
+                          className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none" 
+                          placeholder="Min. 8 caracteres" 
+                          type="password"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                        />
                       </div>
                     </div>
                   </div>
-                  <button className="mt-12 bg-[#2a2a2a] text-white hover:bg-[#333] transition-all px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest active:scale-95">
-                    Atualizar Senha
+                  <button 
+                    onClick={handleUpdatePassword}
+                    disabled={loading || !newPassword}
+                    className="mt-12 bg-[#2a2a2a] text-white hover:bg-[#333] transition-all px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest active:scale-95 disabled:opacity-50"
+                  >
+                    {loading ? 'Processando...' : 'Atualizar Senha'}
                   </button>
                 </section>
 
                 <section className="bg-gradient-to-br from-[#1C1B1B] to-[#131313] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
                   <div className="flex items-center gap-4 mb-10">
-                    <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner">
-                      <Info className="w-6 h-6 text-[#fbbf24]" />
+                    <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner text-[#fbbf24]">
+                      <Info className="w-6 h-6" />
                     </div>
-                    <h3 className="text-xl font-black font-headline text-white uppercase tracking-tighter">Info</h3>
+                    <h3 className="text-xl font-black font-headline text-white uppercase tracking-tighter">Info de Acesso</h3>
                   </div>
                   <p className="text-zinc-500 text-sm leading-relaxed mb-6 font-medium">
-                    Suas senhas são criptografadas e nunca compartilhadas. Ative a autenticação de dois fatores para proteção extra.
+                    Suas senhas são criptografadas e nunca compartilhadas. Email: <b className="text-white">{user?.email}</b>
                   </p>
                   <div className="p-6 bg-[#0e0e0e] rounded-3xl border border-white/[0.02]">
                     <p className="text-xs font-bold text-zinc-400 mb-2 uppercase tracking-widest">Último Acesso</p>
-                    <p className="text-sm font-black text-white">Hoje às 14:32</p>
+                    <p className="text-sm font-black text-[#fbbf24]">Hoje - {new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</p>
                   </div>
                 </section>
               </div>
@@ -156,24 +246,35 @@ export function SettingsPage() {
             {activeTab === 'notifications' && (
               <section className="bg-[#1C1B1B] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
                 <div className="flex items-center gap-4 mb-12">
-                  <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner">
-                    <BellRing className="w-6 h-6 text-[#fbbf24]" />
+                  <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner text-[#fbbf24]">
+                    <BellRing className="w-6 h-6" />
                   </div>
                   <h3 className="text-xl font-black font-headline text-white uppercase tracking-tighter">Notificações</h3>
                 </div>
                 <div className="space-y-8">
                   {[
-                    { label: 'Alertas de Agendamento', sub: 'Receba avisos por e-mail e push em tempo real' },
-                    { label: 'Resumo Semanal', sub: 'Estatísticas completas de desempenho da loja' },
-                    { label: 'Lembretes SMS', sub: 'Enviar lembretes para clientes 2h antes do corte' },
-                  ].map((pref, idx) => (
-                    <div key={idx} className="flex items-center justify-between p-6 rounded-3xl bg-[#0e0e0e] border border-white/[0.02] hover:border-white/5 transition-all group">
+                    { id: 'alerts', label: 'Alertas de Agendamento', sub: 'Receba avisos por e-mail e push em tempo real' },
+                    { id: 'summary', label: 'Resumo Semanal', sub: 'Estatísticas completas de desempenho da loja' },
+                    { id: 'sms', label: 'Lembretes SMS', sub: 'Enviar lembretes para clientes 2h antes do corte' },
+                  ].map((pref) => (
+                    <div key={pref.id} className="flex items-center justify-between p-6 rounded-3xl bg-[#0e0e0e] border border-white/[0.02] hover:border-white/5 transition-all group">
                       <div>
                         <p className="font-black text-[#E5E2E1] text-base group-hover:text-[#fbbf24] transition-colors">{pref.label}</p>
                         <p className="text-xs text-zinc-500 mt-1 font-medium">{pref.sub}</p>
                       </div>
-                      <div className="relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 cursor-pointer shadow-inner bg-[#fbbf24]">
-                        <span className="inline-block h-5 w-5 transform rounded-full bg-[#1c1b1b] transition-transform duration-300 translate-x-6 shadow" />
+                      <div 
+                        onClick={() => setNotifs(prev => ({ ...prev, [pref.id]: !prev[pref.id as keyof typeof notifs] }))}
+                        className={cn(
+                          "relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-300 cursor-pointer shadow-inner",
+                          notifs[pref.id as keyof typeof notifs] ? "bg-[#fbbf24]" : "bg-zinc-800"
+                        )}
+                      >
+                        <span 
+                          className={cn(
+                            "inline-block h-5 w-5 transform rounded-full bg-[#1c1b1b] transition-transform duration-300 shadow",
+                            notifs[pref.id as keyof typeof notifs] ? "translate-x-6" : "translate-x-1"
+                          )} 
+                        />
                       </div>
                     </div>
                   ))}
@@ -184,19 +285,30 @@ export function SettingsPage() {
             {activeTab === 'appearance' && (
               <section className="bg-[#1C1B1B] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
                 <div className="flex items-center gap-4 mb-8">
-                  <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner">
-                    <Palette className="w-6 h-6 text-[#fbbf24]" />
+                  <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner text-[#fbbf24]">
+                    <Palette className="w-6 h-6" />
                   </div>
                   <h3 className="text-xl font-black font-headline text-white uppercase tracking-tighter">Aparência</h3>
                 </div>
                 <p className="text-zinc-500 text-sm font-medium mb-10">Personalize a identidade visual do seu painel e da página pública.</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
                   {['Noir', 'Classic', 'Royal'].map(theme => (
-                    <div key={theme} className={cn(
-                      "aspect-video rounded-2xl border transition-all cursor-pointer flex items-center justify-center font-black text-[10px] uppercase tracking-widest",
-                      theme === 'Noir' ? "bg-black border-[#fbbf24]/40 text-[#fbbf24]" : "bg-[#2a2a2a] border-white/5 text-zinc-500"
-                    )}>
+                    <div 
+                      key={theme} 
+                      onClick={() => setActiveTheme(theme)}
+                      className={cn(
+                        "aspect-video rounded-2xl border transition-all cursor-pointer flex items-center justify-center font-black text-[10px] uppercase tracking-widest relative overflow-hidden",
+                        activeTheme === theme 
+                          ? "bg-black border-[#fbbf24]/40 text-[#fbbf24]" 
+                          : "bg-[#2a2a2a] border-white/5 text-zinc-500 hover:border-white/20"
+                      )}
+                    >
                       {theme} Theme
+                      {activeTheme === theme && (
+                        <div className="absolute top-2 right-2">
+                           <CheckCircle2 className="w-4 h-4" />
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -206,8 +318,12 @@ export function SettingsPage() {
             {/* Action Bar */}
             <div className="flex justify-end gap-6 mt-12 bg-[#0e0e0e]/40 p-6 rounded-[2rem] border border-white/5 backdrop-blur-xl sticky bottom-4 z-10 shadow-2xl">
               <button className="px-8 py-4 text-zinc-500 font-black text-[10px] tracking-widest uppercase hover:text-white transition-all">Descartar</button>
-              <button className="px-12 py-4 bg-[#fbbf24] text-[#402D00] font-black text-[10px] tracking-widest uppercase rounded-full hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 shadow-xl shadow-[#fbbf24]/10">
-                Salvar Alterações
+              <button 
+                onClick={handleSaveCompany}
+                disabled={loading}
+                className="px-12 py-4 bg-[#fbbf24] text-[#402D00] font-black text-[10px] tracking-widest uppercase rounded-full hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 shadow-xl shadow-[#fbbf24]/10 disabled:opacity-50"
+              >
+                {loading ? 'Salvando...' : 'Salvar Alterações'}
               </button>
             </div>
           </div>

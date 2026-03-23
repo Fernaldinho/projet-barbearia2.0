@@ -16,6 +16,7 @@ interface CompanyContextType {
     maxAppointmentsPerMonth: number
   }
   refreshCompany: () => Promise<void>
+  updateCompany: (data: Partial<Company>) => Promise<void>
 }
 
 const CompanyContext = createContext<CompanyContextType | undefined>(undefined)
@@ -83,6 +84,17 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     await fetchCompany()
   }
 
+  const updateCompany = async (data: Partial<Company>) => {
+    if (!company?.id) return
+    const { error } = await supabase
+      .from('companies')
+      .update(data)
+      .eq('id', company.id)
+
+    if (error) throw error
+    await fetchCompany()
+  }
+
   useEffect(() => {
     fetchCompany()
   }, [user])
@@ -95,6 +107,7 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
         loading,
         features,
         refreshCompany,
+        updateCompany,
       }}
     >
       {children}
