@@ -256,7 +256,7 @@ export function ClientPortal() {
            </div>
            {/* Direct CTA */}
            <a 
-             href="/"
+             href={appointments.length > 0 ? `/book/${appointments[0].company?.slug}` : '/'}
              className="bg-[#fbbf24] text-[#402D00] px-10 py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-[#fbbf24]/20 hover:scale-[1.02] transition-all flex items-center gap-3"
            >
               Fazer Novo Agendamento
