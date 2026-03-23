@@ -61,46 +61,60 @@ export function ServicesPage() {
   )
 
   return (
-    <div className="space-y-[40px] animate-fade-in pb-12">
+    <div className="space-y-[60px] animate-fade-in pb-20">
       {/* Editorial Header */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-        <div className="max-w-2xl">
-          <h1 className="text-4xl lg:text-6xl font-bold text-white font-headline leading-tight tracking-tight">
-            Nossos <span className="text-primary-container">Serviços</span>.
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
+        <div className="max-w-3xl">
+          <span className="font-label text-primary-container tracking-[0.4em] uppercase text-xs block mb-4">Gerenciamento</span>
+          <h1 className="text-5xl lg:text-8xl font-black text-white font-headline leading-[0.9] tracking-tighter uppercase">
+            SERVIÇOS<span className="text-primary-container">.</span>
           </h1>
-          <p className="text-lg text-on-surface-variant font-medium mt-4">
-            Gerencie o catálogo de experiências da sua barbearia. Defina preços, durações e o estilo que seus clientes merecem.
+          <p className="text-xl text-on-surface-variant font-medium mt-8 leading-relaxed max-w-2xl">
+            Sua vitrine de experiências. Transforme o simples em <span className="text-white italic">extraordinário</span> através de um catálogo meticulosamente planejado.
           </p>
         </div>
 
         <button 
           onClick={() => setShowForm(true)} 
-          className="bg-primary-container text-on-primary-fixed h-14 px-8 rounded-full font-bold shadow-lg shadow-primary-container/20 hover:scale-[1.02] transition-all flex items-center gap-3 self-start lg:self-end"
+          className="bg-primary-container text-on-primary-fixed h-16 px-10 rounded-full font-black text-xs tracking-widest shadow-[0_20px_40px_rgba(255,191,0,0.15)] hover:scale-[1.05] hover:shadow-primary-container/30 transition-all flex items-center gap-4 self-start lg:self-end active:scale-95 group"
         >
-          <Plus className="w-5 h-5" />
+          <Scissors className="w-5 h-5 group-hover:rotate-12 transition-transform" />
           ADICIONAR SERVIÇO
         </button>
       </div>
 
-      {/* Search Bar - No Line Style */}
-      <div className="relative group max-w-md">
-        <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-          <Search className="w-5 h-5 text-on-surface-variant/40 group-focus-within:text-primary-container transition-colors" />
+      {/* Search & Stats Bar */}
+      <div className="flex flex-wrap items-center gap-8">
+        <div className="relative group flex-grow max-w-md">
+          <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
+            <Search className="w-5 h-5 text-on-surface-variant/30 group-focus-within:text-primary-container transition-colors" />
+          </div>
+          <input
+            type="text"
+            placeholder="Encontrar serviço no catálogo..."
+            className="w-full bg-surface-container-low h-16 pl-16 pr-8 rounded-full text-white placeholder:text-on-surface-variant/20 border border-outline-variant/10 focus:border-primary-container/30 focus:bg-surface-container-highest transition-all outline-none font-bold text-sm tracking-wide"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
-        <input
-          type="text"
-          placeholder="Buscar serviço..."
-          className="w-full bg-surface-container-low h-14 pl-14 pr-6 rounded-2xl text-white placeholder:text-on-surface-variant/30 focus:bg-surface-container-highest transition-all outline-none font-medium"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        
+        <div className="flex gap-4">
+          <div className="bg-surface-container-low px-8 h-16 flex flex-col justify-center rounded-3xl border border-outline-variant/5">
+            <span className="text-[10px] font-black text-on-surface-variant/40 uppercase tracking-widest">Total</span>
+            <span className="text-xl font-bold text-white font-headline leading-none">{services.length}</span>
+          </div>
+          <div className="bg-surface-container-low px-8 h-16 flex flex-col justify-center rounded-3xl border border-outline-variant/5">
+            <span className="text-[10px] font-black text-on-surface-variant/40 uppercase tracking-widest">Ativos</span>
+            <span className="text-xl font-bold text-primary-container font-headline leading-none">{services.filter(s => s.is_active).length}</span>
+          </div>
+        </div>
       </div>
 
       {/* Content Area */}
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-[200px] rounded-3xl bg-surface-container-low animate-pulse" />
+            <div key={i} className="h-[300px] rounded-[2.5rem] bg-surface-container-low animate-pulse" />
           ))}
         </div>
       ) : (
@@ -110,6 +124,7 @@ export function ServicesPage() {
           onDelete={handleDelete} 
         />
       )}
+
 
       {/* Form Modal */}
       {showForm && (
