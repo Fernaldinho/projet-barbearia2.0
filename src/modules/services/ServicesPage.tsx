@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
-import { Plus, Scissors, Search, Sparkles, TrendingUp } from 'lucide-react'
+import { Plus, Scissors, Search, Sparkles, TrendingUp, Bell, Settings as SettingsIcon, User as UserIcon } from 'lucide-react'
 import { useCompany } from '@/contexts/CompanyContext'
 import { ServicesTable } from './ServicesTable'
 import { ServicesForm } from './ServicesForm'
@@ -61,47 +61,62 @@ export function ServicesPage() {
   )
 
   return (
-    <div className="space-y-[40px] animate-fade-in pb-20">
-      {/* Editorial Header */}
+    <div className="space-y-12 animate-fade-in pb-20">
+      {/* Search Header */}
+      <div className="flex items-center justify-between">
+        <div className="relative group w-80">
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <Search className="w-4 h-4 text-on-surface-variant/40 group-focus-within:text-primary-container transition-colors" />
+          </div>
+          <input
+            type="text"
+            placeholder="Buscar serviços..."
+            className="w-full bg-transparent h-10 pl-10 pr-4 rounded-full text-white placeholder:text-on-surface-variant/30 transition-all outline-none font-medium text-sm border-none focus:ring-0 uppercase tracking-widest text-[10px]"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        
+        <div className="flex items-center gap-8">
+          <button className="text-on-surface-variant/60 hover:text-white transition-colors relative">
+            <div className="absolute -top-0.5 -right-0.5 w-1.5 h-1.5 bg-primary-container rounded-full border border-[#0e0e0e]" />
+            <Bell className="w-5 h-5" />
+          </button>
+          <button className="text-on-surface-variant/60 hover:text-white transition-colors">
+            <SettingsIcon className="w-5 h-5" />
+          </button>
+          <div className="w-10 h-10 rounded-full bg-[#1c1c1c] border border-white/5 flex items-center justify-center overflow-hidden cursor-pointer hover:border-primary-container/30 transition-all">
+            <UserIcon className="w-6 h-6 text-on-surface-variant/40" />
+          </div>
+        </div>
+      </div>
+
+      {/* Main Title Section */}
       <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
         <div className="max-w-3xl">
-          <span className="font-label text-primary-container tracking-[0.4em] uppercase text-[10px] font-black block mb-4 opacity-50">Gestão de Portfólio</span>
-          <h1 className="text-5xl lg:text-7xl font-black text-white font-headline leading-[0.9] tracking-tighter uppercase">
-            SERVIÇOS<span className="text-primary-container">.</span>
+          <span className="font-label text-primary-container tracking-[0.4em] uppercase text-[10px] font-black block mb-4">Gestão de Portfólio</span>
+          <h1 className="text-6xl font-black text-white font-headline leading-tight tracking-tighter uppercase">
+            SERVIÇOS
           </h1>
-          <p className="text-lg text-on-surface-variant font-medium mt-6 leading-relaxed max-w-xl">
-            Gerencie os serviços da sua barbearia com <span className="text-white italic">precisão cirúrgica</span>.
+          <p className="text-lg text-on-surface-variant/70 font-medium mt-6 leading-relaxed max-w-xl">
+            Gerencie seu menu de experiências com precisão cirúrgica. Defina valores, tempos e ativações premium.
           </p>
         </div>
 
         <button 
           onClick={() => setShowForm(true)} 
-          className="bg-primary-container text-on-primary-fixed h-14 px-8 rounded-full font-black text-[10px] tracking-[0.2em] shadow-lg hover:scale-[1.02] transition-all flex items-center gap-3 self-start lg:self-end active:scale-95 group uppercase"
+          className="bg-primary-container text-on-primary-fixed h-14 px-8 rounded-full font-black text-xs tracking-wider shadow-lg hover:brightness-110 transition-all flex items-center gap-4 self-start lg:self-end active:scale-95 group uppercase"
         >
           <Plus className="w-5 h-5" />
           Novo Serviço
         </button>
       </div>
 
-      {/* Simplified Search Bar */}
-      <div className="relative group max-w-md">
-        <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
-          <Search className="w-4 h-4 text-on-surface-variant/30 group-focus-within:text-primary-container transition-colors" />
-        </div>
-        <input
-          type="text"
-          placeholder="PESQUISAR SERVIÇO"
-          className="w-full bg-surface-container-lowest h-14 pl-14 pr-8 rounded-full text-white placeholder:text-on-surface-variant/20 border border-outline-variant/10 focus:border-primary-container/30 transition-all outline-none font-black text-[10px] tracking-[0.2em] uppercase"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-
       {/* Content Area */}
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-[200px] rounded-3xl bg-surface-container-low animate-pulse" />
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="h-[300px] rounded-[2rem] bg-surface-container-low animate-pulse" />
           ))}
         </div>
       ) : (
@@ -111,6 +126,7 @@ export function ServicesPage() {
           onDelete={handleDelete} 
         />
       )}
+
 
 
       {/* Form Modal */}
