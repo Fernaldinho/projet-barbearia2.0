@@ -107,29 +107,28 @@ export function DashboardPage() {
   const userName = user?.user_metadata?.full_name || 'Usuário'
 
   return (
-    <div className="space-y-[60px] animate-fade-in pb-20">
+    <div className="space-y-[32px] animate-fade-in pb-10">
       {/* Editorial Header */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
-        <div className="max-w-3xl">
-          <span className="font-label text-primary-container tracking-[0.4em] uppercase text-xs block mb-4">Visão Estratégica</span>
-          <h1 className="text-5xl lg:text-8xl font-black text-white font-headline leading-[0.9] tracking-tighter uppercase">
-            PAINEL<br />EXECUTIVO<span className="text-primary-container">.</span>
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+        <div>
+          <h1 className="text-4xl lg:text-5xl font-bold text-white font-headline leading-tight tracking-tight">
+            {greeting()}, <span className="text-primary-container">{userName.split(' ')[0]}</span>.
           </h1>
-          <p className="text-xl text-on-surface-variant font-medium mt-8 leading-relaxed max-w-2xl">
-            {greeting()}, <span className="text-white">{userName.split(' ')[0]}</span>. Sua operação está processando <span className="text-white italic">{metrics.attendanceRate}%</span> de capacidade hoje.
+          <p className="text-lg text-on-surface-variant font-medium mt-2 max-w-xl">
+            Sua barbearia está com <span className="text-white font-bold">{metrics.attendanceRate}%</span> de ocupação hoje. Aqui está o que está acontecendo.
           </p>
         </div>
 
         {/* Period selector */}
-        <div className="flex items-center bg-surface-container-low rounded-full p-2 h-auto self-start lg:self-end border border-outline-variant/5">
+        <div className="flex items-center bg-surface-container-low rounded-2xl p-1.5 h-auto self-start lg:self-center backdrop-blur-md">
           {(Object.keys(periodLabels) as Period[]).map((p) => (
             <button
               key={p}
               onClick={() => setPeriod(p)}
-              className={`px-6 py-3 rounded-full text-[10px] font-black tracking-[0.1em] uppercase transition-all ${
+              className={`px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all ${
                 period === p
-                  ? 'bg-primary-container text-on-primary-fixed shadow-xl shadow-primary-container/20'
-                  : 'text-on-surface-variant/40 hover:text-white'
+                  ? 'bg-primary-container text-on-primary-fixed shadow-lg shadow-primary-container/20'
+                  : 'text-on-surface-variant hover:text-white'
               }`}
             >
               {periodLabels[p]}
@@ -137,7 +136,6 @@ export function DashboardPage() {
           ))}
         </div>
       </div>
-
 
       {/* Stats Cards Section */}
       <section>
