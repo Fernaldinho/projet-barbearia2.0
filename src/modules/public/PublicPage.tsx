@@ -5,7 +5,10 @@ import { cn } from '@/utils/helpers'
 
 export function PublicPage() {
   const { company } = useCompany()
-  const [slug, setSlug] = useState('barbearia-classic')
+  
+  const generatedSlug = company 
+    ? `${company.name.toLowerCase().replace(/\s+/g, '-')}-${company.id.substring(0, 8)}`
+    : 'barbearia-premium-id'
 
   return (
     <div className="animate-fade-in pb-20 space-y-16 mt-8">
@@ -28,7 +31,7 @@ export function PublicPage() {
             <h1 className="text-6xl font-headline font-black text-[#E5E2E1] tracking-tighter uppercase leading-none">Página Pública</h1>
           </div>
           <a 
-            href={`/book/${slug}`}
+            href={`/book/${company?.slug || generatedSlug}`}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-[#fbbf24] text-[#402D00] px-10 py-5 rounded-full font-black text-sm flex items-center gap-3 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 group shadow-xl shadow-[#fbbf24]/10"
@@ -51,17 +54,18 @@ export function PublicPage() {
                 <h2 className="text-2xl font-black font-headline text-white uppercase tracking-tighter">Link da Agenda</h2>
               </div>
               <div className="space-y-6">
-                <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">URL Personalizada</label>
-                <div className="flex group">
-                  <span className="bg-[#0e0e0e] px-6 py-5 rounded-l-2xl text-zinc-500 border border-white/5 border-r-0 text-sm font-bold flex items-center">agenda.ai/</span>
+                <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">URL Personalizada (Fixo)</label>
+                <div className="flex group opacity-80">
+                  <span className="bg-[#0e0e0e] px-6 py-5 rounded-l-2xl text-zinc-600 border border-white/5 border-r-0 text-sm font-black flex items-center">agenda.ai/</span>
                   <input 
-                    className="flex-1 bg-[#0e0e0e] border border-white/5 rounded-r-2xl py-5 px-6 text-white focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none font-bold placeholder:text-zinc-700" 
+                    className="flex-1 bg-[#0e0e0e] border border-white/5 rounded-r-2xl py-5 px-6 text-zinc-400 font-black cursor-not-allowed outline-none text-sm" 
                     type="text" 
-                    value={slug}
-                    onChange={(e) => setSlug(e.target.value)}
+                    value={generatedSlug}
+                    readOnly
+                    disabled
                   />
                 </div>
-                <p className="text-xs text-zinc-600 font-medium ml-1">Este é o link premium que você deve compartilhar no seu Instagram e WhatsApp.</p>
+                <p className="text-xs text-zinc-600 font-medium ml-1">Este link é gerado automaticamente com base no nome do seu estabelecimento e ID exclusivo para garantir segurança e unicidade.</p>
               </div>
             </section>
 
