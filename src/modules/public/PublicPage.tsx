@@ -9,7 +9,7 @@ export function PublicPage() {
   const [loading, setLoading] = useState(false)
   
   const generatedSlug = company 
-    ? company.slug || company.name.toLowerCase().replace(/\s+/g, '-')
+    ? company.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
     : 'minha-barbearia'
 
   const copyBookingLink = () => {

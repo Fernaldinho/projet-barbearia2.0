@@ -52,6 +52,7 @@ export function SettingsPage() {
     try {
       await updateCompany({
         name: companyName,
+        slug: companyName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
         phone: companyPhone,
         address: companyAddress
       })
