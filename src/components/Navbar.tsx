@@ -4,15 +4,15 @@ import { getInitials } from '@/utils/helpers'
 import { useLocation } from 'react-router-dom'
 
 const routeTitles: Record<string, string> = {
-  '/dashboard': 'Dashboard',
-  '/services': 'Serviços',
-  '/clients': 'Clientes',
-  '/appointments': 'Agendamentos',
-  '/staff': 'Equipe',
-  '/business-hours': 'Horários de Funcionamento',
-  '/blocked-times': 'Bloqueios de Agenda',
-  '/billing': 'Faturamento',
-  '/settings': 'Configurações',
+  '/dashboard': 'DASHBOARD',
+  '/services': 'SERVIÇOS',
+  '/clients': 'CLIENTES',
+  '/appointments': 'AGENDAMENTOS',
+  '/staff': 'EQUIPE',
+  '/business-hours': 'HORÁRIOS',
+  '/blocked-times': 'BLOQUEIOS',
+  '/billing': 'FATURAMENTO',
+  '/settings': 'CONFIGURAÇÕES',
 }
 
 interface NavbarProps {
