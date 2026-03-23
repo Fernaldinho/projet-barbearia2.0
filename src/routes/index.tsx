@@ -23,12 +23,17 @@ import { BlockedTimesPage } from '@/modules/blocked-times/BlockedTimesPage'
 import { BillingPage } from '@/modules/billing/BillingPage'
 import { SettingsPage } from '@/modules/settings/SettingsPage'
 import { PublicPage } from '@/modules/public/PublicPage'
+import { ClientPortal } from '@/modules/client/ClientPortal'
 
 export const router = createBrowserRouter([
   // Public routes
   {
     path: '/',
     element: <LandingPage />,
+  },
+  {
+    path: '/portal',
+    element: <ClientPortal />,
   },
   {
     path: '/login',

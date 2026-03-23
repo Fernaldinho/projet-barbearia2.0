@@ -1,4 +1,4 @@
-import { CheckCircle2, Calendar, Clock, Scissors, MapPin, Users2, Sparkles, Share2 } from 'lucide-react'
+import { CheckCircle2, Calendar, Clock, Scissors, MapPin, Users2, Sparkles, Home } from 'lucide-react'
 import { cn } from '@/utils/helpers'
 
 interface ConfirmationScreenProps {
@@ -110,12 +110,12 @@ export function ConfirmationScreen({
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 w-full">
-         <button className="w-full bg-white/5 border border-white/10 text-white py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-white/10 transition-all">
-            <Share2 className="w-4 h-4" /> COMPARTILHAR
-         </button>
-         <button className="w-full text-zinc-600 py-2 font-black text-[10px] uppercase tracking-widest hover:text-white transition-colors">
-            Adicionar ao Google Agenda
+      <div className="w-full">
+         <button 
+           onClick={() => window.location.href = '/'}
+           className="w-full bg-[#fbbf24] text-[#402D00] py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:shadow-[0_0_30px_rgba(251,191,36,0.3)] transition-all active:scale-95"
+         >
+            <Home className="w-4 h-4" /> VOLTAR PARA O INÍCIO
          </button>
       </div>
     </div>

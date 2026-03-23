@@ -76,3 +76,15 @@ export async function deleteClient(id: string): Promise<void> {
   const { error } = await supabase.from('clients').delete().eq('id', id)
   if (error) throw error
 }
+
+export async function getClientAppointments(email: string): Promise<any[]> {
+  const { data, error } = await supabase
+    .from('appointments')
+    .select('*, client:clients!inner(*), service:services(*), staff:staff(*), company:companies(*)')
+    .eq('clients.email', email)
+    .order('date', { ascending: false })
+    .order('start_time', { ascending: false })
+
+  if (error) throw error
+  return data || []
+}
