@@ -1,6 +1,5 @@
 import type { Service } from '@/types'
 import { formatCurrency, cn } from '@/utils/helpers'
-import { Clock, Scissors, Star, User, Zap } from 'lucide-react'
 
 interface ServicesTableProps {
   services: Service[]
@@ -11,8 +10,8 @@ interface ServicesTableProps {
 export function ServicesTable({ services, onEdit, onDelete }: ServicesTableProps) {
   if (services.length === 0) {
     return (
-      <div className="p-16 text-center rounded-[2rem] bg-surface-container-low border border-outline-variant/5">
-        <p className="text-on-surface-variant font-medium">Nenhum serviço encontrado</p>
+      <div className="p-16 text-center rounded-[2rem] bg-surface-container-low border border-outline-variant/10">
+        <p className="text-on-surface-variant font-medium">Nenhum serviço encontrado no catálogo premium.</p>
       </div>
     )
   }
@@ -23,11 +22,12 @@ export function ServicesTable({ services, onEdit, onDelete }: ServicesTableProps
         const isBestseller = service.name.toLowerCase().includes('signature') || 
                             service.name.toLowerCase().includes('combo')
         
-        // Icon matching based on name (mock logic to match screenshot)
-        const getIcon = () => {
-          if (isBestseller) return <Star className="w-5 h-5 text-white" />
-          if (service.name.toLowerCase().includes('barba')) return <User className="w-5 h-5 text-white" />
-          return <Scissors className="w-5 h-5 text-white" />
+        // Match icons to Stitch HTML: content_cut, face, star, spa
+        const getIconName = () => {
+          if (isBestseller) return 'star'
+          if (service.name.toLowerCase().includes('barba')) return 'face'
+          if (service.name.toLowerCase().includes('massagem') || service.name.toLowerCase().includes('capilar')) return 'spa'
+          return 'content_cut'
         }
 
         return (
@@ -35,62 +35,85 @@ export function ServicesTable({ services, onEdit, onDelete }: ServicesTableProps
             key={service.id} 
             onClick={() => onEdit(service)}
             className={cn(
-              "group relative bg-[#1c1c1c] rounded-[2.5rem] p-10 flex flex-col justify-between transition-all duration-500 cursor-pointer hover:bg-[#252525] border border-white/5",
-              isBestseller && "ring-1 ring-primary-container/30 bg-gradient-to-b from-[#1c1c1c] to-[#161616]"
+              "group p-8 rounded-[2rem] transition-all duration-500 flex flex-col justify-between h-[420px] relative border cursor-pointer",
+              isBestseller 
+                ? "bg-gradient-to-br from-[#1C1B1B] to-[#FBBF24]/5 hover:to-[#FBBF24]/10 border-[#FBBF24]/20" 
+                : "bg-[#1C1B1B] hover:bg-[#201F1F] border-transparent hover:border-[#4F4633]/20",
+              !service.is_active && "opacity-60 hover:opacity-100"
             )}
           >
-            {/* Top Row: Icon and Toggle */}
-            <div className="flex items-center justify-between mb-10">
-              <div className="w-12 h-12 rounded-xl bg-surface-container-highest/50 flex items-center justify-center">
-                {getIcon()}
+            {/* Top: Icon and Toggle */}
+            <div className="flex justify-between items-start">
+              <div className={cn(
+                "w-14 h-14 rounded-2xl flex items-center justify-center transition-transform duration-500 group-hover:scale-110 shadow-inner",
+                isBestseller ? "bg-[#FBBF24] text-[#402D00] shadow-[0_0_15px_rgba(251,191,36,0.3)]" : "bg-[#353534] text-[#FBBF24]"
+              )}>
+                <span className="material-symbols-outlined text-3xl" style={{ fontVariationSettings: isBestseller ? "'FILL' 1" : "" }}>
+                  {getIconName()}
+                </span>
               </div>
 
-              <div className="flex items-center gap-3">
-                <span className="text-[8px] font-black text-on-surface-variant/40 uppercase tracking-widest">Ativo</span>
-                <div className={cn(
-                  "w-10 h-5 rounded-full p-1 transition-colors duration-300",
-                  service.is_active ? "bg-primary-container" : "bg-on-surface-variant/20"
+              <div className="flex flex-col items-end">
+                <label className="relative inline-flex items-center cursor-pointer pointer-events-none">
+                  <input type="checkbox" checked={service.is_active} className="sr-only peer" readOnly />
+                  <div className="w-11 h-6 bg-[#353534] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-[#D3C5AC] after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#FBBF24] peer-checked:after:bg-[#402D00]"></div>
+                </label>
+                <span className={cn(
+                  "text-[10px] uppercase font-bold tracking-widest mt-2 transition-colors",
+                  service.is_active ? "text-[#FBBF24] opacity-80" : "text-[#D3C5AC]/40"
                 )}>
-                  <div className={cn(
-                    "w-3 h-3 bg-white rounded-full transition-transform duration-300",
-                    service.is_active ? "translate-x-5" : "translate-x-0"
-                  )} />
-                </div>
+                  {service.is_active ? 'Ativo' : 'Inativo'}
+                </span>
               </div>
             </div>
 
-            {/* Service Content */}
-            <div className="flex-1 mb-12">
+            {/* Middle: Name and Description */}
+            <div className="mt-8">
               {isBestseller && (
-                <div className="inline-block px-3 py-1 bg-primary-container/10 border border-primary-container/20 text-primary-container text-[8px] font-black uppercase tracking-widest rounded-full mb-4">
-                  Bestseller
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="bg-[#FBBF24]/20 text-[#FBBF24] text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-widest">
+                    Bestseller
+                  </span>
                 </div>
               )}
-              <h3 className="text-3xl font-black text-white font-headline tracking-tighter uppercase mb-4 leading-tight">
+              <h3 className={cn(
+                "font-headline text-2xl font-bold mb-3 transition-colors",
+                isBestseller ? "text-[#FBBF24]" : "text-[#E5E2E1] group-hover:text-[#FBBF24]"
+              )}>
                 {service.name}
               </h3>
-              <p className="text-sm text-on-surface-variant/50 font-medium leading-relaxed line-clamp-3">
-                {service.description || 'Experiência exclusiva com atendimento personalizado e produtos de alta qualidade.'}
+              <p className="text-[#D3C5AC]/60 text-sm line-clamp-3 leading-relaxed">
+                {service.description || 'Experiência exclusiva com produtos premium e consultoria personalizada.'}
               </p>
             </div>
 
-            {/* Bottom Row: Stats */}
-            <div className="pt-8 border-t border-white/5 flex items-center gap-12">
-              <div>
-                <span className="text-[9px] font-black text-primary-container/60 uppercase tracking-[0.2em] block mb-2">Tempo</span>
-                <p className="text-lg font-bold text-white tracking-tight">{service.duration} min</p>
+            {/* Bottom: Stats */}
+            <div className={cn(
+              "mt-auto pt-8 flex items-center justify-between border-t",
+              isBestseller ? "border-[#FBBF24]/10" : "border-[#4F4633]/10"
+            )}>
+              <div className="flex flex-col">
+                <span className="text-[10px] uppercase tracking-tighter text-[#D3C5AC]/60">Tempo</span>
+                <span className="font-headline font-medium text-[#E5E2E1]">{service.duration} min</span>
               </div>
-              
-              <div>
-                <span className="text-[9px] font-black text-primary-container/60 uppercase tracking-[0.2em] block mb-2">Investimento</span>
-                <div className="flex items-baseline gap-2">
-                  <span className="text-2xl font-black text-white font-headline tracking-tighter">
-                    {formatCurrency(service.price)}
-                  </span>
+              <div className="flex flex-col items-end">
+                <div className="flex items-center gap-2">
                   {isBestseller && (
-                    <span className="text-[10px] font-black text-primary-container uppercase tracking-widest">Especial</span>
+                    <>
+                      <span className="text-[10px] line-through text-[#D3C5AC]/40">{formatCurrency(service.price * 1.15)}</span>
+                      <span className="text-[10px] uppercase tracking-tighter text-[#FBBF24]">Especial</span>
+                    </>
+                  )}
+                  {!isBestseller && (
+                    <span className="text-[10px] uppercase tracking-tighter text-[#D3C5AC]/60">Invetimento</span>
                   )}
                 </div>
+                <span className={cn(
+                  "font-headline font-bold text-[#FBBF24]",
+                  isBestseller ? "text-3xl font-black" : "text-2xl"
+                )}>
+                  {formatCurrency(service.price).replace(',00', '')}
+                </span>
               </div>
             </div>
           </div>
@@ -99,3 +122,4 @@ export function ServicesTable({ services, onEdit, onDelete }: ServicesTableProps
     </div>
   )
 }
+
