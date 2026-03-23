@@ -65,8 +65,7 @@ export function LandingPage() {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
                 <Link to={ROUTES.REGISTER} className="w-full sm:w-auto bg-[#fbbf24] text-[#402d00] px-10 py-4 rounded-full font-headline font-bold text-lg hover:shadow-[0_0_30px_rgba(251,191,36,0.4)] transition-all text-center">Começar Grátis</Link>
-                <Link to="/book/luis-fe" className="w-full sm:w-auto border border-[#4f4633]/30 text-[#e5e2e1] px-10 py-4 rounded-full font-headline font-bold text-lg hover:bg-[#1c1b1b] transition-all flex items-center justify-center gap-2">
-                  <span className="material-symbols-outlined">play_circle</span>
+                <Link to="/book/barbearia-demo" className="w-full sm:w-auto border border-[#4f4633]/30 text-[#e5e2e1] px-10 py-4 rounded-full font-headline font-bold text-lg hover:bg-[#1c1b1b] transition-all flex items-center justify-center gap-2">
                   Demonstração
                 </Link>
               </div>
