@@ -1,14 +1,42 @@
-import { useState } from 'react'
-import { Link as LinkIcon, Palette, Clock, Smartphone, Laptop, CloudUpload, CheckCircle, ExternalLink, MapPin } from 'lucide-react'
+import { Link as LinkIcon, Palette, Clock, Smartphone, Laptop, CloudUpload, CheckCircle, ExternalLink, MapPin, Copy } from 'lucide-react'
 import { useCompany } from '@/contexts/CompanyContext'
 import { cn } from '@/utils/helpers'
+import { useEffect, useState } from 'react'
+import { toast } from 'react-hot-toast'
 
 export function PublicPage() {
-  const { company } = useCompany()
+  const { company, updateCompany } = useCompany()
+  const [loading, setLoading] = useState(false)
+  const [companySlug, setCompanySlug] = useState('')
   
-  const generatedSlug = company 
-    ? `${company.name.toLowerCase().replace(/\s+/g, '-')}-${company.id.substring(0, 8)}`
-    : 'barbearia-premium-id'
+  useEffect(() => {
+    if (company) {
+      setCompanySlug(company.slug || '')
+    }
+  }, [company])
+
+  const copyBookingLink = () => {
+    const link = `${window.location.origin}/book/${companySlug}`
+    navigator.clipboard.writeText(link)
+    toast.success('Link copiado!')
+  }
+
+  const handleSave = async () => {
+    if (!company) return
+    setLoading(true)
+    try {
+      await updateCompany({
+        ...company,
+        slug: companySlug.toLowerCase().replace(/[^a-z0-9-]/g, '-')
+      })
+      toast.success('Página pública atualizada!')
+    } catch (err: any) {
+      console.error(err)
+      toast.error('Erro ao atualizar página pública.')
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="animate-fade-in pb-20 space-y-16 mt-8">
@@ -31,7 +59,7 @@ export function PublicPage() {
             <h1 className="text-6xl font-headline font-black text-[#E5E2E1] tracking-tighter uppercase leading-none">Página Pública</h1>
           </div>
           <a 
-            href={`/book/${company?.slug || generatedSlug}`}
+            href={`/book/${companySlug}`}
             target="_blank"
             rel="noopener noreferrer"
             className="bg-[#fbbf24] text-[#402D00] px-10 py-5 rounded-full font-black text-sm flex items-center gap-3 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 group shadow-xl shadow-[#fbbf24]/10"
@@ -54,18 +82,25 @@ export function PublicPage() {
                 <h2 className="text-2xl font-black font-headline text-white uppercase tracking-tighter">Link da Agenda</h2>
               </div>
               <div className="space-y-6">
-                <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">URL Personalizada (Fixo)</label>
-                <div className="flex group opacity-80">
-                  <span className="bg-[#0e0e0e] px-6 py-5 rounded-l-2xl text-zinc-600 border border-white/5 border-r-0 text-sm font-black flex items-center">agenda.ai/</span>
-                  <input 
-                    className="flex-1 bg-[#0e0e0e] border border-white/5 rounded-r-2xl py-5 px-6 text-zinc-400 font-black cursor-not-allowed outline-none text-sm" 
-                    type="text" 
-                    value={generatedSlug}
-                    readOnly
-                    disabled
-                  />
+                <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Url Personalizada do seu link</label>
+                <div className="flex flex-col sm:flex-row gap-3">
+                   <div className="flex group flex-1">
+                      <span className="bg-[#0e0e0e] px-6 py-5 rounded-l-2xl text-zinc-600 border border-white/5 border-r-0 text-sm font-black flex items-center">/book/</span>
+                      <input 
+                        className="flex-1 bg-[#0e0e0e] border border-white/5 rounded-r-2xl py-5 px-6 text-[#E5E2E1] font-black outline-none text-sm focus:ring-1 focus:ring-[#fbbf24]" 
+                        type="text" 
+                        value={companySlug}
+                        onChange={(e) => setCompanySlug(e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''))}
+                      />
+                   </div>
+                   <button 
+                     onClick={copyBookingLink}
+                     className="bg-white/5 border border-white/5 text-zinc-400 hover:text-[#fbbf24] hover:border-[#fbbf24]/20 px-6 rounded-2xl transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest"
+                   >
+                      <Copy className="w-4 h-4" /> Copiar Link
+                   </button>
                 </div>
-                <p className="text-xs text-zinc-600 font-medium ml-1">Este link é gerado automaticamente com base no nome do seu estabelecimento e ID exclusivo para garantir segurança e unicidade.</p>
+                <p className="text-xs text-zinc-600 font-medium ml-1">Este link é a identidade da sua barbearia. Use um nome fácil de lembrar. <br/> Seu link oficial: <span className="text-[#fbbf24]/60">{window.location.origin}/book/{companySlug}</span></p>
               </div>
             </section>
 
@@ -234,7 +269,13 @@ export function PublicPage() {
           </div>
           <div className="flex gap-6">
             <button className="px-10 py-5 rounded-full border border-white/5 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-all shadow-lg active:scale-95">DESCARTAR</button>
-            <button className="px-16 py-5 rounded-full bg-[#fbbf24] text-[#402D00] text-[10px] font-black uppercase tracking-widest shadow-xl shadow-[#fbbf24]/20 hover:shadow-[#fbbf24]/40 transition-all active:scale-95">SALVAR ALTERAÇÕES</button>
+            <button 
+              onClick={handleSave}
+              disabled={loading}
+              className="px-16 py-5 rounded-full bg-[#fbbf24] text-[#402D00] text-[10px] font-black uppercase tracking-widest shadow-xl shadow-[#fbbf24]/20 hover:shadow-[#fbbf24]/40 transition-all active:scale-95 disabled:opacity-50"
+            >
+              {loading ? 'SALVANDO...' : 'SALVAR ALTERAÇÕES'}
+            </button>
           </div>
         </div>
       </div>
