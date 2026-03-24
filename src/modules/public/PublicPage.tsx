@@ -107,24 +107,7 @@ export function PublicPage() {
                     />
                   </div>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                  <div>
-                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-4 ml-1">Esquema de Cores</label>
-                    <div className="bg-[#0e0e0e] p-5 rounded-2xl border border-[#fbbf24]/20 flex items-center gap-4 group">
-                      <div className="w-8 h-8 rounded-full bg-[#fbbf24] shadow-[0_0_15px_rgba(251,191,36,0.5)] group-hover:scale-110 transition-transform"></div>
-                      <span className="text-sm font-black text-white uppercase tracking-tighter">Precision Noir</span>
-                      <CheckCircle className="text-[#fbbf24] w-6 h-6 ml-auto" />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-4 ml-1">Estilo de Botões</label>
-                    <div className="flex gap-4">
-                      <div className="h-10 w-10 rounded-full bg-[#fbbf24] border-2 border-white/10 ring-2 ring-[#fbbf24]/20 shadow-lg"></div>
-                      <div className="h-10 w-10 rounded-2xl bg-zinc-800 border border-white/5 opacity-40"></div>
-                      <div className="h-10 w-10 rounded-lg bg-zinc-800 border border-white/5 opacity-40"></div>
-                    </div>
-                  </div>
-                </div>
+
               </div>
             </section>
 
