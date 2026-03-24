@@ -1,9 +1,46 @@
+import { useState, useEffect } from 'react'
 import { DollarSign, TrendingUp, Clock, CreditCard } from 'lucide-react'
 import { useCompany } from '@/contexts/CompanyContext'
 import { formatCurrency } from '@/utils/helpers'
+import { supabase } from '@/lib/supabase'
 
 export function BillingPage() {
-  const { plan } = useCompany()
+  const { company, plan } = useCompany()
+
+  const [stats, setStats] = useState({ total: 0, received: 0, pending: 0 })
+
+  useEffect(() => {
+    if (!company?.id) return
+
+    const loadStats = async () => {
+      const today = new Date()
+      const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0]
+      const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0]
+
+      const { data, error } = await supabase
+        .from('appointments')
+        .select('status, service:services(price)')
+        .eq('company_id', company.id)
+        .gte('date', firstDay)
+        .lte('date', lastDay)
+        
+      if (!error && data) {
+        let received = 0
+        let pending = 0
+
+        data.forEach((app: any) => {
+          const price = app.service?.price || 0
+          if (app.status === 'completed') {
+            received += price
+          } else if (app.status === 'confirmed' || app.status === 'scheduled') {
+            pending += price
+          }
+        })
+        setStats({ total: received + pending, received, pending })
+      }
+    }
+    loadStats()
+  }, [company?.id])
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -15,34 +52,34 @@ export function BillingPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="card p-6">
+        <div className="card p-6 border border-white/5 rounded-2xl bg-[#1C1B1B]">
           <div className="flex items-start justify-between mb-4">
             <div className="w-11 h-11 rounded-xl bg-success-500/10 flex items-center justify-center">
               <DollarSign className="w-5 h-5 text-success-500" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-white mb-1">{formatCurrency(0)}</p>
-          <p className="text-sm text-dark-400">Receita do mês</p>
+          <p className="text-2xl font-bold text-white mb-1">{formatCurrency(stats.total)}</p>
+          <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-black">Receita do mês</p>
         </div>
 
-        <div className="card p-6">
+        <div className="card p-6 border border-white/5 rounded-2xl bg-[#1C1B1B]">
           <div className="flex items-start justify-between mb-4">
             <div className="w-11 h-11 rounded-xl bg-primary-500/10 flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-primary-400" />
+              <TrendingUp className="w-5 h-5 text-[#fbbf24]" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-white mb-1">{formatCurrency(0)}</p>
-          <p className="text-sm text-dark-400">Recebido</p>
+          <p className="text-2xl font-bold text-white mb-1">{formatCurrency(stats.received)}</p>
+          <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-black">Recebido</p>
         </div>
 
-        <div className="card p-6">
+        <div className="card p-6 border border-white/5 rounded-2xl bg-[#1C1B1B]">
           <div className="flex items-start justify-between mb-4">
             <div className="w-11 h-11 rounded-xl bg-info-500/10 flex items-center justify-center">
               <Clock className="w-5 h-5 text-info-500" />
             </div>
           </div>
-          <p className="text-2xl font-bold text-white mb-1">{formatCurrency(0)}</p>
-          <p className="text-sm text-dark-400">Pendente</p>
+          <p className="text-2xl font-bold text-white mb-1">{formatCurrency(stats.pending)}</p>
+          <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-black">Pendente</p>
         </div>
       </div>
 
