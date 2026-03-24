@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react'
-import { Plus, ChevronLeft, ChevronRight, Calendar, List, Users2, Search, Filter, MoreVertical, Scissors } from 'lucide-react'
+import { Plus, ChevronLeft, ChevronRight, Calendar, List, Users2, Search, Filter, MoreVertical, Scissors, Edit, CheckCircle, XCircle } from 'lucide-react'
 import { useCompany } from '@/contexts/CompanyContext'
 import { AppointmentsList } from './AppointmentsList'
 import { AppointmentForm } from './AppointmentForm'
@@ -22,6 +22,7 @@ export function AppointmentsPage() {
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0])
   const [selectedStaffId, setSelectedStaffId] = useState<string>('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null)
 
   // Modal state
   const [showForm, setShowForm] = useState(false)
@@ -286,9 +287,37 @@ export function AppointmentsPage() {
                               {app.status === 'confirmed' ? 'Confirmado' : 
                                app.status === 'scheduled' ? 'Agendado' : 'Cancelado'}
                             </span>
-                            <button className="w-12 h-12 rounded-2xl flex items-center justify-center hover:bg-white/5 transition-all text-zinc-500 hover:text-white">
-                              <MoreVertical className="w-6 h-6" />
-                            </button>
+                            <div className="relative">
+                              <button 
+                                onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === app.id ? null : app.id); }}
+                                className="w-12 h-12 rounded-2xl flex items-center justify-center hover:bg-white/5 transition-all text-zinc-500 hover:text-white"
+                              >
+                                <MoreVertical className="w-6 h-6" />
+                              </button>
+                              
+                              {openMenuId === app.id && (
+                                <div className="absolute top-14 right-0 mt-2 w-48 bg-[#0e0e0e] border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-[100] animate-fade-in origin-top-right">
+                                  <button onClick={(e) => { e.stopPropagation(); setEditingAppointment(app); setOpenMenuId(null); }} className="w-full text-left px-6 py-4 text-xs font-black uppercase tracking-widest text-[#E5E2E1] hover:bg-white/5 hover:text-[#fbbf24] transition-all flex items-center gap-3">
+                                    <Edit className="w-4 h-4" /> Editar
+                                  </button>
+                                  {app.status === 'scheduled' && (
+                                    <button onClick={(e) => { e.stopPropagation(); handleStatusChange(app.id, 'confirmed'); setOpenMenuId(null); }} className="w-full text-left px-6 py-4 text-xs font-black uppercase tracking-widest text-[#E5E2E1] hover:bg-white/5 hover:text-emerald-400 transition-all flex items-center gap-3">
+                                      <CheckCircle className="w-4 h-4" /> Confirmar
+                                    </button>
+                                  )}
+                                  {app.status === 'confirmed' && (
+                                    <button onClick={(e) => { e.stopPropagation(); handleStatusChange(app.id, 'completed'); setOpenMenuId(null); }} className="w-full text-left px-6 py-4 text-xs font-black uppercase tracking-widest text-[#E5E2E1] hover:bg-white/5 hover:text-blue-400 transition-all flex items-center gap-3">
+                                      <CheckCircle className="w-4 h-4" /> Concluir
+                                    </button>
+                                  )}
+                                  {(app.status === 'scheduled' || app.status === 'confirmed') && (
+                                    <button onClick={(e) => { e.stopPropagation(); handleStatusChange(app.id, 'cancelled'); setOpenMenuId(null); }} className="w-full text-left px-6 py-4 text-xs font-black uppercase tracking-widest text-zinc-500 hover:bg-white/5 hover:text-red-500 transition-all flex items-center gap-3 border-t border-white/5">
+                                      <XCircle className="w-4 h-4" /> Cancelar
+                                    </button>
+                                  )}
+                                </div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
