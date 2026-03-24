@@ -99,6 +99,17 @@ export function AppointmentsPage() {
     setSelectedDate(d.toISOString().split('T')[0])
   }
 
+  const goPrevMonth = () => {
+    const d = new Date(selectedDate + 'T12:00:00')
+    const prev = new Date(d.getFullYear(), d.getMonth() - 1, 1)
+    setSelectedDate(prev.toISOString().split('T')[0])
+  }
+  const goNextMonth = () => {
+    const d = new Date(selectedDate + 'T12:00:00')
+    const next = new Date(d.getFullYear(), d.getMonth() + 1, 1)
+    setSelectedDate(next.toISOString().split('T')[0])
+  }
+
   const formatDisplayDate = (dateStr: string) => {
     const d = new Date(dateStr + 'T12:00:00')
     const today = new Date().toISOString().split('T')[0]
@@ -194,35 +205,58 @@ export function AppointmentsPage() {
             {/* Mini Calendar Visual */}
             <div className="bg-[#1C1B1B] rounded-[2rem] p-8 border border-white/5 shadow-xl relative overflow-hidden group">
               <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#fbbf24]/5 rounded-full blur-2xl group-hover:bg-[#fbbf24]/10 transition-colors"></div>
-              <div className="flex justify-between items-center mb-8">
-                <span className="font-black text-white text-sm uppercase tracking-widest">Outubro 2026</span>
-                <div className="flex gap-4">
-                  <button onClick={goPrevDay} className="text-zinc-500 hover:text-[#fbbf24] transition-colors">
-                    <span className="material-symbols-outlined text-sm">chevron_left</span>
-                  </button>
-                  <button onClick={goNextDay} className="text-zinc-500 hover:text-[#fbbf24] transition-colors">
-                    <span className="material-symbols-outlined text-sm">chevron_right</span>
-                  </button>
-                </div>
-              </div>
-              <div className="grid grid-cols-7 gap-2 text-center text-[10px] text-zinc-600 font-black mb-4">
-                <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
-              </div>
-              <div className="grid grid-cols-7 gap-2 text-center text-xs">
-                {[...Array(31)].map((_, i) => (
-                  <span 
-                    key={i} 
-                    className={cn(
-                      "py-2 rounded-xl transition-all cursor-pointer font-bold",
-                      (i + 1).toString().padStart(2, '0') === selectedDate.split('-')[2]
-                        ? "bg-[#fbbf24] text-[#402D00]" 
-                        : "text-zinc-500 hover:text-white"
-                    )}
-                  >
-                    {i + 1}
-                  </span>
-                ))}
-              </div>
+              
+              {(() => {
+                const currentDate = new Date(selectedDate + 'T12:00:00')
+                const year = currentDate.getFullYear()
+                const month = currentDate.getMonth()
+                const daysInMonth = new Date(year, month + 1, 0).getDate()
+                const firstDayOfMonth = new Date(year, month, 1).getDay()
+                const monthLabel = currentDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })
+
+                return (
+                  <>
+                    <div className="flex justify-between items-center mb-8 relative z-10">
+                      <span className="font-black text-white text-sm uppercase tracking-widest">{monthLabel}</span>
+                      <div className="flex gap-4">
+                        <button onClick={goPrevMonth} className="text-zinc-500 hover:text-[#fbbf24] transition-colors">
+                          <span className="material-symbols-outlined text-sm">chevron_left</span>
+                        </button>
+                        <button onClick={goNextMonth} className="text-zinc-500 hover:text-[#fbbf24] transition-colors">
+                          <span className="material-symbols-outlined text-sm">chevron_right</span>
+                        </button>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-7 gap-2 text-center text-[10px] text-zinc-600 font-black mb-4 relative z-10">
+                      <span>D</span><span>S</span><span>T</span><span>Q</span><span>Q</span><span>S</span><span>S</span>
+                    </div>
+                    <div className="grid grid-cols-7 gap-2 text-center text-xs relative z-10">
+                      {[...Array(firstDayOfMonth)].map((_, i) => (
+                        <span key={`empty-${i}`} />
+                      ))}
+                      {[...Array(daysInMonth)].map((_, i) => {
+                        const day = i + 1
+                        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+                        const isSelected = dateStr === selectedDate
+                        return (
+                          <span 
+                            key={day} 
+                            onClick={() => setSelectedDate(dateStr)}
+                            className={cn(
+                              "py-2 rounded-xl transition-all cursor-pointer font-bold",
+                              isSelected
+                                ? "bg-[#fbbf24] text-[#402D00]" 
+                                : "text-zinc-500 hover:text-white"
+                            )}
+                          >
+                            {day}
+                          </span>
+                        )
+                      })}
+                    </div>
+                  </>
+                )
+              })()}
             </div>
           </div>
 
@@ -234,6 +268,14 @@ export function AppointmentsPage() {
                 <span className="text-lg font-black text-white uppercase tracking-tighter whitespace-nowrap">
                   {formatDisplayDate(selectedDate)}
                 </span>
+                <div className="flex gap-2">
+                  <button onClick={goPrevDay} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/10 transition-all">
+                    <span className="material-symbols-outlined text-sm">chevron_left</span>
+                  </button>
+                  <button onClick={goNextDay} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/10 transition-all">
+                    <span className="material-symbols-outlined text-sm">chevron_right</span>
+                  </button>
+                </div>
                 <div className="flex-1 h-[1px] bg-white/5"></div>
               </div>
 
