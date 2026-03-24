@@ -353,6 +353,7 @@ export function BookingPage() {
           <ConfirmationScreen
             companyName={company.name}
             companyAddress={company.address}
+            companySlug={company.slug}
             serviceName={selectedService?.name || ''}
             date={selectedDate}
             startTime={selectedTime || ''}

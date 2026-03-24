@@ -37,6 +37,10 @@ export const router = createBrowserRouter([
     element: <ClientPortal />,
   },
   {
+    path: '/portal/:slug',
+    element: <ClientPortal />,
+  },
+  {
     path: '/login',
     element: <LoginPage />,
   },

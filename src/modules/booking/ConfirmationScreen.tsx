@@ -9,6 +9,7 @@ interface ConfirmationScreenProps {
   startTime: string
   clientName: string
   staffName?: string
+  companySlug?: string
 }
 
 export function ConfirmationScreen({
@@ -19,6 +20,7 @@ export function ConfirmationScreen({
   startTime,
   clientName,
   staffName,
+  companySlug,
 }: ConfirmationScreenProps) {
   const formatDate = (d: string) => {
     const dateObj = new Date(d + 'T12:00:00')
@@ -112,7 +114,7 @@ export function ConfirmationScreen({
 
       <div className="w-full max-w-sm space-y-3">
          <a 
-           href="/portal"
+           href={companySlug ? `/portal/${companySlug}` : '/portal'}
            target="_blank"
            rel="noopener noreferrer"
            className="w-full bg-[#fbbf24] text-[#402D00] py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:shadow-[0_0_30px_rgba(251,191,36,0.3)] transition-all active:scale-95"

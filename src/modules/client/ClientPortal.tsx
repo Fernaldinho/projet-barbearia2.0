@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { cn } from '@/utils/helpers'
 import { 
@@ -23,6 +23,7 @@ import { supabase } from '@/lib/supabase'
 export function ClientPortal() {
   const { user, login, logout, loading: authLoading } = useAuth()
   const navigate = useNavigate()
+  const { slug } = useParams<{ slug: string }>()
 
   // Auth State
   const [isRegister, setIsRegister] = useState(false)
@@ -220,6 +221,8 @@ export function ClientPortal() {
   }
 
   // Dashboard View
+  const fallbackTargetSlug = slug || (appointments.length > 0 ? appointments[0].company?.slug : null)
+
   return (
     <div className="min-h-screen bg-black text-[#E5E2E1] font-body selection:bg-[#fbbf24] selection:text-[#402D00]">
       <style>{`
@@ -230,7 +233,7 @@ export function ClientPortal() {
       {/* Header */}
       <header className="sticky top-0 z-30 bg-black/80 backdrop-blur-2xl border-b border-white/[0.03]">
         <div className="max-w-4xl mx-auto px-6 py-6 flex items-center justify-between">
-          <Link to="/" className="font-headline font-black text-xl text-[#fbbf24] tracking-tighter uppercase">agendai</Link>
+          <Link to={fallbackTargetSlug ? `/book/${fallbackTargetSlug}` : '/'} className="font-headline font-black text-xl text-[#fbbf24] tracking-tighter uppercase">PORTAL DA BARBEARIA</Link>
           <div className="flex items-center gap-6">
              <div className="hidden sm:block text-right">
                 <p className="text-[9px] uppercase font-black tracking-widest text-[#fbbf24]">Perfil do Cliente</p>
@@ -256,9 +259,9 @@ export function ClientPortal() {
            </div>
            {/* Direct CTA */}
            <a 
-             href={appointments.length > 0 ? `/book/${appointments[0].company?.slug}` : '#'}
+             href={fallbackTargetSlug ? `/book/${fallbackTargetSlug}` : '#'}
              onClick={(e) => {
-               if (appointments.length === 0) {
+               if (!fallbackTargetSlug) {
                  e.preventDefault();
                  alert("Você ainda não possui histórico. Para agendar pela primeira vez, utilize o link da sua barbearia!");
                }
@@ -324,7 +327,6 @@ export function ClientPortal() {
                     <div className="bg-[#131212] border border-dashed border-white/5 rounded-[2rem] p-12 text-center space-y-4">
                        <Calendar className="w-12 h-12 text-zinc-800 mx-auto" />
                        <p className="text-zinc-600 text-sm font-black uppercase tracking-widest">Nenhum agendamento encontrado</p>
-                       <a href="/" className="text-[#fbbf24] text-xs font-bold uppercase hover:underline">Ir para página inicial</a>
                     </div>
                  ) : (
                     appointments.map((app) => (
