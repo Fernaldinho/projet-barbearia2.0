@@ -73,6 +73,7 @@ export interface Client {
   notes: string | null
   created_at: string
   updated_at: string
+  appointments?: any[]
 }
 
 export interface ClientFormData {

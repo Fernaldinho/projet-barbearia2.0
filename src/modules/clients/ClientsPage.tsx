@@ -6,6 +6,7 @@ import { ClientsForm } from './ClientsForm'
 import { getClients, createClient, updateClient, deleteClient } from './clients.api'
 import type { Client, ClientFormData } from '@/types'
 import { cn } from '@/utils/helpers'
+import { ClientHistoryModal } from './ClientHistoryModal'
 
 export function ClientsPage() {
   const { company } = useCompany()
@@ -13,6 +14,7 @@ export function ClientsPage() {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editingClient, setEditingClient] = useState<Client | null>(null)
+  const [historyClient, setHistoryClient] = useState<Client | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
 
   const loadClients = useCallback(async () => {
@@ -48,8 +50,12 @@ export function ClientsPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Tem certeza que deseja excluir este cliente?')) return
-    await deleteClient(id)
-    await loadClients()
+    try {
+      await deleteClient(id)
+      await loadClients()
+    } catch (err: any) {
+      alert('Erro ao excluir cliente: ' + err.message)
+    }
   }
 
   const filteredClients = useMemo(() => {
@@ -60,6 +66,20 @@ export function ClientsPage() {
       (c.phone && c.phone.replace(/\D/g, '').includes(searchTerm.replace(/\D/g, '')))
     )
   }, [clients, searchTerm])
+
+  const novosEsteMes = useMemo(() => {
+    const now = new Date();
+    return clients.filter(c => {
+      const d = new Date(c.created_at)
+      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+    }).length
+  }, [clients])
+
+  const taxaFidelidade = useMemo(() => {
+    if (!clients.length) return 0
+    const fieis = clients.filter(c => c.appointments && c.appointments.length > 1).length
+    return Math.round((fieis / clients.length) * 100)
+  }, [clients])
 
   return (
     <div className="animate-fade-in pb-20 space-y-12 mt-8">
@@ -107,7 +127,7 @@ export function ClientsPage() {
           <div className="bg-[#1C1B1B] p-8 rounded-[2rem] flex items-center justify-between group hover:bg-[#201F1F] transition-all border border-white/5">
             <div>
               <p className="text-zinc-500 text-[10px] uppercase tracking-[0.2em] font-black mb-2">Novos este Mês</p>
-              <p className="text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">0</p>
+              <p className="text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{novosEsteMes}</p>
             </div>
             <div className="bg-[#fbbf24]/10 p-5 rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
               <TrendingUp className="w-8 h-8" />
@@ -116,7 +136,7 @@ export function ClientsPage() {
           <div className="bg-[#1C1B1B] p-8 rounded-[2rem] flex items-center justify-between group hover:bg-[#201F1F] transition-all border border-white/5">
             <div>
               <p className="text-zinc-500 text-[10px] uppercase tracking-[0.2em] font-black mb-2">Taxa de Fidelidade</p>
-              <p className="text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">0%</p>
+              <p className="text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{taxaFidelidade}%</p>
             </div>
             <div className="bg-[#fbbf24]/10 p-5 rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
               <ShieldCheck className="w-8 h-8" />
@@ -132,6 +152,7 @@ export function ClientsPage() {
             clients={filteredClients} 
             onEdit={(c) => setEditingClient(c)} 
             onDelete={handleDelete} 
+            onViewHistory={(c) => setHistoryClient(c)}
           />
         )}
 
@@ -200,6 +221,7 @@ export function ClientsPage() {
 
       {showForm && <ClientsForm onSubmit={handleCreate} onClose={() => setShowForm(false)} />}
       {editingClient && <ClientsForm initialData={editingClient} onSubmit={handleUpdate} onClose={() => setEditingClient(null)} />}
+      {historyClient && <ClientHistoryModal client={historyClient} onClose={() => setHistoryClient(null)} />}
     </div>
   )
 }

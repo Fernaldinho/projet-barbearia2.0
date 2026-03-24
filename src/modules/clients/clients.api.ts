@@ -4,7 +4,7 @@ import type { Client, ClientFormData } from '@/types'
 export async function getClients(companyId: string): Promise<Client[]> {
   const { data, error } = await supabase
     .from('clients')
-    .select('*')
+    .select('*, appointments(id, date, status, service:services(price))')
     .eq('company_id', companyId)
     .order('name')
 
@@ -73,15 +73,18 @@ export async function updateClient(companyId: string, id: string, formData: Part
 }
 
 export async function deleteClient(id: string): Promise<void> {
+  // Excluir ou cancelar os agendamentos antes de excluir o cliente (evitando erro de Foreign Key)
+  await supabase.from('appointments').delete().eq('client_id', id)
+  
   const { error } = await supabase.from('clients').delete().eq('id', id)
   if (error) throw error
 }
 
-export async function getClientAppointments(email: string): Promise<any[]> {
+export async function getClientAppointments(clientId: string): Promise<any[]> {
   const { data, error } = await supabase
     .from('appointments')
-    .select('*, client:clients!inner(*), service:services(*), staff:staff(*), company:companies(*)')
-    .eq('clients.email', email)
+    .select('*, client:clients!inner(*), service:services(*), staff:staff(*)')
+    .eq('client_id', clientId)
     .order('date', { ascending: false })
     .order('start_time', { ascending: false })
 

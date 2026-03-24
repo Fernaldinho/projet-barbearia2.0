@@ -6,9 +6,27 @@ interface ClientsTableProps {
   clients: Client[]
   onEdit: (client: Client) => void
   onDelete: (id: string) => void
+  onViewHistory: (client: Client) => void
 }
 
-export function ClientsTable({ clients, onEdit, onDelete }: ClientsTableProps) {
+export function ClientsTable({ clients, onEdit, onDelete, onViewHistory }: ClientsTableProps) {
+  const calculateTotalSpent = (appointments?: any[]) => {
+    if (!appointments) return 0
+    return appointments.reduce((sum, apt) => {
+      if (apt.status !== 'cancelled' && apt.status !== 'no_show') {
+         return sum + (apt.service?.price || 0)
+      }
+      return sum
+    }, 0)
+  }
+
+  const getLastVisit = (appointments?: any[]) => {
+    if (!appointments || appointments.length === 0) return '-'
+    const valid = appointments.filter(a => a.status === 'completed' || new Date(a.date) <= new Date()).sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    if (valid.length === 0) return '-'
+    const vDate = new Date(valid[0].date)
+    return new Date(vDate.getTime() + vDate.getTimezoneOffset() * 60000).toLocaleDateString('pt-BR')
+  }
   if (clients.length === 0) {
     return (
       <div className="p-20 text-center bg-[#1C1B1B] rounded-[2.5rem] border border-dashed border-[#4F4633]/20 shadow-inner">
@@ -45,13 +63,18 @@ export function ClientsTable({ clients, onEdit, onDelete }: ClientsTableProps) {
                   </div>
                 </td>
                 <td className="px-10 py-8 text-base text-zinc-400 font-medium">{client.phone}</td>
-                <td className="px-10 py-8 text-base text-zinc-400 font-medium">-</td>
+                <td className="px-10 py-8 text-base text-zinc-400 font-medium">{getLastVisit(client.appointments)}</td>
                 <td className="px-10 py-8">
-                  <span className="text-[#fbbf24] font-black font-headline text-lg tracking-tighter">R$ 0,00</span>
+                  <span className="text-[#fbbf24] font-black font-headline text-lg tracking-tighter">
+                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(calculateTotalSpent(client.appointments))}
+                  </span>
                 </td>
                 <td className="px-10 py-8 text-right">
                   <div className="flex justify-end gap-3 opacity-40 group-hover:opacity-100 transition-all">
-                    <button className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl text-zinc-400 hover:text-white transition-all shadow-lg active:scale-95">
+                    <button 
+                      onClick={() => onViewHistory(client)}
+                      className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl text-zinc-400 hover:text-white transition-all shadow-lg active:scale-95"
+                    >
                       <History className="w-5 h-5" />
                     </button>
                     <button 
