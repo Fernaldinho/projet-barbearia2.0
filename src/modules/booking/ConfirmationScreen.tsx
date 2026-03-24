@@ -112,7 +112,7 @@ export function ConfirmationScreen({
 
       <div className="w-full max-w-sm space-y-3">
          <button 
-           onClick={() => window.location.href = '/portal'}
+           onClick={() => window.open('/portal', '_blank')}
            className="w-full bg-[#fbbf24] text-[#402D00] py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:shadow-[0_0_30px_rgba(251,191,36,0.3)] transition-all active:scale-95"
          >
             <User className="w-4 h-4" /> MEU PORTAL
