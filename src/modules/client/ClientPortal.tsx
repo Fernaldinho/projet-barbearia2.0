@@ -40,6 +40,15 @@ export function ClientPortal() {
   // Data State
   const [appointments, setAppointments] = useState<any[]>([])
   const [dataLoading, setDataLoading] = useState(false)
+  const [companyContext, setCompanyContext] = useState<any>(null)
+
+  useEffect(() => {
+    if (slug) {
+      supabase.from('companies').select('name').eq('slug', slug).single().then(({data}) => {
+        if (data) setCompanyContext(data)
+      })
+    }
+  }, [slug])
 
   const [showSettings, setShowSettings] = useState(false)
   const [profileName, setProfileName] = useState('')
@@ -137,7 +146,11 @@ export function ClientPortal() {
                <span className="material-symbols-outlined text-4xl text-[#402D00] font-black">content_cut</span>
             </div>
             <h1 className="text-4xl font-headline font-black text-white uppercase tracking-tighter">PORTAL DO <span className="text-[#fbbf24]">CLIENTE</span></h1>
-            <p className="text-[#D3C5AC] text-sm mt-3 font-light">Acesse seus agendamentos e histórico premium.</p>
+            {companyContext ? (
+               <p className="text-[#D3C5AC] text-sm mt-3 font-light">Acesse seus agendamentos na <span className="font-bold text-white">{companyContext.name}</span>.</p>
+            ) : (
+               <p className="text-[#D3C5AC] text-sm mt-3 font-light">Acesse seus agendamentos e histórico premium.</p>
+            )}
           </div>
 
           <div className="bg-[#1C1B1B] border border-white/5 rounded-[2.5rem] p-8 shadow-2xl space-y-8 relative overflow-hidden">
@@ -259,8 +272,13 @@ export function ClientPortal() {
 
       {/* Header */}
       <header className="sticky top-0 z-30 bg-black/80 backdrop-blur-2xl border-b border-white/[0.03]">
-        <div className="max-w-4xl mx-auto px-6 py-6 flex items-center justify-between">
-          <Link to={fallbackTargetSlug ? `/book/${fallbackTargetSlug}` : '/'} className="font-headline font-black text-xl text-[#fbbf24] tracking-tighter uppercase">PORTAL DA BARBEARIA</Link>
+        <div className="max-w-4xl mx-auto px-6 py-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex flex-col">
+            <Link to={fallbackTargetSlug ? `/book/${fallbackTargetSlug}` : '/'} className="font-headline font-black text-xl text-[#fbbf24] tracking-tighter uppercase leading-none">PORTAL DA BARBEARIA</Link>
+            {companyContext && (
+              <span className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black mt-1.5">{companyContext.name}</span>
+            )}
+          </div>
           <div className="flex items-center gap-6">
              <div className="hidden sm:block text-right">
                 <p className="text-[9px] uppercase font-black tracking-widest text-[#fbbf24]">Perfil do Cliente</p>
