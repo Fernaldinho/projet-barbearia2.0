@@ -118,7 +118,7 @@ export function ConfirmationScreen({
             <User className="w-4 h-4" /> MEU PORTAL
          </button>
          <button 
-           onClick={() => window.location.href = window.location.pathname}
+           onClick={() => window.location.reload()}
            className="w-full bg-white/5 text-zinc-400 hover:text-white py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all active:scale-95 border border-white/5 hover:bg-white/10"
          >
             <History className="w-4 h-4" /> NOVO AGENDAMENTO AQUI
