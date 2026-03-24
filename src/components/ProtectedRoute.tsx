@@ -27,10 +27,13 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />
   }
 
-  if (companyLoading) {
+  if (companyLoading && !company) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-dark-950">
-        <div className="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin" />
+      <div className="flex items-center justify-center min-h-screen bg-[#0c0c0c]">
+        <div className="flex flex-col items-center gap-4 animate-fade-in">
+          <div className="w-12 h-12 border-4 border-[#fbbf24] border-t-transparent rounded-full animate-spin" />
+          <span className="text-zinc-500 text-sm font-medium">Sincronizando...</span>
+        </div>
       </div>
     )
   }
