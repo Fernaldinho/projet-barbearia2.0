@@ -19,6 +19,12 @@ export function PublicPage() {
     toast.success('Link copiado!')
   }
 
+  const copyPortalLink = () => {
+    const link = `${window.location.origin}/portal/${generatedSlug}`
+    navigator.clipboard.writeText(link)
+    toast.success('Link do portal copiado!')
+  }
+
   const handleBannerUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file || !company) return
@@ -99,29 +105,59 @@ export function PublicPage() {
                 <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner text-[#fbbf24]">
                   <LinkIcon className="w-6 h-6" />
                 </div>
-                <h2 className="text-2xl font-black font-headline text-white uppercase tracking-tighter">Link da Agenda</h2>
+                <h2 className="text-2xl font-black font-headline text-white uppercase tracking-tighter">Links Públicos</h2>
               </div>
-              <div className="space-y-6">
-                <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">URL Gerada Automaticamente</label>
-                <div className="flex flex-col sm:flex-row gap-3">
-                   <div className="flex group flex-1 opacity-80">
-                      <span className="bg-[#0e0e0e] px-6 py-5 rounded-l-2xl text-zinc-600 border border-white/5 border-r-0 text-sm font-black flex items-center">/book/</span>
-                      <input 
-                        className="flex-1 bg-[#0e0e0e] border border-white/5 rounded-r-2xl py-5 px-6 text-zinc-400 font-black cursor-not-allowed outline-none text-sm" 
-                        type="text" 
-                        value={generatedSlug}
-                        readOnly
-                        disabled
-                      />
-                   </div>
-                   <button 
-                     onClick={copyBookingLink}
-                     className="bg-white/5 border border-white/5 text-zinc-400 hover:text-[#fbbf24] hover:border-[#fbbf24]/20 px-6 py-5 rounded-2xl transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest"
-                   >
-                      <Copy className="w-4 h-4" /> Copiar Link
-                   </button>
+              
+              <div className="space-y-10">
+                {/* Booking Link */}
+                <div className="space-y-6">
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Link da Agenda</label>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                     <div className="flex group flex-1 opacity-80">
+                        <span className="bg-[#0e0e0e] px-6 py-5 rounded-l-2xl text-zinc-600 border border-white/5 border-r-0 text-sm font-black flex items-center">/book/</span>
+                        <input 
+                          className="flex-1 bg-[#0e0e0e] border border-white/5 rounded-r-2xl py-5 px-6 text-zinc-400 font-black cursor-not-allowed outline-none text-sm" 
+                          type="text" 
+                          value={generatedSlug}
+                          readOnly
+                          disabled
+                        />
+                     </div>
+                     <button 
+                       onClick={copyBookingLink}
+                       className="bg-white/5 border border-white/5 text-zinc-400 hover:text-[#fbbf24] hover:border-[#fbbf24]/20 px-6 py-5 rounded-2xl transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest"
+                     >
+                        <Copy className="w-4 h-4" /> Copiar Link
+                     </button>
+                  </div>
+                  <p className="text-xs text-zinc-600 font-medium ml-1">Seu link oficial: <span className="text-[#fbbf24]/60">{window.location.origin}/book/{generatedSlug}</span></p>
                 </div>
-                <p className="text-xs text-zinc-600 font-medium ml-1">Este link é gerado automaticamente com base no nome do seu estabelecimento. <br/> Seu link oficial: <span className="text-[#fbbf24]/60">{window.location.origin}/book/{generatedSlug}</span></p>
+
+                <div className="h-px bg-white/5 w-full hidden sm:block"></div>
+
+                {/* Portal Link */}
+                <div className="space-y-6">
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Link do Portal do Cliente</label>
+                  <div className="flex flex-col sm:flex-row gap-3">
+                     <div className="flex group flex-1 opacity-80">
+                        <span className="bg-[#0e0e0e] px-6 py-5 rounded-l-2xl text-zinc-600 border border-white/5 border-r-0 text-sm font-black flex items-center">/portal/</span>
+                        <input 
+                          className="flex-1 bg-[#0e0e0e] border border-white/5 rounded-r-2xl py-5 px-6 text-zinc-400 font-black cursor-not-allowed outline-none text-sm" 
+                          type="text" 
+                          value={generatedSlug}
+                          readOnly
+                          disabled
+                        />
+                     </div>
+                     <button 
+                       onClick={copyPortalLink}
+                       className="bg-white/5 border border-white/5 text-zinc-400 hover:text-[#fbbf24] hover:border-[#fbbf24]/20 px-6 py-5 rounded-2xl transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest"
+                     >
+                        <Copy className="w-4 h-4" /> Copiar Link
+                     </button>
+                  </div>
+                  <p className="text-xs text-zinc-600 font-medium ml-1">Seu link oficial: <span className="text-[#fbbf24]/60">{window.location.origin}/portal/{generatedSlug}</span></p>
+                </div>
               </div>
             </section>
 
