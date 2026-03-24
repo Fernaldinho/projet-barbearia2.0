@@ -57,6 +57,7 @@ export const router = createBrowserRouter([
 
   // Private routes (wrapped in ProtectedRoute + DashboardLayout)
   {
+    path: '/',
     element: (
       <ProtectedRoute>
         <DashboardLayout />
