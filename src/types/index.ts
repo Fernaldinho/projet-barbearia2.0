@@ -20,6 +20,7 @@ export interface Company {
   phone: string | null
   email: string | null
   address: string | null
+  banner_url?: string | null
   plan: PlanType
   owner_id: string
   created_at: string
