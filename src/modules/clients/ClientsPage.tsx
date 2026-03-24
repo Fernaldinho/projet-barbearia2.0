@@ -82,7 +82,7 @@ export function ClientsPage() {
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
           <div className="text-left">
             <span className="text-xs font-label text-[#fbbf24] uppercase tracking-[0.3em] font-black block mb-4">CRM & Relacionamento</span>
-            <h1 className="text-6xl font-headline font-black text-[#E5E2E1] leading-none tracking-tighter uppercase">Clientes</h1>
+            <h1 className="text-6xl font-headline font-black text-[#E5E2E1] leading-none tracking-tighter uppercase">Gerenciador de Clientes</h1>
           </div>
           <button 
             onClick={() => setShowForm(true)}
@@ -107,7 +107,7 @@ export function ClientsPage() {
           <div className="bg-[#1C1B1B] p-8 rounded-[2rem] flex items-center justify-between group hover:bg-[#201F1F] transition-all border border-white/5">
             <div>
               <p className="text-zinc-500 text-[10px] uppercase tracking-[0.2em] font-black mb-2">Novos este Mês</p>
-              <p className="text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">+12</p>
+              <p className="text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">0</p>
             </div>
             <div className="bg-[#fbbf24]/10 p-5 rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
               <TrendingUp className="w-8 h-8" />
@@ -115,8 +115,8 @@ export function ClientsPage() {
           </div>
           <div className="bg-[#1C1B1B] p-8 rounded-[2rem] flex items-center justify-between group hover:bg-[#201F1F] transition-all border border-white/5">
             <div>
-              <p className="text-zinc-500 text-[10px] uppercase tracking-[0.2em] font-black mb-2">Taxa de Retenção</p>
-              <p className="text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">84%</p>
+              <p className="text-zinc-500 text-[10px] uppercase tracking-[0.2em] font-black mb-2">Taxa de Fidelidade</p>
+              <p className="text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">0%</p>
             </div>
             <div className="bg-[#fbbf24]/10 p-5 rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
               <ShieldCheck className="w-8 h-8" />

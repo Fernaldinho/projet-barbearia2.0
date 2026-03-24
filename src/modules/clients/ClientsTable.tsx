@@ -40,14 +40,14 @@ export function ClientsTable({ clients, onEdit, onDelete }: ClientsTableProps) {
                     </div>
                     <div>
                       <p className="font-bold text-[#E5E2E1] text-lg group-hover:text-[#fbbf24] transition-colors">{client.name}</p>
-                      <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold mt-1">Membro Platinum</p>
+                      <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold mt-1">Cliente Ativo</p>
                     </div>
                   </div>
                 </td>
                 <td className="px-10 py-8 text-base text-zinc-400 font-medium">{client.phone}</td>
-                <td className="px-10 py-8 text-base text-zinc-400 font-medium">14 Out, 2023</td>
+                <td className="px-10 py-8 text-base text-zinc-400 font-medium">-</td>
                 <td className="px-10 py-8">
-                  <span className="text-[#fbbf24] font-black font-headline text-lg tracking-tighter">R$ 1.450,00</span>
+                  <span className="text-[#fbbf24] font-black font-headline text-lg tracking-tighter">R$ 0,00</span>
                 </td>
                 <td className="px-10 py-8 text-right">
                   <div className="flex justify-end gap-3 opacity-40 group-hover:opacity-100 transition-all">

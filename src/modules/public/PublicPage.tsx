@@ -3,6 +3,7 @@ import { useCompany } from '@/contexts/CompanyContext'
 import { cn } from '@/utils/helpers'
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
+import { supabase } from '@/lib/supabase'
 
 export function PublicPage() {
   const { company } = useCompany()
@@ -17,6 +18,45 @@ export function PublicPage() {
     navigator.clipboard.writeText(link)
     toast.success('Link copiado!')
   }
+
+  const handleBannerUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !company) return
+
+    try {
+      setLoading(true)
+      const fileExt = file.name.split('.').pop()
+      const filePath = `company-banners/${company.id}-${Math.random()}.${fileExt}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('banners')
+        .upload(filePath, file)
+
+      if (uploadError) throw uploadError
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('banners')
+        .getPublicUrl(filePath)
+
+      const { error: updateError } = await supabase
+        .from('companies')
+        .update({ banner_url: publicUrl })
+        .eq('id', company.id)
+
+      if (updateError) throw updateError
+      
+      toast.success('Banner atualizado com sucesso!')
+      window.location.reload() // Recarrega para refletir a mudança via Contexto
+    } catch (err) {
+      console.error(err)
+      toast.error('Erro ao subir banner. Verifique as permissões de Bucket no Supabase.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const defaultBanner = "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=1200"
+  const bannerToDisplay = company?.banner_url || defaultBanner
 
   return (
     <div className="animate-fade-in pb-20 space-y-16 mt-8">
@@ -96,16 +136,27 @@ export function PublicPage() {
               <div className="space-y-10">
                 <div>
                   <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-6 ml-1">Banner de Capa (Noir Style)</label>
-                  <div className="relative h-64 rounded-[2rem] overflow-hidden group cursor-pointer border-2 border-dashed border-white/5 hover:border-[#fbbf24]/30 transition-all shadow-inner">
+                  <label 
+                    className="relative h-64 rounded-[2rem] overflow-hidden group cursor-pointer border-2 border-dashed border-white/5 hover:border-[#fbbf24]/30 transition-all shadow-inner block"
+                  >
+                    <input 
+                      type="file" 
+                      className="hidden" 
+                      accept="image/*" 
+                      onChange={handleBannerUpload}
+                      disabled={loading}
+                    />
                     <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 backdrop-blur-sm">
-                      <CloudUpload className="text-[#fbbf24] w-10 h-10 mb-4" />
-                      <span className="text-white text-[10px] font-black uppercase tracking-[0.2em]">ALTERAR BANNER</span>
+                      <CloudUpload className={cn("text-[#fbbf24] w-10 h-10 mb-4", loading && "animate-bounce")} />
+                      <span className="text-white text-[10px] font-black uppercase tracking-[0.2em]">
+                        {loading ? 'ENVIANDO...' : 'ALTERAR BANNER'}
+                      </span>
                     </div>
                     <img 
                       className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-60 transition-all duration-1000 scale-105 group-hover:scale-110" 
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCESWIsIr3iN66VqPmDLJ9uj0VtYosMizRX36_wR4pacezeyhALjUcQgCbgt-fIXEsvKmWTdasdPp5yzz5hCr1dHhF-nBT0WoyF4Le5bMOhB2fYvfI9-n5IKLEmfv2FE77uNGKMOnGL-iKJGOsC48o50hqEiOsn83gLaQtBJLMmTHsSMJG1l_Ri7b7Uoi-nOVMbKgajRaaf3ysNAuOLdd6E9uP2QjYT4_h_aMbWLkmB4c6spIMwB4vivU4XLiIJ0U3Q5tlW5W3_HjiG" 
+                      src={bannerToDisplay} 
                     />
-                  </div>
+                  </label>
                 </div>
 
               </div>
@@ -156,52 +207,33 @@ export function PublicPage() {
                 <div className="relative h-60 shrink-0">
                   <img 
                     className="w-full h-full object-cover grayscale-50 opacity-60" 
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQe5SXSxDR04mAagtvJT-0LATw9R2F94QjCfIiTdv2DsFmOgXuxsu2GUKVgtKEjPkVOBbrGZ27UfzR6EXnOkeYAHTeTH5TWbCowpDfO_V-O6-2IjsrGPBFkjMLkdDjDXwkMLFsX-y3akzvCCFQj7lSfCET2LedYFD2WxZ7GujfnFuiNwrp7KK3XEd8EzcLVGyFBfNUYwsRF81Mq72jZKU0mSISsMJ3OFWVF5iDsKwl_-cmoIeXfO_znj12MplyWnc3hWHH0A7UJ1Td" 
+                    src={bannerToDisplay} 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#131313] via-[#131313]/50 to-transparent"></div>
                   <div className="absolute bottom-6 left-8 right-8">
-                    <h3 className="text-3xl font-headline font-black text-white tracking-tighter uppercase leading-none">{company?.name || 'Noir Precision Barbershop'}</h3>
+                    <h3 className="text-3xl font-headline font-black text-white tracking-tighter uppercase leading-none">{company?.name || 'Sua Barbearia'}</h3>
                     <p className="text-[10px] text-[#fbbf24] font-black uppercase tracking-widest mt-3 flex items-center gap-2">
                        <MapPin className="w-3 h-3" />
-                       RUA DOS ARTISTAS, 120 - SP
+                       {company?.address || 'ENDEREÇO NÃO CONFIGURADO'}
                     </p>
                   </div>
                 </div>
                 {/* Content Mockup */}
                 <div className="flex-1 overflow-y-auto px-8 py-10 space-y-10 scrollbar-hide">
                   <section>
-                    <h4 className="text-[10px] uppercase tracking-[0.3em] text-[#fbbf24] font-black mb-6">SERVIÇOS EM DESTAQUE</h4>
+                    <h4 className="text-[10px] uppercase tracking-[0.3em] text-[#fbbf24] font-black mb-6">NOSSOS SERVIÇOS</h4>
                     <div className="space-y-4">
-                      <div className="bg-[#1C1B1B] p-6 rounded-3xl flex justify-between items-center border border-white/5 shadow-xl">
-                        <div>
-                          <p className="text-base font-black text-white uppercase tracking-tighter">Corte de Cabelo</p>
-                          <p className="text-[10px] text-zinc-500 font-bold tracking-widest mt-1">45 MIN • R$ 65,00</p>
-                        </div>
-                        <button className="bg-[#fbbf24] text-[#402D00] text-[9px] px-5 py-2.5 rounded-full font-black uppercase tracking-wider shadow-lg shadow-[#fbbf24]/10">AGENDAR</button>
-                      </div>
-                      <div className="bg-[#1C1B1B] p-6 rounded-3xl flex justify-between items-center border border-white/5 shadow-xl">
-                        <div>
-                          <p className="text-base font-black text-white uppercase tracking-tighter">Barba Premium</p>
-                          <p className="text-[10px] text-zinc-500 font-bold tracking-widest mt-1">30 MIN • R$ 45,00</p>
-                        </div>
-                        <button className="bg-[#fbbf24] text-[#402D00] text-[9px] px-5 py-2.5 rounded-full font-black uppercase tracking-wider shadow-lg shadow-[#fbbf24]/10">AGENDAR</button>
+                      <div className="text-center py-10 bg-[#1C1B1B] rounded-3xl border border-dashed border-white/5">
+                          <p className="text-[10px] text-zinc-600 font-black uppercase tracking-widest">Seus serviços aparecerão aqui</p>
                       </div>
                     </div>
                   </section>
                   <section>
                     <h4 className="text-[10px] uppercase tracking-[0.3em] text-[#fbbf24] font-black mb-6">PROFISSIONAIS</h4>
                     <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
-                      {[
-                        { name: 'Ricardo', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCsdkN-7AQGESwcQfaYSCZwCldVIYuhJ8BfxME6QmEqqF4owzCucPuqbKTzSQHBlrZjjvzsZT6WFHofZm5H_Av7yfo4OsaUN-zwfxDG_GbC-lRAc3u2SInKybvReHGAn74E14aMGXluiiMXZ41B5PSSXBY8f7YtZnQG4rO1QKMzPPovRZGItRgo_9q6I5xbeKcQ1Vl5aFtpd6-UIfyspeZTvPuIKcPwhCWy2wEXBesR6q7aK11NcTqTW8BGXljcfYSTvoKOkGyhYQVF' },
-                        { name: 'Marcus', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuASKrRD4PZltJ7jLHFFwyqz87fd2i5R8MqjZzt4vmVhcaq633xrIFiUL1Fn43bqUWE0JbufPFx-TlhAWaut7Hjsj1atkhUwpJsXFycGvM8emJik1-HvYTWCPQI8mwCtDOJdh50eVtk71-MEULQWfi1rihMq-n8jFQALUE2iJhR2rMVrmvziptYuAl7A1lVf-nNWlobEzDbHIi_D49XYIYDA8TKt3eJTrs_zjajQlwzI8a2KW_q_ulLbMsWhABEH6IH1jRV9J_Mipdx-' }
-                      ].map((barber, i) => (
-                        <div key={i} className="shrink-0 flex flex-col items-center gap-4">
-                          <div className={cn("w-20 h-20 rounded-full border-2 p-1 overflow-hidden transition-all shadow-2xl", i === 0 ? "border-[#fbbf24]" : "border-white/5 opacity-40")}>
-                            <img className="w-full h-full rounded-full object-cover" src={barber.img} />
-                          </div>
-                          <span className={cn("text-[10px] font-black uppercase tracking-widest", i === 0 ? "text-[#fbbf24]" : "text-zinc-600")}>{barber.name}</span>
-                        </div>
-                      ))}
+                       <div className="text-center w-full py-4 border border-dashed border-white/5 rounded-2xl">
+                           <p className="text-[10px] text-zinc-600 font-black uppercase tracking-widest">Sua equipe aqui</p>
+                       </div>
                     </div>
                   </section>
                 </div>

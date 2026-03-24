@@ -256,7 +256,13 @@ export function ClientPortal() {
            </div>
            {/* Direct CTA */}
            <a 
-             href={appointments.length > 0 ? `/book/${appointments[0].company?.slug}` : '/'}
+             href={appointments.length > 0 ? `/book/${appointments[0].company?.slug}` : '#'}
+             onClick={(e) => {
+               if (appointments.length === 0) {
+                 e.preventDefault();
+                 alert("Você ainda não possui histórico. Para agendar pela primeira vez, utilize o link da sua barbearia!");
+               }
+             }}
              className="bg-[#fbbf24] text-[#402D00] px-10 py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-[#fbbf24]/20 hover:scale-[1.02] transition-all flex items-center gap-3"
            >
               Fazer Novo Agendamento

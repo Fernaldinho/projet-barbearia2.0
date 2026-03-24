@@ -76,19 +76,19 @@ export function LandingPage() {
             <div className="max-w-7xl mx-auto px-6">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
                 <div className="space-y-4">
-                  <span className="material-symbols-outlined text-[#fbbf24] text-4xl">calendar_month</span>
-                  <div className="text-4xl font-headline font-bold text-[#e5e2e1]">+5K Agendamentos</div>
-                  <div className="text-[#d3c5ac] uppercase tracking-widest text-xs">Realizados com precisão</div>
+                  <span className="material-symbols-outlined text-[#fbbf24] text-4xl">check_circle</span>
+                  <div className="text-4xl font-headline font-bold text-[#e5e2e1]">Pronto para Uso</div>
+                  <div className="text-[#d3c5ac] uppercase tracking-widest text-xs">Acesse e configure agora</div>
                 </div>
                 <div className="space-y-4">
-                  <span className="material-symbols-outlined text-[#fbbf24] text-4xl">group</span>
-                  <div className="text-4xl font-headline font-bold text-[#e5e2e1]">+500 Barbearias</div>
-                  <div className="text-[#d3c5ac] uppercase tracking-widest text-xs">Parceiros ativos no sistema</div>
+                  <span className="material-symbols-outlined text-[#fbbf24] text-4xl">speed</span>
+                  <div className="text-4xl font-headline font-bold text-[#e5e2e1]">Alta Velocidade</div>
+                  <div className="text-[#d3c5ac] uppercase tracking-widest text-xs">Agendamentos em segundos</div>
                 </div>
                 <div className="space-y-4">
-                  <span className="material-symbols-outlined text-[#fbbf24] text-4xl">schedule</span>
-                  <div className="text-4xl font-headline font-bold text-[#e5e2e1]">24/7 Disponível</div>
-                  <div className="text-[#d3c5ac] uppercase tracking-widest text-xs">Sempre online para seus clientes</div>
+                  <span className="material-symbols-outlined text-[#fbbf24] text-4xl">security</span>
+                  <div className="text-4xl font-headline font-bold text-[#e5e2e1]">100% Seguro</div>
+                  <div className="text-[#d3c5ac] uppercase tracking-widest text-xs">Seus dados protegidos</div>
                 </div>
               </div>
             </div>
