@@ -222,26 +222,22 @@ export function LandingPage() {
                     <span className="text-[#e5e2e1] font-headline font-bold text-4xl">R$ 0</span>
                     <span className="text-[#d3c5ac] text-sm">/mês</span>
                   </div>
-                  <ul className="space-y-4 mb-12 text-left">
+                   <ul className="space-y-4 mb-12 text-left">
                     <li className="flex items-center gap-3">
                       <span className="material-symbols-outlined text-[#fbbf24] text-lg">check</span>
                       <span className="text-[#e5e2e1]">1 serviço cadastrado</span>
                     </li>
                     <li className="flex items-center gap-3">
                       <span className="material-symbols-outlined text-[#fbbf24] text-lg">check</span>
-                      <span className="text-[#e5e2e1]">10 clientes por mês</span>
+                      <span className="text-[#e5e2e1]">Até 2 clientes cadastrados</span>
                     </li>
                     <li className="flex items-center gap-3">
                       <span className="material-symbols-outlined text-[#fbbf24] text-lg">check</span>
-                      <span className="text-[#e5e2e1]">1 barbeiro</span>
+                      <span className="text-[#e5e2e1]">Até 2 agendamentos por mês</span>
                     </li>
                     <li className="flex items-center gap-3">
                       <span className="material-symbols-outlined text-[#fbbf24] text-lg">check</span>
-                      <span className="text-[#e5e2e1]">Link de agendamento</span>
-                    </li>
-                    <li className="flex items-center gap-3">
-                      <span className="material-symbols-outlined text-[#fbbf24] text-lg">check</span>
-                      <span className="text-[#e5e2e1]">Suporte por email</span>
+                      <span className="text-[#e5e2e1]">Link de agendamento automático</span>
                     </li>
                   </ul>
                   <Link to={ROUTES.REGISTER} className="mt-auto w-full border border-[#4f4633]/30 text-[#e5e2e1] py-4 rounded-xl font-headline font-bold hover:bg-[#1c1b1b] transition-all text-center">Começar Grátis</Link>

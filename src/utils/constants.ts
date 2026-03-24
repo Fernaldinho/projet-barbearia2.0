@@ -32,9 +32,9 @@ export const PLANS = {
 export const PLAN_FEATURES = {
   [PLANS.FREE]: {
     name: 'Gratuito',
-    maxClients: 50,
-    maxServices: 10,
-    maxAppointmentsPerMonth: 100,
+    maxClients: 2,
+    maxServices: 1,
+    maxAppointmentsPerMonth: 2,
     hasReports: false,
     hasBilling: false,
   },
