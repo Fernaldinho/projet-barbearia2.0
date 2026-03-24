@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react'
-import { Plus, ChevronLeft, ChevronRight, Calendar, List, Users2, Search, Filter, MoreVertical, Scissors, Edit, CheckCircle, XCircle } from 'lucide-react'
+import { Plus, ChevronLeft, ChevronRight, Calendar, List, Users2, Search, Filter, MoreVertical, Scissors, Edit, CheckCircle, XCircle, Trash2 } from 'lucide-react'
 import { useCompany } from '@/contexts/CompanyContext'
 import { AppointmentsList } from './AppointmentsList'
 import { AppointmentForm } from './AppointmentForm'
@@ -8,6 +8,7 @@ import {
   createAppointment,
   updateAppointment,
   updateAppointmentStatus,
+  deleteAppointment
 } from './appointments.api'
 import { getActiveStaff } from '@/modules/staff/staff.api'
 import { supabase } from '@/lib/supabase'
@@ -71,8 +72,19 @@ export function AppointmentsPage() {
     try {
       await updateAppointmentStatus(id, status)
       await loadAppointments()
-    } catch (err) {
+    } catch (err: any) {
+      alert('Erro ao atualizar status: ' + err.message)
       console.error('Error updating status:', err)
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('Tem certeza que deseja excluir permanentemente este agendamento?')) return
+    try {
+      await deleteAppointment(id)
+      await loadAppointments()
+    } catch (err: any) {
+      alert('Erro ao excluir: ' + err.message)
     }
   }
 
@@ -280,11 +292,13 @@ export function AppointmentsPage() {
                           <div className="flex items-center gap-8">
                             <span className={cn(
                               "px-5 py-2 text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg",
-                              app.status === 'confirmed' ? "bg-emerald-500/10 text-emerald-400" : 
+                              app.status === 'confirmed' ? "bg-blue-500/10 text-blue-400" : 
+                              app.status === 'completed' ? "bg-emerald-500/10 text-emerald-400" :
                               app.status === 'scheduled' ? "bg-[#fbbf24]/10 text-[#fbbf24]" :
-                              "bg-red-500/10 text-red-400"
+                              "bg-red-500/10 text-red-500"
                             )}>
                               {app.status === 'confirmed' ? 'Confirmado' : 
+                               app.status === 'completed' ? 'Concluído' :
                                app.status === 'scheduled' ? 'Agendado' : 'Cancelado'}
                             </span>
                             <div className="relative">
@@ -315,6 +329,9 @@ export function AppointmentsPage() {
                                       <XCircle className="w-4 h-4" /> Cancelar
                                     </button>
                                   )}
+                                  <button onClick={(e) => { e.stopPropagation(); handleDelete(app.id); setOpenMenuId(null); }} className="w-full text-left px-6 py-4 text-xs font-black uppercase tracking-widest text-zinc-500 hover:bg-white/5 hover:text-red-500 transition-all flex items-center gap-3 border-t border-white/5">
+                                    <Trash2 className="w-4 h-4" /> Excluir
+                                  </button>
                                 </div>
                               )}
                             </div>
