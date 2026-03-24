@@ -121,7 +121,7 @@ export function ClientForm({ onSubmit, loading, error, initialData }: ClientForm
             </div>
 
             <div className="space-y-3 p-1">
-              <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-4">Seu Melhor E-mail</label>
+              <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-4">E-mail (Opcional)</label>
               <div className="relative group">
                 <div className="absolute left-5 top-1/2 -translate-y-1/2 text-zinc-600 transition-colors group-focus-within:text-[#fbbf24]">
                   <Mail className="w-5 h-5" />
