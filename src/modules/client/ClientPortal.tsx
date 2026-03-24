@@ -15,7 +15,10 @@ import {
   TrendingUp,
   History,
   AlertCircle,
-  Sparkles
+  Sparkles,
+  Settings,
+  X,
+  Phone
 } from 'lucide-react'
 import { getClientAppointments } from '../clients/clients.api'
 import { supabase } from '@/lib/supabase'
@@ -38,9 +41,16 @@ export function ClientPortal() {
   const [appointments, setAppointments] = useState<any[]>([])
   const [dataLoading, setDataLoading] = useState(false)
 
+  const [showSettings, setShowSettings] = useState(false)
+  const [profileName, setProfileName] = useState('')
+  const [profilePhone, setProfilePhone] = useState('')
+  const [profileSaving, setProfileSaving] = useState(false)
+
   useEffect(() => {
-    if (user?.email) {
-      loadAppointments(user.email)
+    if (user) {
+      if (user.email) loadAppointments(user.email)
+      setProfileName(user.user_metadata?.full_name || '')
+      setProfilePhone(user.user_metadata?.phone || '')
     }
   }, [user])
 
@@ -53,6 +63,23 @@ export function ClientPortal() {
       console.error('Portal load error:', err)
     } finally {
       setDataLoading(false)
+    }
+  }
+
+  const handleSaveProfile = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setProfileSaving(true)
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: { full_name: profileName, phone: profilePhone }
+      })
+      if (error) throw error
+      alert('Perfil atualizado com sucesso! Estes dados serão preenchidos automaticamente nos próximos agendamentos.')
+      setShowSettings(false)
+    } catch (err: any) {
+      alert(err.message || 'Erro ao atualizar perfil')
+    } finally {
+      setProfileSaving(false)
     }
   }
 
@@ -239,7 +266,10 @@ export function ClientPortal() {
                 <p className="text-[9px] uppercase font-black tracking-widest text-[#fbbf24]">Perfil do Cliente</p>
                 <p className="text-xs font-bold text-white uppercase">{user.user_metadata?.full_name || 'Usuário'}</p>
              </div>
-             <button onClick={() => logout()} className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-zinc-500 hover:text-white transition-all">
+             <button title="Configurar Perfil" onClick={() => setShowSettings(true)} className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-zinc-500 hover:text-[#fbbf24] transition-all">
+                <Settings className="w-5 h-5" />
+             </button>
+             <button title="Sair" onClick={() => logout()} className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-zinc-500 hover:text-white transition-all">
                 <LogOut className="w-5 h-5" />
              </button>
           </div>
@@ -367,11 +397,80 @@ export function ClientPortal() {
         </div>
       </main>
       
+       {/* Powered By Footer */}
       <footer className="max-w-4xl mx-auto px-6 py-12 text-center opacity-20 hover:opacity-100 transition-opacity">
          <p className="text-[9px] uppercase font-black tracking-[0.4em] text-zinc-500">
             AgendaAI Premium Portal <span className="text-white/20 mx-2">|</span> Precision Noir System
          </p>
       </footer>
+
+      {/* Settings Modal */}
+      {showSettings && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-[#1C1B1B] border border-white/5 rounded-[2.5rem] p-8 w-full max-w-md shadow-2xl relative">
+            <button 
+              onClick={() => setShowSettings(false)}
+              className="absolute top-6 right-6 w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-zinc-500 hover:text-white transition-all"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <h3 className="text-3xl font-headline font-black uppercase text-white tracking-tighter mb-8">
+              Meus <span className="text-[#fbbf24]">Dados</span>
+            </h3>
+
+            <form onSubmit={handleSaveProfile} className="space-y-6">
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-4">Nome Completo</label>
+                <div className="relative group">
+                  <User className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-[#fbbf24]" />
+                  <input 
+                    type="text" 
+                    required 
+                    value={profileName}
+                    onChange={(e) => setProfileName(e.target.value)}
+                    className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-2xl px-12 py-4 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-4">Telefone (Celular)</label>
+                <div className="relative group">
+                  <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-[#fbbf24]" />
+                  <input 
+                    type="tel" 
+                    required 
+                    value={profilePhone}
+                    onChange={(e) => {
+                      const v = e.target.value.replace(/\D/g, '')
+                      let formatted = v
+                      if (v.length <= 11) {
+                         formatted = v.replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3')
+                      }
+                      setProfilePhone(formatted)
+                    }}
+                    placeholder="(00) 00000-0000"
+                    className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-2xl px-12 py-4 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none text-white"
+                  />
+                </div>
+              </div>
+              
+              <div className="pt-4 border-t border-white/5 space-y-4">
+                <p className="text-[10px] text-zinc-500 uppercase font-medium tracking-widest text-center">
+                  Estes dados serão preenchidos automaticamente<br/><span className="text-[#fbbf24] font-black">na tela de agendamento</span> para agilizar seu processo.
+                </p>
+                <button 
+                  type="submit" 
+                  disabled={profileSaving}
+                  className="w-full bg-[#fbbf24] text-[#402D00] py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-[#fbbf24]/20 hover:scale-[1.02] active:scale-95 transition-all text-center flex items-center justify-center disabled:opacity-50"
+                >
+                  {profileSaving ? <div className="w-5 h-5 border-2 border-[#402D00]/20 border-t-[#402D00] rounded-full animate-spin" /> : 'Salvar Alterações'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
