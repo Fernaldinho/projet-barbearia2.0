@@ -38,6 +38,10 @@ export const PLAN_FEATURES = {
     maxAppointmentsPerMonth: 2,
     hasReports: false,
     hasBilling: false,
+    upgradeLinks: {
+      monthly: 'https://pay.kirvano.com/435f6ec9-afb0-4405-8e12-8d49bbf652d6',
+      semiannual: 'https://pay.kirvano.com/f6753696-480f-4b00-9a16-73463b09f9b7'
+    }
   },
   [PLANS.STARTER]: {
     name: 'Starter',

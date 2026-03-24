@@ -112,6 +112,35 @@ export function BillingPage() {
             <p className="text-sm font-semibold text-white">{plan.hasReports ? 'Incluído' : 'Não incluído'}</p>
           </div>
         </div>
+
+        {plan.name === 'Gratuito' && (
+          <div className="mt-10 p-8 rounded-3xl bg-gradient-to-br from-[#fbbf24]/5 to-transparent border border-[#fbbf24]/10">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+              <div>
+                <h4 className="text-xl font-bold text-white mb-2 uppercase tracking-tight">Potencialize seu Negócio</h4>
+                <p className="text-sm text-zinc-500 max-w-md">Remova todos os limites de clientes, serviços e agendamentos agora mesmo.</p>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                <a 
+                  href="https://pay.kirvano.com/435f6ec9-afb0-4405-8e12-8d49bbf652d6" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="px-8 py-4 bg-[#fbbf24] text-[#402D00] rounded-xl font-black text-xs uppercase tracking-widest hover:scale-[1.02] transition-all text-center shadow-xl shadow-[#fbbf24]/10"
+                >
+                  Upgrade Mensal
+                </a>
+                <a 
+                  href="https://pay.kirvano.com/f6753696-480f-4b00-9a16-73463b09f9b7" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="px-8 py-4 bg-white/5 text-white rounded-xl font-black text-xs uppercase tracking-widest border border-white/10 hover:bg-white/10 transition-all text-center"
+                >
+                  Upgrade Semestral
+                </a>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Invoices placeholder */}
