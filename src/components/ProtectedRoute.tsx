@@ -35,15 +35,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     )
   }
 
-  // Redirect to onboarding if no company and not already there
-  if (!company && location.pathname !== '/onboarding') {
-    return <Navigate to="/onboarding" replace />
-  }
-
-  // Redirect away from onboarding if company already exists
-  if (company && location.pathname === '/onboarding') {
-    return <Navigate to="/dashboard" replace />
-  }
+  return <>{children}</>
 
   return <>{children}</>
 }

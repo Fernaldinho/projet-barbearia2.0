@@ -9,6 +9,7 @@ export function RegisterPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
+  const [companyName, setCompanyName] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -19,6 +20,11 @@ export function RegisterPage() {
     e.preventDefault()
     setError('')
 
+    if (!companyName.trim()) {
+      setError('Informe o nome da sua barbearia.')
+      return
+    }
+
     if (password !== confirmPassword) {
       setError('As senhas não coincidem.')
       return
@@ -28,27 +34,15 @@ export function RegisterPage() {
       setError('A senha deve ter pelo menos 8 caracteres.')
       return
     }
-    if (!/[A-Z]/.test(password)) {
-      setError('A senha deve conter pelo menos uma letra maiúscula.')
-      return
-    }
-    if (!/[a-z]/.test(password)) {
-      setError('A senha deve conter pelo menos uma letra minúscula.')
-      return
-    }
-    if (!/[0-9]/.test(password)) {
-      setError('A senha deve conter pelo menos um número.')
-      return
-    }
 
     setLoading(true)
 
     try {
-      const { error: regError } = await register(email, password, name)
+      const { error: regError } = await register(email, password, name, companyName)
       if (regError) {
         setError(regError.message || 'Erro ao criar conta. Tente novamente.')
       } else {
-        navigate(ROUTES.ONBOARDING)
+        navigate('/dashboard')
       }
     } catch (err: any) {
       setError(err?.message || 'Erro ao criar conta. Tente novamente.')
@@ -143,6 +137,20 @@ export function RegisterPage() {
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-label uppercase tracking-widest text-[#d3c5ac] ml-1" htmlFor="companyName">Nome do Estabelecimento</label>
+                  <input
+                    className="w-full bg-[#0e0e0e] border border-[#4f4633]/20 rounded-xl px-4 py-4 text-[#e5e2e1] placeholder:text-[#d3c5ac]/40 focus:ring-1 focus:ring-[#fbbf24] focus:border-[#fbbf24] transition-all outline-none"
+                    id="companyName"
+                    name="companyName"
+                    placeholder="Ex: Barber Shop Precision"
+                    type="text"
+                    required
+                    value={companyName}
+                    onChange={(e) => setCompanyName(e.target.value)}
                   />
                 </div>
 

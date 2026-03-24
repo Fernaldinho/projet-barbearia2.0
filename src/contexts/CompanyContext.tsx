@@ -46,19 +46,49 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      // First get the user profile to find the company_id
+      // 1. Verificar se o perfil do usuário já tem empresa
       const { data: profile, error: profileError } = await supabase
         .from('users')
         .select('company_id')
         .eq('id', user.id)
         .single()
 
-      if (profileError || !profile?.company_id) {
+      // 2. Se não houver empresa no perfil, tentar criar uma nova usando os metadados do Auth
+      if (!profile?.company_id) {
+        const companyName = user.user_metadata?.company_name
+        
+        if (companyName) {
+          // Criar a empresa primeiro
+          const { data: newCompany, error: createError } = await supabase
+            .from('companies')
+            .insert({
+              name: companyName,
+              slug: companyName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, ''),
+              created_by: user.id,
+              plan: PLANS.FREE
+            })
+            .select()
+            .single()
+
+          if (!createError && newCompany) {
+            // Vincular a empresa ao perfil do usuário
+            await supabase
+              .from('users')
+              .update({ company_id: newCompany.id })
+              .eq('id', user.id)
+            
+            setCompany(newCompany)
+            setLoading(false)
+            return
+          }
+        }
+        
         setCompany(null)
         setLoading(false)
         return
       }
 
+      // 3. Se já tiver empresa, buscar os dados completos
       const { data, error } = await supabase
         .from('companies')
         .select('*')
