@@ -8,7 +8,7 @@ import { cn } from '@/utils/helpers'
 
 export function StaffPage() {
   const { company } = useCompany()
-  const [staffList, setStaffList] = useState<Staff[]>([])
+  const [staffList, setStaffList] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editing, setEditing] = useState<Staff | null>(null)
@@ -123,7 +123,7 @@ export function StaffPage() {
                 <div className="flex gap-4">
                   <div className="bg-[#0e0e0e] px-4 py-3 rounded-2xl flex flex-col flex-1">
                     <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-1">Agendamentos</span>
-                    <span className="text-sm font-black text-[#E5E2E1]">128/mês</span>
+                    <span className="text-sm font-black text-[#E5E2E1]">{s.appointments?.filter((a:any) => new Date(a.date).getMonth() === new Date().getMonth()).length || 0}/mês</span>
                   </div>
                   <div className="bg-[#0e0e0e] px-4 py-3 rounded-2xl flex flex-col flex-1">
                     <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-1">Especialidade</span>
@@ -189,46 +189,56 @@ export function StaffPage() {
               <thead>
                 <tr className="text-[10px] uppercase tracking-[0.2em] text-[#D3C5AC]/40 font-bold bg-[#131313]/30">
                   <th className="px-10 py-6 font-medium">Profissional</th>
-                  <th className="px-10 py-6 font-medium">Taxa de Ocupação</th>
-                  <th className="px-10 py-6 font-medium">Retenção</th>
-                  <th className="px-10 py-6 font-medium">Receita Estimada</th>
-                  <th className="px-10 py-6 font-medium text-right">Disponibilidade</th>
+                  <th className="px-10 py-6 font-medium">Agendamentos (Mês)</th>
+                  <th className="px-10 py-6 font-medium">Concluídos</th>
+                  <th className="px-10 py-6 font-medium">Geração de Receita</th>
+                  <th className="px-10 py-6 font-medium text-right">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#4F4633]/10">
-                {staffList.map((s) => (
-                  <tr key={s.id} className="hover:bg-white/[0.02] transition-colors group">
-                    <td className="px-10 py-8">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-[#0e0e0e] flex items-center justify-center text-sm font-black text-[#fbbf24] border border-white/5 shadow-inner">
-                          {s.name.substring(0,2).toUpperCase()}
+                {staffList.map((s) => {
+                  const currentMonth = new Date().getMonth()
+                  const currentYear = new Date().getFullYear()
+                  const apptsDateFiltered = (s.appointments || []).filter((a: any) => {
+                    const d = new Date(a.date)
+                    return d.getMonth() === currentMonth && d.getFullYear() === currentYear
+                  })
+                  
+                  const totalAppts = apptsDateFiltered.length
+                  const completedAppts = apptsDateFiltered.filter((a: any) => a.status === 'completed' || a.status === 'confirmed').length
+                  const receita = apptsDateFiltered
+                    .filter((a: any) => a.status === 'completed' || a.status === 'confirmed')
+                    .reduce((acc: number, a: any) => acc + (a.service?.price || 0), 0)
+
+                  return (
+                    <tr key={s.id} className="hover:bg-white/[0.02] transition-colors group">
+                      <td className="px-10 py-8">
+                        <div className="flex items-center gap-4">
+                          <div className="w-10 h-10 rounded-xl bg-[#0e0e0e] flex items-center justify-center text-sm font-black text-[#fbbf24] border border-white/5 shadow-inner">
+                            {s.name.substring(0,2).toUpperCase()}
+                          </div>
+                          <span className="text-base font-bold text-[#E5E2E1] group-hover:text-[#fbbf24] transition-colors">{s.name}</span>
                         </div>
-                        <span className="text-base font-bold text-[#E5E2E1] group-hover:text-[#fbbf24] transition-colors">{s.name}</span>
-                      </div>
-                    </td>
-                    <td className="px-10 py-8">
-                      <div className="flex items-center gap-4">
-                        <div className="w-32 h-1.5 bg-[#0e0e0e] rounded-full overflow-hidden shadow-inner">
-                          <div className="bg-[#fbbf24] h-full w-[85%] rounded-full shadow-[0_0_10px_rgba(251,191,36,0.2)]"></div>
+                      </td>
+                      <td className="px-10 py-8 text-base font-black text-[#E5E2E1]">{totalAppts}</td>
+                      <td className="px-10 py-8 text-base font-black text-[#E5E2E1]">{completedAppts}</td>
+                      <td className="px-10 py-8 text-base font-black text-[#fbbf24]">
+                        {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(receita)}
+                      </td>
+                      <td className="px-10 py-8 text-right">
+                        <div className="flex items-center justify-end gap-3">
+                          <div className={cn(
+                            "w-2 h-2 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]",
+                            s.active ? "bg-emerald-500" : "bg-zinc-600"
+                          )} />
+                          <span className="text-xs uppercase font-bold tracking-widest text-[#D3C5AC]/60">
+                            {s.active ? 'Disponível' : 'Ausente'}
+                          </span>
                         </div>
-                        <span className="text-xs font-black text-[#fbbf24]">85%</span>
-                      </div>
-                    </td>
-                    <td className="px-10 py-8 text-base font-black text-[#E5E2E1]">92%</td>
-                    <td className="px-10 py-8 text-base font-black text-[#fbbf24]">R$ 12.450</td>
-                    <td className="px-10 py-8 text-right">
-                      <div className="flex items-center justify-end gap-3">
-                        <div className={cn(
-                          "w-2 h-2 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]",
-                          s.active ? "bg-emerald-500" : "bg-zinc-600"
-                        )} />
-                        <span className="text-xs uppercase font-bold tracking-widest text-[#D3C5AC]/60">
-                          {s.active ? 'Disponível' : 'Ausente'}
-                        </span>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>

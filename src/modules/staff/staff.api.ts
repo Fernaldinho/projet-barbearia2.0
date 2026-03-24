@@ -1,10 +1,10 @@
 import { supabase } from '@/lib/supabase'
 import type { Staff, StaffFormData } from '@/types'
 
-export async function getStaff(companyId: string): Promise<Staff[]> {
+export async function getStaff(companyId: string): Promise<any[]> {
   const { data, error } = await supabase
     .from('staff')
-    .select('*')
+    .select('*, appointments(id, status, date, service:services(price))')
     .eq('company_id', companyId)
     .order('name')
 
