@@ -91,3 +91,33 @@ export async function getClientAppointments(clientId: string): Promise<any[]> {
   if (error) throw error
   return data || []
 }
+
+export async function getClientAppointmentsForPortal(email: string, phone?: string): Promise<any[]> {
+  if (!email && !phone) return []
+
+  let query = supabase.from('clients').select('id')
+  
+  if (phone && email) {
+    query = query.or(`email.eq.${email},phone.ilike.%${phone.replace(/\D/g, '')}%`)
+  } else if (email) {
+    query = query.eq('email', email)
+  } else if (phone) {
+    query = query.ilike('phone', `%${phone.replace(/\D/g, '')}%`)
+  }
+
+  const { data: clients, error: cErr } = await query
+  if (cErr) throw cErr
+  
+  const clientIds = clients?.map(c => c.id) || []
+  if (clientIds.length === 0) return []
+
+  const { data, error } = await supabase
+    .from('appointments')
+    .select('*, client:clients(*), service:services(*), staff:staff(*), company:companies(*)')
+    .in('client_id', clientIds)
+    .order('date', { ascending: false })
+    .order('start_time', { ascending: false })
+
+  if (error) throw error
+  return data || []
+}

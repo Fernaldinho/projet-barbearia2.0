@@ -20,7 +20,7 @@ import {
   X,
   Phone
 } from 'lucide-react'
-import { getClientAppointments } from '../clients/clients.api'
+import { getClientAppointmentsForPortal } from '../clients/clients.api'
 import { supabase } from '@/lib/supabase'
 
 export function ClientPortal() {
@@ -57,16 +57,16 @@ export function ClientPortal() {
 
   useEffect(() => {
     if (user) {
-      if (user.email) loadAppointments(user.email)
+      if (user.email) loadAppointments(user.email, user.user_metadata?.phone)
       setProfileName(user.user_metadata?.full_name || '')
       setProfilePhone(user.user_metadata?.phone || '')
     }
   }, [user])
 
-  const loadAppointments = async (email: string) => {
+  const loadAppointments = async (email: string, phone?: string) => {
     setDataLoading(true)
     try {
-      const data = await getClientAppointments(email)
+      const data = await getClientAppointmentsForPortal(email, phone)
       setAppointments(data)
     } catch (err) {
       console.error('Portal load error:', err)
