@@ -10,7 +10,6 @@ const tabs = [
   { id: 'company', label: 'PERFIL DA BARBEARIA', icon: <Store className="w-5 h-4" /> },
   { id: 'security', label: 'SEGURANÇA', icon: <Lock className="w-5 h-4" /> },
   { id: 'notifications', label: 'NOTIFICAÇÕES', icon: <BellRing className="w-5 h-4" /> },
-  { id: 'appearance', label: 'APARÊNCIA', icon: <Palette className="w-5 h-4" /> },
 ]
 
 export function SettingsPage() {
@@ -28,8 +27,7 @@ export function SettingsPage() {
   const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
 
-  // Appearance State
-  const [activeTheme, setActiveTheme] = useState('Noir')
+
 
   // Notifications State
   const [notifs, setNotifs] = useState({
@@ -305,38 +303,7 @@ export function SettingsPage() {
               </section>
             )}
 
-            {activeTab === 'appearance' && (
-              <section className="bg-[#1C1B1B] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner text-[#fbbf24]">
-                    <Palette className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-xl font-black font-headline text-white uppercase tracking-tighter">Aparência</h3>
-                </div>
-                <p className="text-zinc-500 text-sm font-medium mb-10">Personalize a identidade visual do seu painel e da página pública.</p>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-6">
-                  {['Noir', 'Classic', 'Royal'].map(theme => (
-                    <div 
-                      key={theme} 
-                      onClick={() => setActiveTheme(theme)}
-                      className={cn(
-                        "aspect-video rounded-2xl border transition-all cursor-pointer flex items-center justify-center font-black text-[10px] uppercase tracking-widest relative overflow-hidden",
-                        activeTheme === theme 
-                          ? "bg-black border-[#fbbf24]/40 text-[#fbbf24]" 
-                          : "bg-[#2a2a2a] border-white/5 text-zinc-500 hover:border-white/20"
-                      )}
-                    >
-                      {theme} Theme
-                      {activeTheme === theme && (
-                        <div className="absolute top-2 right-2">
-                           <CheckCircle2 className="w-4 h-4" />
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
+
 
             {/* Action Bar */}
             <div className="flex justify-end gap-6 mt-12 bg-[#0e0e0e]/40 p-6 rounded-[2rem] border border-white/5 backdrop-blur-xl sticky bottom-4 z-10 shadow-2xl">
