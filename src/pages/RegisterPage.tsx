@@ -24,8 +24,20 @@ export function RegisterPage() {
       return
     }
 
-    if (password.length < 6) {
-      setError('A senha deve ter pelo menos 6 caracteres.')
+    if (password.length < 8) {
+      setError('A senha deve ter pelo menos 8 caracteres.')
+      return
+    }
+    if (!/[A-Z]/.test(password)) {
+      setError('A senha deve conter pelo menos uma letra maiúscula.')
+      return
+    }
+    if (!/[a-z]/.test(password)) {
+      setError('A senha deve conter pelo menos uma letra minúscula.')
+      return
+    }
+    if (!/[0-9]/.test(password)) {
+      setError('A senha deve conter pelo menos um número.')
       return
     }
 
@@ -47,7 +59,7 @@ export function RegisterPage() {
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{__html: `
+      <style>{`
         .font-headline { font-family: 'Space Grotesk', sans-serif; }
         .font-body { font-family: 'Inter', sans-serif; }
         .font-label { font-family: 'Inter', sans-serif; }
@@ -62,7 +74,7 @@ export function RegisterPage() {
         .noir-gradient {
             background: linear-gradient(180deg, #131313 0%, #0E0E0E 100%);
         }
-      `}} />
+      `}</style>
       <main className="flex min-h-screen w-full flex-col md:flex-row overflow-hidden bg-[#131313] text-[#e5e2e1] font-body">
         {/* Left Side: Visual Branding */}
         <section className="hidden lg:flex w-1/2 relative flex-col justify-center items-center px-12 py-20 noir-gradient">

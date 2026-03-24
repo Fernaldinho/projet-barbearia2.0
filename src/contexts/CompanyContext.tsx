@@ -66,13 +66,11 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
         .single()
 
       if (error) {
-        console.error('Error fetching company:', error)
         setCompany(null)
       } else {
         setCompany(data)
       }
-    } catch (err) {
-      console.error('Error fetching company:', err)
+    } catch (_err) {
       setCompany(null)
     } finally {
       setLoading(false)

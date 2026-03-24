@@ -97,10 +97,10 @@ export function ClientPortal() {
   if (!user) {
     return (
       <div className="min-h-screen bg-black text-[#E5E2E1] font-body flex flex-col items-center justify-center p-6 selection:bg-[#fbbf24] selection:text-[#402D00]">
-        <style dangerouslySetInnerHTML={{__html: `
+        <style>{`
           .font-headline { font-family: 'Space Grotesk', sans-serif; }
           .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300; }
-        `}} />
+        `}</style>
         
         <div className="w-full max-w-md space-y-12">
           {/* Logo */}
@@ -222,10 +222,10 @@ export function ClientPortal() {
   // Dashboard View
   return (
     <div className="min-h-screen bg-black text-[#E5E2E1] font-body selection:bg-[#fbbf24] selection:text-[#402D00]">
-      <style dangerouslySetInnerHTML={{__html: `
+      <style>{`
           .font-headline { font-family: 'Space Grotesk', sans-serif; }
           .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 300; }
-        `}} />
+        `}</style>
 
       {/* Header */}
       <header className="sticky top-0 z-30 bg-black/80 backdrop-blur-2xl border-b border-white/[0.03]">

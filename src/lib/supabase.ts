@@ -18,14 +18,7 @@ const finalUrl = isValidUrl(supabaseUrl)
   : 'https://placeholder.supabase.co';
 
 if (!supabaseUrl || !supabaseAnonKey || !isValidUrl(supabaseUrl)) {
-  console.warn(
-    '⚠️ Supabase configuration issue. Please check your .env file.',
-    { 
-      hasUrl: !!supabaseUrl, 
-      hasKey: !!supabaseAnonKey, 
-      isValidUrl: isValidUrl(supabaseUrl) 
-    }
-  )
+  // Supabase not configured - client will use placeholder
 }
 
 export const supabase = createClient(

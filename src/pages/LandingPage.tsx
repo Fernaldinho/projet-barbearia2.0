@@ -4,7 +4,7 @@ import { ROUTES } from '@/utils/constants'
 export function LandingPage() {
   return (
     <>
-      <style dangerouslySetInnerHTML={{__html: `
+      <style>{`
         .font-headline { font-family: 'Space Grotesk', sans-serif; }
         .font-body { font-family: 'Inter', sans-serif; }
         .font-label { font-family: 'Inter', sans-serif; }
@@ -24,7 +24,7 @@ export function LandingPage() {
         .cta-glow-bg {
           background: radial-gradient(circle, rgba(251, 191, 36, 0.15) 0%, rgba(19, 19, 19, 0) 70%), #1c1a0e;
         }
-      `}} />
+      `}</style>
       <div className="bg-[#131313] text-[#e5e2e1] font-body antialiased selection:bg-[#fbbf24] selection:text-[#402d00]">
         {/* Top Navigation Bar */}
         <nav className="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl">

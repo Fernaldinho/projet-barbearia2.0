@@ -66,13 +66,36 @@ export function SettingsPage() {
   }
 
 
+  const validatePassword = (pwd: string): string | null => {
+    if (pwd.length < 8) return 'A senha deve ter pelo menos 8 caracteres.'
+    if (!/[A-Z]/.test(pwd)) return 'A senha deve conter pelo menos uma letra maiúscula.'
+    if (!/[a-z]/.test(pwd)) return 'A senha deve conter pelo menos uma letra minúscula.'
+    if (!/[0-9]/.test(pwd)) return 'A senha deve conter pelo menos um número.'
+    return null
+  }
+
   const handleUpdatePassword = async () => {
-    if (newPassword.length < 6) {
-      toast.error('A senha deve ter pelo menos 6 caracteres.')
+    if (!currentPassword) {
+      toast.error('Informe sua senha atual.')
+      return
+    }
+    const validationError = validatePassword(newPassword)
+    if (validationError) {
+      toast.error(validationError)
       return
     }
     setLoading(true)
     try {
+      // Verificar senha atual fazendo re-login
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: user?.email || '',
+        password: currentPassword,
+      })
+      if (authError) {
+        toast.error('Senha atual incorreta.')
+        return
+      }
+      // Atualizar para nova senha
       const { error } = await supabase.auth.updateUser({
         password: newPassword
       })
@@ -80,8 +103,7 @@ export function SettingsPage() {
       toast.success('Senha atualizada com sucesso!')
       setNewPassword('')
       setCurrentPassword('')
-    } catch (err) {
-      console.error(err)
+    } catch (_err) {
       toast.error('Erro ao atualizar senha.')
     } finally {
       setLoading(false)
@@ -195,12 +217,11 @@ export function SettingsPage() {
                       <h3 className="text-xl font-black font-headline text-white uppercase tracking-tighter">Segurança</h3>
                     </div>
                     <div className="space-y-6">
-                      <div className="space-y-3 relative opacity-50">
-                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Senha Atual (Mock)</label>
+                      <div className="space-y-3">
+                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Senha Atual</label>
                         <input 
-                          disabled
-                          className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none" 
-                          placeholder="••••••••" 
+                          className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none text-[#E5E2E1]" 
+                          placeholder="Digite sua senha atual" 
                           type="password"
                           value={currentPassword}
                           onChange={(e) => setCurrentPassword(e.target.value)}
@@ -220,7 +241,7 @@ export function SettingsPage() {
                   </div>
                   <button 
                     onClick={handleUpdatePassword}
-                    disabled={loading || !newPassword}
+                    disabled={loading || !newPassword || !currentPassword}
                     className="mt-12 bg-[#2a2a2a] text-white hover:bg-[#333] transition-all px-8 py-4 rounded-full font-black text-xs uppercase tracking-widest active:scale-95 disabled:opacity-50"
                   >
                     {loading ? 'Processando...' : 'Atualizar Senha'}

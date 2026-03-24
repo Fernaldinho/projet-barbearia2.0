@@ -22,11 +22,19 @@ export function ClientForm({ onSubmit, loading, error, initialData }: ClientForm
   const [name, setName] = useState(initialData?.name || '')
   const [phone, setPhone] = useState(initialData?.phone || '')
   const [email, setEmail] = useState(initialData?.email || '')
+  const [website, setWebsite] = useState('')
   const [localError, setLocalError] = useState<string | null>(null)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setLocalError(null)
+
+    // Honeypot check
+    if (website) {
+      // Rejeita silenciosamente ou mostra erro genérico para bots
+      setLocalError('Falha na validação de segurança.')
+      return
+    }
 
     if (!name.trim()) {
       setLocalError('Informe seu nome completo.')
@@ -65,6 +73,18 @@ export function ClientForm({ onSubmit, loading, error, initialData }: ClientForm
         )}
 
         <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Honeypot field - Keep hidden */}
+          <div className="absolute -left-[9999px] top-0 opacity-0 pointer-events-none">
+            <input
+              type="text"
+              name="website"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
+
           <div className="space-y-6">
             <div className="space-y-3 p-1">
               <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-4">Nome Completo</label>
