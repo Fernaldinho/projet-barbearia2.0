@@ -16,6 +16,7 @@ import {
   Crown
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
+import { useCompany } from '@/contexts/CompanyContext'
 import { ROUTES, APP_NAME } from '@/utils/constants'
 import { cn } from '@/utils/helpers'
 
@@ -40,7 +41,11 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const { logout } = useAuth()
+  const { company } = useCompany()
   const location = useLocation()
+  
+  const isPro = company?.plan === 'pro'
+
 
   return (
     <aside 
@@ -55,7 +60,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
           <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-primary-container shadow-[0_0_20px_rgba(251,191,36,0.2)]">
             <Sparkles className="w-5 h-5 text-on-primary-fixed" />
           </div>
-          <span className="text-xl font-bold text-white tracking-tight font-headline">{APP_NAME}</span>
+          <span className="text-xl font-bold text-white tracking-tight font-headline flex items-center gap-2">
+            {APP_NAME}
+            {isPro && (
+              <span className="bg-primary-container/20 text-primary-container text-[10px] font-black px-1.5 py-0.5 rounded border border-primary-container/30 tracking-widest uppercase">
+                PRO
+              </span>
+            )}
+          </span>
         </div>
         
         <button 
