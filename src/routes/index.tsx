@@ -21,6 +21,7 @@ import { StaffPage } from '@/modules/staff/StaffPage'
 import { BusinessHoursPage } from '@/modules/business-hours/BusinessHoursPage'
 import { BlockedTimesPage } from '@/modules/blocked-times/BlockedTimesPage'
 import { BillingPage } from '@/modules/billing/BillingPage'
+import { SubscriptionPage } from '@/modules/billing/SubscriptionPage'
 import { SettingsPage } from '@/modules/settings/SettingsPage'
 import { PublicPage } from '@/modules/public/PublicPage'
 import { ClientPortal } from '@/modules/client/ClientPortal'
@@ -93,6 +94,10 @@ export const router = createBrowserRouter([
       {
         path: '/billing',
         element: <BillingPage />,
+      },
+      {
+        path: '/subscription',
+        element: <SubscriptionPage />,
       },
       {
         path: '/settings',

@@ -12,7 +12,8 @@ import {
   LogOut,
   Sparkles,
   X,
-  Globe
+  Globe,
+  Crown
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { ROUTES, APP_NAME } from '@/utils/constants'
@@ -26,7 +27,8 @@ const navItems = [
   { path: ROUTES.STAFF, label: 'Equipe', icon: Users2 },
   { path: ROUTES.BUSINESS_HOURS, label: 'Horários', icon: Clock },
   { path: ROUTES.BLOCKED_TIMES, label: 'Bloqueios', icon: CalendarOff },
-  { path: ROUTES.BILLING, label: 'Assinatura', icon: CreditCard },
+  { path: ROUTES.SUBSCRIPTION, label: 'Assinatura', icon: Crown },
+  { path: ROUTES.BILLING, label: 'Faturamento', icon: CreditCard },
   { path: ROUTES.PUBLIC_PAGE, label: 'Página Pública', icon: Globe },
   { path: ROUTES.SETTINGS, label: 'Configurações', icon: Settings },
 ]
