@@ -16,7 +16,7 @@ import type { Appointment, AppointmentFormData, Staff } from '@/types'
 import { cn } from '@/utils/helpers'
 
 export function AppointmentsPage() {
-  const { company } = useCompany()
+  const { company, features } = useCompany()
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [staffList, setStaffList] = useState<Staff[]>([])
   const [loading, setLoading] = useState(true)
@@ -55,6 +55,25 @@ export function AppointmentsPage() {
 
   const handleCreate = async (data: AppointmentFormData, serviceDuration: number) => {
     if (!company?.id) return
+
+    if (features.maxAppointmentsPerMonth !== -1) {
+      const today = new Date()
+      const firstDay = new Date(today.getFullYear(), today.getMonth(), 1).toISOString().split('T')[0]
+      const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0]
+  
+      const { count, error } = await supabase
+        .from('appointments')
+        .select('*', { count: 'exact', head: true })
+        .eq('company_id', company.id)
+        .gte('date', firstDay)
+        .lte('date', lastDay)
+  
+      if (!error && count !== null && count >= features.maxAppointmentsPerMonth) {
+        alert(`Aviso: Seu plano permite apenas ${features.maxAppointmentsPerMonth} agendamentos neste mês. Faça o upgrade para agendar mais.`)
+        return
+      }
+    }
+
     await createAppointment(company.id, data, serviceDuration)
     setShowForm(false)
     setPreselectedTime(undefined)
@@ -144,7 +163,13 @@ export function AppointmentsPage() {
             <h1 className="text-6xl font-headline font-black text-[#E5E2E1] leading-none tracking-tighter uppercase">Agendamentos</h1>
           </div>
           <button 
-            onClick={() => setShowForm(true)}
+            onClick={() => {
+              // Note: the true check happens in handleCreate, here we just show a mild warning if they try
+              if (features.maxAppointmentsPerMonth !== -1 && appointments.length >= features.maxAppointmentsPerMonth) {
+                 alert(`Lembrete: Seu plano tem limite de ${features.maxAppointmentsPerMonth} agendamentos/mês. Podem haver bloqueios caso já tenha atingido o teto.`)
+              }
+              setShowForm(true)
+            }}
             className="bg-[#fbbf24] text-[#402D00] px-8 py-4 rounded-full font-bold flex items-center gap-3 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 group shadow-xl shadow-[#fbbf24]/10"
           >
             <span className="material-symbols-outlined group-hover:rotate-90 transition-transform">add</span>
@@ -291,10 +316,15 @@ export function AppointmentsPage() {
                 </div>
               ) : (
                 <div className="space-y-6">
-                  {filteredAppointments.map((app) => (
+                  {filteredAppointments.map((app, index) => (
                     <div 
                       key={app.id} 
-                      className="group bg-[#1C1B1B] rounded-[2rem] p-1 transition-all hover:bg-gradient-to-r hover:from-[#fbbf24]/10 hover:to-transparent border border-white/[0.02]"
+                      className={cn(
+                        "group bg-[#1C1B1B] rounded-[2rem] p-1 transition-all hover:bg-gradient-to-r hover:from-[#fbbf24]/10 hover:to-transparent border border-white/[0.02]",
+                        features.maxAppointmentsPerMonth !== -1 && index >= features.maxAppointmentsPerMonth
+                          ? "blur-[4px] opacity-40 select-none pointer-events-none"
+                          : ""
+                      )}
                     >
                       <div className="bg-[#1C1B1B] rounded-[1.9rem] p-8 flex items-center justify-between group-hover:translate-x-2 transition-transform duration-500">
                         <div className="flex items-center gap-10">

@@ -9,7 +9,7 @@ import { cn } from '@/utils/helpers'
 import { ClientHistoryModal } from './ClientHistoryModal'
 
 export function ClientsPage() {
-  const { company } = useCompany()
+  const { company, features } = useCompany()
   const [clients, setClients] = useState<Client[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -36,6 +36,10 @@ export function ClientsPage() {
 
   const handleCreate = async (data: ClientFormData) => {
     if (!company?.id) return
+    if (features.maxClients !== -1 && clients.length >= features.maxClients) {
+       alert(`Aviso: Seu plano permite apenas ${features.maxClients} clientes. Faça o upgrade para adicionar mais.`)
+       return
+    }
     await createClient(company.id, data)
     setShowForm(false)
     await loadClients()
@@ -105,7 +109,12 @@ export function ClientsPage() {
             <h1 className="text-6xl font-headline font-black text-[#E5E2E1] leading-none tracking-tighter uppercase">Gerenciador de Clientes</h1>
           </div>
           <button 
-            onClick={() => setShowForm(true)}
+            onClick={() => {
+              if (features.maxClients !== -1 && clients.length >= features.maxClients) {
+                alert(`Plano Gratuito atinge o limite máximo de ${features.maxClients} clientes. O próximo seria borrado.`)
+              }
+              setShowForm(true)
+            }}
             className="bg-[#fbbf24] text-[#402D00] px-8 py-4 rounded-full font-bold flex items-center gap-3 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 group"
           >
             <span className="material-symbols-outlined group-hover:rotate-90 transition-transform">person_add</span>
@@ -150,6 +159,7 @@ export function ClientsPage() {
         ) : (
           <ClientsTable 
             clients={filteredClients} 
+            maxClients={features.maxClients}
             onEdit={(c) => setEditingClient(c)} 
             onDelete={handleDelete} 
             onViewHistory={(c) => setHistoryClient(c)}

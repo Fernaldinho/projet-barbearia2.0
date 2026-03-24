@@ -6,9 +6,10 @@ interface ServicesTableProps {
   onEdit: (service: Service) => void
   onDelete: (id: string) => void
   onToggleStatus: (service: Service) => void
+  maxServices?: number
 }
 
-export function ServicesTable({ services, onEdit, onDelete, onToggleStatus }: ServicesTableProps) {
+export function ServicesTable({ services, onEdit, onDelete, onToggleStatus, maxServices }: ServicesTableProps) {
   if (services.length === 0) {
     return (
       <div className="p-16 text-center rounded-[2rem] bg-surface-container-low border border-outline-variant/10">
@@ -19,7 +20,7 @@ export function ServicesTable({ services, onEdit, onDelete, onToggleStatus }: Se
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {services.map((service) => {
+      {services.map((service, index) => {
         const isBestseller = service.name.toLowerCase().includes('signature') || 
                             service.name.toLowerCase().includes('combo')
         
@@ -39,7 +40,10 @@ export function ServicesTable({ services, onEdit, onDelete, onToggleStatus }: Se
               isBestseller 
                 ? "bg-gradient-to-br from-[#1C1B1B] to-[#FBBF24]/5 hover:to-[#FBBF24]/10 border-[#FBBF24]/20 shadow-2xl hover:shadow-[#FBBF24]/10" 
                 : "bg-[#1C1B1B] hover:bg-[#201F1F] border-transparent hover:border-[#4F4633]/20 shadow-lg hover:shadow-black/40",
-              !service.is_active && "opacity-60"
+              !service.is_active && "opacity-60",
+              maxServices !== undefined && maxServices !== -1 && index >= maxServices
+                ? "blur-[4px] opacity-40 select-none pointer-events-none"
+                : ""
             )}
           >
             {/* Glossy Overlay effect */}

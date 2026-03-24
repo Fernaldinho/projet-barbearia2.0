@@ -7,9 +7,10 @@ interface ClientsTableProps {
   onEdit: (client: Client) => void
   onDelete: (id: string) => void
   onViewHistory: (client: Client) => void
+  maxClients?: number
 }
 
-export function ClientsTable({ clients, onEdit, onDelete, onViewHistory }: ClientsTableProps) {
+export function ClientsTable({ clients, onEdit, onDelete, onViewHistory, maxClients }: ClientsTableProps) {
   const calculateTotalSpent = (appointments?: any[]) => {
     if (!appointments) return 0
     return appointments.reduce((sum, apt) => {
@@ -49,8 +50,16 @@ export function ClientsTable({ clients, onEdit, onDelete, onViewHistory }: Clien
             </tr>
           </thead>
           <tbody className="divide-y divide-white/[0.03]">
-            {clients.map((client) => (
-              <tr key={client.id} className="hover:bg-white/[0.02] transition-all group">
+            {clients.map((client, index) => (
+              <tr 
+                key={client.id} 
+                className={cn(
+                  "hover:bg-white/[0.02] transition-all group",
+                  maxClients !== undefined && maxClients !== -1 && index >= maxClients
+                    ? "blur-[4px] opacity-40 select-none pointer-events-none"
+                    : ""
+                )}
+              >
                 <td className="px-10 py-8">
                   <div className="flex items-center gap-5">
                     <div className="w-12 h-12 rounded-full bg-[#353534] flex items-center justify-center overflow-hidden border border-white/5 shadow-inner grow-0 shrink-0">

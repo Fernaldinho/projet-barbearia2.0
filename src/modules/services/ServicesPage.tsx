@@ -7,7 +7,7 @@ import { getServices, createService, updateService, deleteService } from './serv
 import type { Service, ServiceFormData } from '@/types'
 
 export function ServicesPage() {
-  const { company } = useCompany()
+  const { company, features } = useCompany()
   const [services, setServices] = useState<Service[]>([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
@@ -33,6 +33,10 @@ export function ServicesPage() {
 
   const handleCreate = async (data: ServiceFormData) => {
     if (!company?.id) return
+    if (features.maxServices !== -1 && services.length >= features.maxServices) {
+       alert(`Aviso: Seu plano permite criar apenas ${features.maxServices} serviços. Faça o upgrade para adicionar mais.`)
+       return
+    }
     await createService(company.id, data)
     setShowForm(false)
     await loadServices()
@@ -97,7 +101,12 @@ export function ServicesPage() {
           </div>
 
           <button 
-            onClick={() => setShowForm(true)}
+            onClick={() => {
+              if (features.maxServices !== -1 && services.length >= features.maxServices) {
+                alert(`Plano Gratuito atinge o limite máximo de ${features.maxServices} serviços. O próximo seria borrado.`)
+              }
+              setShowForm(true)
+            }}
             className="group relative flex items-center gap-3 bg-[#fbbf24] text-[#402D00] px-8 py-4 rounded-full font-headline font-bold text-lg hover:pr-10 transition-all duration-300 active:scale-95 shadow-xl shadow-[#fbbf24]/10"
           >
             <span className="material-symbols-outlined">add</span>
@@ -115,6 +124,7 @@ export function ServicesPage() {
         ) : (
           <ServicesTable 
             services={filteredServices} 
+            maxServices={features.maxServices}
             onEdit={handleEdit} 
             onDelete={handleDelete} 
             onToggleStatus={handleToggleStatus}
