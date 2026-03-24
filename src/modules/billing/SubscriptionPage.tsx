@@ -82,10 +82,15 @@ export function SubscriptionPage() {
               ))}
             </div>
 
-            <button className="w-full py-6 bg-transparent border-2 border-white/5 text-white hover:bg-[#fbbf24] hover:text-[#402D00] hover:border-[#fbbf24] transition-all rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-lg active:scale-95 flex items-center justify-center gap-2 group">
+            <a 
+              href={`https://pay.kirvano.com/435f6ec9-afb0-4405-8e12-8d49bbf652d6?metadata_company_id=${company?.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-6 bg-transparent border-2 border-white/5 text-white hover:bg-[#fbbf24] hover:text-[#402D00] hover:border-[#fbbf24] transition-all rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-lg active:scale-95 flex items-center justify-center gap-2 group"
+            >
               ASSINAR AGORA
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </a>
           </section>
 
           {/* Plano Semestral */}
@@ -118,10 +123,15 @@ export function SubscriptionPage() {
               ))}
             </div>
 
-            <button className="w-full py-6 bg-[#fbbf24] text-[#402D00] hover:shadow-[0_0_30px_rgba(251,191,36,0.2)] transition-all rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-[#fbbf24]/10 active:scale-95 flex items-center justify-center gap-2 group">
+            <a 
+              href={`https://pay.kirvano.com/f6753696-480f-4b00-9a16-73463b09f9b7?metadata_company_id=${company?.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-6 bg-[#fbbf24] text-[#402D00] hover:shadow-[0_0_30px_rgba(251,191,36,0.2)] transition-all rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-[#fbbf24]/10 active:scale-95 flex items-center justify-center gap-2 group"
+            >
               ASSINAR AGORA
               <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </button>
+            </a>
           </section>
 
         </div>
