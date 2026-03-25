@@ -117,6 +117,7 @@ export interface Appointment {
   end_time: string
   status: AppointmentStatus
   notes: string | null
+  cancellation_reason?: string | null
   created_at: string
   updated_at: string
   // Relations

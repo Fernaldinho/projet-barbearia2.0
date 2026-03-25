@@ -1,7 +1,10 @@
-import { Bell, Menu } from 'lucide-react'
+import { Bell, Menu, X, CheckCircle, Info, AlertTriangle, MessageSquare } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import { getInitials } from '@/utils/helpers'
+import { getInitials, cn } from '@/utils/helpers'
 import { useLocation } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { supabase } from '@/lib/supabase'
+import { useCompany } from '@/contexts/CompanyContext'
 
 const routeTitles: Record<string, string> = {
   '/dashboard': 'DASHBOARD',
@@ -22,10 +25,72 @@ interface NavbarProps {
 
 export function Navbar({ onMenuClick }: NavbarProps) {
   const { user } = useAuth()
+  const { company } = useCompany()
   const location = useLocation()
-  const userName = user?.user_metadata?.full_name || user?.email || 'Usuário'
   
+  const [notifications, setNotifications] = useState<any[]>([])
+  const [showNotifications, setShowNotifications] = useState(false)
+  const [unreadCount, setUnreadCount] = useState(0)
+
+  useEffect(() => {
+    if (!company?.id) return
+    loadNotifications()
+    
+    // Subscribe to new notifications
+    const sub = supabase
+      .channel('notifications')
+      .on('postgres_changes', { 
+        event: 'INSERT', 
+        schema: 'public', 
+        table: 'notifications',
+        filter: `company_id=eq.${company.id}`
+      }, () => {
+        loadNotifications()
+        // Sound or pulse could be added here
+      })
+      .subscribe()
+      
+    return () => { sub.unsubscribe() }
+  }, [company?.id])
+
+  const loadNotifications = async () => {
+    if (!company?.id) return
+    const { data } = await supabase
+      .from('notifications')
+      .select('*')
+      .eq('company_id', company.id)
+      .order('created_at', { ascending: false })
+      .limit(10)
+    
+    if (data) {
+      setNotifications(data)
+      setUnreadCount(data.filter(n => !n.read).length)
+    }
+  }
+
+  const markAllRead = async () => {
+    if (!company?.id) return
+    await supabase
+      .from('notifications')
+      .update({ read: true })
+      .eq('company_id', company.id)
+      .eq('read', false)
+    
+    loadNotifications()
+  }
+
+  const userName = user?.user_metadata?.full_name || user?.email || 'Usuário'
   const pageTitle = routeTitles[location.pathname] || 'Dashboard'
+
+  const timeAgo = (date: string) => {
+    const seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000)
+    if (seconds < 60) return 'agora'
+    const minutes = Math.floor(seconds / 60)
+    if (minutes < 60) return `${minutes}m`
+    const hours = Math.floor(minutes / 60)
+    if (hours < 24) return `${hours}h`
+    return new Date(date).toLocaleDateString()
+  }
 
   return (
     <header style={{ backgroundColor: '#121212', borderBottom: '1px solid #262626' }} className="fixed top-0 right-0 z-30 h-[64px] backdrop-blur-lg left-0 md:left-[240px] transition-all">
@@ -45,10 +110,73 @@ export function Navbar({ onMenuClick }: NavbarProps) {
 
         {/* Right side: Actions & User Info */}
         <div className="flex items-center gap-[16px] shrink-0">
-          <button className="relative p-2 rounded-lg text-dark-400 hover:bg-dark-800 hover:text-white transition-all">
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#e7b008' }} />
-          </button>
+          <div className="relative">
+            <button 
+              onClick={() => {
+                setShowNotifications(!showNotifications)
+                if (!showNotifications && unreadCount > 0) markAllRead()
+              }}
+              className={cn(
+                "relative p-2 rounded-lg text-dark-400 hover:bg-dark-800 hover:text-white transition-all",
+                showNotifications && "bg-dark-800 text-white"
+              )}
+            >
+              <Bell className="w-5 h-5" />
+              {unreadCount > 0 && (
+                <span className="absolute top-2 right-2 w-2 h-2 rounded-full border-2 border-[#121212]" style={{ backgroundColor: '#e7b008' }} />
+              )}
+            </button>
+
+            {/* Notifications Popover */}
+            {showNotifications && (
+              <>
+                <div className="fixed inset-0 z-40 bg-transparent" onClick={() => setShowNotifications(false)} />
+                <div className="absolute right-0 mt-2 w-80 bg-[#1A1A1A] border border-[#262626] rounded-xl shadow-2xl z-50 overflow-hidden animate-fade-in animate-scale-in">
+                  <div className="p-4 border-b border-[#262626] flex items-center justify-between bg-[#1f1f1f]">
+                    <h3 className="text-xs font-black tracking-widest uppercase text-white mb-0">Notificações</h3>
+                    <button onClick={() => setShowNotifications(false)} className="text-dark-400 hover:text-white"><X className="w-4 h-4" /></button>
+                  </div>
+                  
+                  <div className="max-h-[400px] overflow-y-auto">
+                    {notifications.length === 0 ? (
+                      <div className="p-10 text-center space-y-3">
+                        <Bell className="w-8 h-8 text-[#262626] mx-auto" />
+                        <p className="text-[10px] font-black uppercase tracking-widest text-dark-500">Nenhuma notificação</p>
+                      </div>
+                    ) : (
+                      <div className="divide-y divide-[#262626]">
+                        {notifications.map((n) => (
+                          <div key={n.id} className={cn("p-4 flex gap-4 hover:bg-white/[0.02] transition-colors", !n.read && "bg-[#fbbf24]/5")}>
+                            <div className={cn(
+                              "w-8 h-8 rounded-lg shrink-0 flex items-center justify-center",
+                              n.type === 'success' ? "bg-emerald-500/10 text-emerald-500" :
+                              n.type === 'warning' ? "bg-amber-500/10 text-amber-500" :
+                              "bg-[#fbbf24]/10 text-[#fbbf24]"
+                            )}>
+                              {n.type === 'success' ? <CheckCircle className="w-4 h-4" /> :
+                               n.type === 'warning' ? <AlertTriangle className="w-4 h-4" /> :
+                               n.type === 'review' ? <MessageSquare className="w-4 h-4" /> :
+                               <Bell className="w-4 h-4" />
+                              }
+                            </div>
+                            <div className="flex-1 space-y-1">
+                              <p className="text-xs font-bold text-white leading-tight">{n.title}</p>
+                              <p className="text-[11px] text-dark-400 leading-snug">{n.message}</p>
+                              <p className="text-[9px] text-dark-500 uppercase font-black">{timeAgo(n.created_at)}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="p-3 bg-[#131313] border-t border-[#262626] text-center">
+                    <p className="text-[9px] font-black uppercase tracking-widest text-dark-500">AgendaAI Pro System</p>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
 
           <div className="flex items-center gap-[8px] pl-[16px] border-l border-dark-800">
             <div className="hidden sm:block text-right mr-2">

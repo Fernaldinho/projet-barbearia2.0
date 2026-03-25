@@ -67,6 +67,7 @@ export function ClientPortal() {
   const [showReviewThanks, setShowReviewThanks] = useState(false)
   const [showConfirmCancel, setShowConfirmCancel] = useState(false)
   const [appToCancel, setAppToCancel] = useState<string | null>(null)
+  const [cancelReason, setCancelReason] = useState('')
 
   useEffect(() => {
     if (user) {
@@ -145,7 +146,7 @@ export function ClientPortal() {
     try {
       const { error } = await supabase
         .from('appointments')
-        .update({ status: 'cancelled' })
+        .update({ status: 'cancelled', cancellation_reason: cancelReason })
         .eq('id', appToCancel)
       
       if (error) throw error
@@ -153,6 +154,7 @@ export function ClientPortal() {
       toast.success('Agendamento cancelado com sucesso!')
       setShowConfirmCancel(false)
       setAppToCancel(null)
+      setCancelReason('')
       setAppointments(prev => prev.map(app => 
         app.id === appToCancel ? { ...app, status: 'cancelled' } : app
       ))
@@ -554,17 +556,18 @@ export function ClientPortal() {
                               
                               {isFinished && (
                                   <div className="flex items-center gap-1 text-[#fbbf24]">
-                                     {[...Array(5)].map((_, i) => (
-                                        <Star 
-                                          key={i} 
-                                          className={cn(
-                                            "w-3.5 h-3.5 transition-all", 
-                                            app.reviews?.[0] 
-                                              ? (i < app.reviews[0].rating ? "fill-[#fbbf24]" : "text-zinc-800")
-                                              : "text-zinc-800 group-hover:text-zinc-600"
-                                          )} 
-                                        />
-                                     ))}
+                                     {[...Array(5)].map((_, i) => {
+                                        const r = Array.isArray(app.reviews) ? app.reviews[0] : app.reviews
+                                        return (
+                                          <Star 
+                                            key={i} 
+                                            className={cn(
+                                              "w-3.5 h-3.5 transition-all", 
+                                              r ? (i < r.rating ? "fill-[#fbbf24]" : "text-zinc-800") : "text-zinc-800 group-hover:text-zinc-600"
+                                            )} 
+                                          />
+                                        )
+                                     })}
                                   </div>
                                )}
 
@@ -600,6 +603,17 @@ export function ClientPortal() {
             <h3 className="text-2xl font-headline font-black text-white uppercase tracking-tighter mb-4">Cancelar Agendamento?</h3>
             <p className="text-zinc-500 text-sm font-medium mb-10 leading-relaxed text-center">Esta ação não pode ser desfeita e o horário será liberado para outros clientes.</p>
             
+            <div className="space-y-4 mb-8">
+              <label className="text-[10px] uppercase font-black tracking-widest text-[#E5E2E1]/40 block text-left ml-4">Motivo (Opcional)</label>
+              <textarea 
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                placeholder="Por que você está cancelando?"
+                rows={3}
+                className="w-full bg-black/40 border border-white/5 rounded-2xl p-4 text-white text-sm outline-none focus:border-red-500/50 transition-all resize-none"
+              />
+            </div>
+            
             <div className="flex flex-col gap-3">
               <button 
                 onClick={confirmCancelAppointment}
@@ -611,6 +625,7 @@ export function ClientPortal() {
                 onClick={() => {
                   setShowConfirmCancel(false)
                   setAppToCancel(null)
+                  setCancelReason('')
                 }}
                 className="w-full bg-white/5 text-zinc-400 hover:text-white font-black py-5 rounded-full text-xs uppercase tracking-[0.2em] transition-all"
               >

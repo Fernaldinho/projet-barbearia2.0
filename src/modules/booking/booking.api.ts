@@ -92,5 +92,14 @@ export async function createPublicBooking(
     .single()
 
   if (error) throw error
+
+  // Create notification for the admin
+  supabase.from('notifications').insert({
+    company_id: companyId,
+    title: 'Novo Agendamento (Portal)',
+    message: `Um novo agendamento foi realizado via portal para o dia ${date} às ${startTime}`,
+    type: 'success'
+  }).then(() => {})
+
   return data
 }

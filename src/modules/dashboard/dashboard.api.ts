@@ -124,24 +124,40 @@ export async function getDashboardMetrics(companyId: string): Promise<DashboardM
   ])
 
   const allAppts = monthAppts.data || []
+  const now = new Date()
+
+  const isActuallyDone = (a: any) => {
+    if (a.status === 'completed') return true
+    if (a.status !== 'confirmed') return false
+    // If confirmed and date/time is past, consider it done for metrics
+    try {
+      const appDate = new Date(`${a.date}T${a.start_time}`)
+      return appDate < now
+    } catch {
+      return false
+    }
+  }
+
   const totalMonth = allAppts.length
-  const completedMonth = allAppts.filter((a) => a.status === 'completed').length
+  const completedMonth = allAppts.filter(isActuallyDone).length
   const cancelledMonth = allAppts.filter((a) => a.status === 'cancelled' || a.status === 'no_show').length
   const countable = totalMonth - cancelledMonth
   const attendanceRate = countable > 0 ? (completedMonth / countable) * 100 : 0
 
   const monthlyRevenue = allAppts
-    .filter((a) => a.status === 'completed')
-    .reduce((sum, a) => {
-      const service = a.service as unknown as { price: number } | null
-      return sum + (Number(service?.price) || 0)
+    .filter(isActuallyDone)
+    .reduce((sum, a: any) => {
+      // Handle both object and array response from Supabase
+      const serviceData = Array.isArray(a.service) ? a.service[0] : a.service
+      return sum + (Number(serviceData?.price) || 0)
     }, 0)
 
   const projectedRevenue = allAppts
-    .filter((a) => ['scheduled', 'confirmed'].includes(a.status))
-    .reduce((sum, a) => {
-      const service = a.service as unknown as { price: number } | null
-      return sum + (Number(service?.price) || 0)
+    .filter((a) => !isActuallyDone(a) && ['scheduled', 'confirmed'].includes(a.status))
+    .reduce((sum, a: any) => {
+      // Handle both object and array response from Supabase
+      const serviceData = Array.isArray(a.service) ? a.service[0] : a.service
+      return sum + (Number(serviceData?.price) || 0)
     }, 0)
 
   return {

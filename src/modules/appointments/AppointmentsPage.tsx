@@ -351,6 +351,11 @@ export function AppointmentsPage() {
                             <div>
                               <h4 className="font-black text-lg sm:text-xl text-white tracking-tight group-hover:text-[#fbbf24] transition-colors capitalize">{app.client?.name || 'Cliente'}</h4>
                               <p className="text-[10px] sm:text-xs text-[#D3C5AC]/60 uppercase tracking-widest font-bold mt-1">{app.service?.name || 'Serviço Premium'}</p>
+                              {app.status === 'cancelled' && app.cancellation_reason && (
+                                <p className="text-[10px] text-red-500/80 font-medium italic mt-2 bg-red-500/5 px-3 py-1.5 rounded-lg border border-red-500/10 inline-block">
+                                  Motivo: {app.cancellation_reason}
+                                </p>
+                              )}
                             </div>
                           </div>
                         </div>

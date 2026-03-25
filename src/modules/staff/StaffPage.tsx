@@ -124,7 +124,11 @@ export function StaffPage() {
                   </div>
                   <div className="flex items-center gap-1.5 text-[#fbbf24]">
                     <span className="material-symbols-outlined text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                    <span className="font-headline font-black text-lg">4.9</span>
+                    <span className="font-headline font-black text-lg">
+                      {s.reviews && s.reviews.length > 0 
+                        ? (s.reviews.reduce((acc: number, r: any) => acc + r.rating, 0) / s.reviews.length).toFixed(1)
+                        : '4.9'}
+                    </span>
                   </div>
                 </div>
 

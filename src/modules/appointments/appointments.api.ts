@@ -109,6 +109,18 @@ export async function updateAppointmentStatus(id: string, status: string): Promi
     .eq('id', id)
 
   if (error) throw error
+
+  if (status === 'cancelled') {
+    const { data: app } = await supabase.from('appointments').select('*, client:clients(name)').eq('id', id).single()
+    if (app) {
+      await supabase.from('notifications').insert({
+        company_id: (app as any).company_id,
+        title: 'Agendamento Cancelado',
+        message: `O agendamento de ${(app as any).client?.name || 'Cliente'} foi cancelado.`,
+        type: 'warning'
+      })
+    }
+  }
 }
 
 export async function deleteAppointment(id: string): Promise<void> {
