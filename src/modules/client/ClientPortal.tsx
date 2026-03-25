@@ -45,7 +45,7 @@ export function ClientPortal() {
 
   useEffect(() => {
     if (slug) {
-      supabase.from('companies').select('name').eq('slug', slug).single().then(({data}) => {
+      supabase.from('companies').select('name, logo_url').eq('slug', slug).single().then(({data}) => {
         if (data) setCompanyContext(data)
       })
     }
@@ -349,10 +349,21 @@ export function ClientPortal() {
       <header className="sticky top-0 z-30 bg-black/80 backdrop-blur-2xl border-b border-white/[0.03]">
         <div className="max-w-4xl mx-auto px-6 py-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex flex-col">
-            <Link to={fallbackTargetSlug ? `/book/${fallbackTargetSlug}` : '/'} className="font-headline font-black text-xl text-[#fbbf24] tracking-tighter uppercase leading-none">PORTAL DA BARBEARIA</Link>
-            {companyContext && (
-              <span className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black mt-1.5">{companyContext.name}</span>
-            )}
+            <Link to={fallbackTargetSlug ? `/book/${fallbackTargetSlug}` : '/'} className="flex items-center gap-3 group">
+               {companyContext?.logo_url ? (
+                  <img src={companyContext.logo_url} alt={companyContext.name} className="w-10 h-10 rounded-lg object-contain bg-white/5 p-1" />
+               ) : (
+                  <div className="w-10 h-10 rounded-lg bg-[#fbbf24]/10 flex items-center justify-center text-[#fbbf24]">
+                     <Scissors className="w-5 h-5" />
+                  </div>
+               )}
+               <div className="flex flex-col">
+                  <span className="font-headline font-black text-xl text-white group-hover:text-[#fbbf24] transition-colors tracking-tighter uppercase leading-none">
+                     {companyContext?.name || 'PORTAL DA BARBEARIA'}
+                  </span>
+                  <span className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black mt-1">Sessão do Cliente</span>
+               </div>
+            </Link>
           </div>
           <div className="flex items-center gap-6">
              <div className="hidden sm:block text-right">
@@ -369,7 +380,36 @@ export function ClientPortal() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-12 space-y-12">
+      <main className="max-w-4xl mx-auto px-6 py-8 space-y-12">
+        {/* Hero Banner */}
+        <section className="relative h-64 md:h-80 rounded-[3rem] overflow-hidden group shadow-2xl">
+           <img 
+              src="/barber_portal_banner_1774459878962.png" 
+              alt="Banner" 
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105"
+           />
+           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+           <div className="absolute inset-x-0 bottom-0 p-8 md:p-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div className="space-y-2">
+                 <div className="flex items-center gap-2 mb-2">
+                    <span className="px-3 py-1 bg-[#fbbf24] text-[#402D00] text-[10px] font-black uppercase tracking-widest rounded-full">Experiência Premium</span>
+                 </div>
+                 <h3 className="text-3xl md:text-5xl font-headline font-black text-white uppercase tracking-tighter leading-none">
+                    Redefina seu <span className="text-[#fbbf24]">Estilo</span>.
+                 </h3>
+                 <p className="text-[#D3C5AC] text-sm md:text-base font-light max-w-md">
+                    Agende agora o seu próximo atendimento e garanta o padrão que você merece.
+                 </p>
+              </div>
+              <Link 
+                to={fallbackTargetSlug ? `/book/${fallbackTargetSlug}` : '#'}
+                className="bg-white/10 backdrop-blur-md border border-white/10 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#fbbf24] hover:text-[#402D00] transition-all flex items-center justify-center gap-3 group/btn"
+              >
+                 Reservar Agora
+                 <ChevronRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
+              </Link>
+           </div>
+        </section>
         {/* Welcome Block */}
         <section className="flex flex-col md:flex-row md:items-end justify-between gap-8 animate-fade-in">
            <div className="space-y-4">
