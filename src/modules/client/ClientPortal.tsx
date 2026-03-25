@@ -73,17 +73,30 @@ export function ClientPortal() {
     }
   }, [user])
 
+  const isPastAppointment = (date: string, startTime: string) => {
+    try {
+      const now = new Date()
+      // Ensure date and time are parsed correctly
+      const [year, month, day] = date.split('-').map(Number)
+      const [hours, minutes] = startTime.split(':').map(Number)
+      const appDate = new Date(year, month - 1, day, hours, minutes)
+      return appDate < now
+    } catch {
+      return false
+    }
+  }
+
   const loadAppointments = async (email: string, phone?: string) => {
     setDataLoading(true)
     try {
       const data = await getClientAppointmentsForPortal(email, phone)
       setAppointments(data)
       
-      // Auto-trigger review modal for the last unreviewed completed appointment
-      const lastUnreviewed = data.find(app => 
-        app.status === 'completed' && 
-        (!app.reviews || app.reviews.length === 0)
-      )
+      // Auto-trigger review modal for the last unreviewed completed/past appointment
+      const lastUnreviewed = data.find(app => {
+        const finished = app.status === 'completed' || isPastAppointment(app.date, app.start_time)
+        return finished && (!app.reviews || app.reviews.length === 0)
+      })
       
       if (lastUnreviewed) {
         setTimeout(() => {
@@ -431,15 +444,18 @@ export function ClientPortal() {
                        <p className="text-zinc-600 text-sm font-black uppercase tracking-widest">Nenhum agendamento encontrado</p>
                     </div>
                  ) : (
-                    appointments.map((app) => (
-                       <div 
-                         key={app.id} 
-                         onClick={() => app.status === 'completed' ? handleReview(app) : null}
-                         className={cn(
-                           "group bg-[#1C1B1B] border border-white/5 rounded-[2.5rem] p-8 flex items-center justify-between hover:bg-[#201F1F] transition-all",
-                           app.status === 'completed' && "cursor-pointer active:scale-[0.98]"
-                         )}
-                       >
+                    appointments.map((app) => {
+                       const isFinished = app.status === 'completed' || isPastAppointment(app.date, app.start_time)
+                       
+                       return (
+                         <div 
+                           key={app.id} 
+                           onClick={() => isFinished ? handleReview(app) : null}
+                           className={cn(
+                             "group bg-[#1C1B1B] border border-white/5 rounded-[2.5rem] p-8 flex items-center justify-between hover:bg-[#201F1F] transition-all",
+                             isFinished && "cursor-pointer active:scale-[0.98]"
+                           )}
+                         >
                           <div className="flex items-center gap-6">
                              <div className="w-16 h-16 rounded-[1.25rem] bg-[#fbbf24] flex items-center justify-center text-[#402D00] flex-shrink-0 group-hover:scale-110 transition-transform">
                                 <Scissors className="w-8 h-8" />
@@ -459,36 +475,36 @@ export function ClientPortal() {
                                 </div>
                              </div>
                           </div>
-                          
-                          <div className="flex flex-col items-end gap-3">
-                             <div className={cn(
-                                "px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.2em] border",
-                                app.status === 'scheduled' || app.status === 'confirmed' 
-                                  ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" 
-                                  : "bg-zinc-800 text-zinc-500 border-white/5"
-                             )}>
-                                {app.status === 'scheduled' ? 'Agendado' : app.status === 'confirmed' ? 'Confirmado' : 'Finalizado'}
-                             </div>
-                             
-                              {app.status === 'completed' && (
-                                 <div className="flex items-center gap-1 text-[#fbbf24]">
-                                    {[...Array(5)].map((_, i) => (
-                                       <Star 
-                                         key={i} 
-                                         className={cn(
-                                           "w-3.5 h-3.5 transition-all", 
-                                           app.reviews?.[0] 
-                                             ? (i < app.reviews[0].rating ? "fill-[#fbbf24]" : "text-zinc-800")
-                                             : "text-zinc-800 group-hover:text-zinc-600"
-                                         )} 
-                                       />
-                                    ))}
-                                 </div>
-                              )}
-                           </div>
-                       </div>
-                    ))
-                 )}
+                                       <div className="flex flex-col items-end gap-3">
+                              <div className={cn(
+                                 "px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.2em] border",
+                                 (app.status === 'scheduled' || app.status === 'confirmed') && !isPastAppointment(app.date, app.start_time)
+                                   ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" 
+                                   : "bg-zinc-800 text-zinc-500 border-white/5"
+                              )}>
+                                 {isFinished ? 'Finalizado' : (app.status === 'scheduled' ? 'Agendado' : 'Confirmado')}
+                              </div>
+                              
+                               {isFinished && (
+                                  <div className="flex items-center gap-1 text-[#fbbf24]">
+                                     {[...Array(5)].map((_, i) => (
+                                        <Star 
+                                          key={i} 
+                                          className={cn(
+                                            "w-3.5 h-3.5 transition-all", 
+                                            app.reviews?.[0] 
+                                              ? (i < app.reviews[0].rating ? "fill-[#fbbf24]" : "text-zinc-800")
+                                              : "text-zinc-800 group-hover:text-zinc-600"
+                                          )} 
+                                        />
+                                     ))}
+                                  </div>
+                               )}
+                            </div>
+                        </div>
+                       )
+                    })
+                  )}
               </div>
            </div>
         </div>
