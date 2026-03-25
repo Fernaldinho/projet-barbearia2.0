@@ -12,7 +12,7 @@ export function TopServices({ data }: TopServicesProps) {
 
   return (
     <div className="card-premium">
-      <h3 className="mb-8 font-headline text-lg text-white uppercase tracking-widest">Serviços Mais Procurados</h3>
+      <h3 className="mb-6 uppercase tracking-widest text-[11px] font-bold text-text-caption">Ranking de Serviços</h3>
       {data.length === 0 ? (
         <div className="text-center py-12 rounded-xl border border-white/5 bg-white/2 text-text-muted/40 text-sm italic">
           Nenhum dado para o período

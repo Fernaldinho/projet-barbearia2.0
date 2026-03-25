@@ -107,27 +107,27 @@ export function DashboardPage() {
   const userName = user?.user_metadata?.full_name || 'Usuário'
 
   return (
-    <div className="space-y-8 md:space-y-12 animate-fade-in pb-12">
+    <div className="space-y-6 md:space-y-8 animate-fade-in pb-12">
       {/* Editorial Header */}
-      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8">
-        <div className="max-w-2xl">
-          <h1 className="mb-3">
-            {greeting()}, <span className="text-primary">{userName.split(' ')[0]}</span>.
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-white">
+            {greeting()}, <span className="text-primary">{userName.split(' ')[0]}</span>
           </h1>
-          <p className="text-p text-lg md:text-xl opacity-80">
-            Sua barbearia está com <span className="text-white font-bold">{metrics.attendanceRate}%</span> de ocupação hoje. Aqui está o resumo da sua operação.
+          <p className="text-small mt-1 opacity-60">
+            Sua barbearia está com <span className="text-white font-bold">{metrics.attendanceRate}%</span> de ocupação hoje.
           </p>
         </div>
 
         {/* Period selector */}
-        <div className="flex items-center bg-bg-surface border border-border-subtle rounded-xl p-1 self-start lg:self-end backdrop-blur-md">
+        <div className="flex items-center bg-bg-surface border border-border-subtle rounded-lg p-1 self-start lg:self-center">
           {(Object.keys(periodLabels) as Period[]).map((p) => (
             <button
               key={p}
               onClick={() => setPeriod(p)}
-              className={`px-4 md:px-6 py-2 rounded-lg text-xs md:text-sm font-bold tracking-wider uppercase transition-all ${
+              className={`px-3 py-1.5 rounded-md text-[10px] font-bold tracking-widest uppercase transition-all ${
                 period === p
-                  ? 'bg-primary text-primary-text shadow-lg shadow-primary/20'
+                  ? 'bg-primary text-primary-text'
                   : 'text-text-muted hover:text-white'
               }`}
             >
@@ -140,9 +140,9 @@ export function DashboardPage() {
       {/* Stats Cards Section */}
       <section>
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-32 rounded-xl bg-bg-surface border border-border-subtle animate-pulse" />
+              <div key={i} className="h-24 rounded-xl bg-bg-surface border border-border-subtle animate-pulse" />
             ))}
           </div>
         ) : (
@@ -151,10 +151,10 @@ export function DashboardPage() {
       </section>
 
       {/* Main Grid: Split Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 items-start">
         
         {/* Left Column: Appointments (Large) */}
-        <div className="lg:col-span-2 space-y-8 md:space-y-12">
+        <div className="lg:col-span-2 space-y-6 md:space-y-8">
           {loading ? (
             <div className="h-96 rounded-xl bg-bg-surface border border-border-subtle animate-pulse" />
           ) : (
@@ -162,10 +162,10 @@ export function DashboardPage() {
           )}
 
           {/* Revenue Chart Section */}
-          <section className="card-premium">
-             <h3 className="mb-6 font-headline text-xl text-white uppercase tracking-widest">Fluxo de Caixa</h3>
+          <section className="card-premium p-6">
+             <h3 className="mb-6 uppercase tracking-widest text-[11px] font-bold text-text-caption">Fluxo de Caixa</h3>
              {chartsLoading ? (
-               <div className="h-64 w-full bg-bg-base/40 rounded-lg animate-pulse" />
+               <div className="h-48 w-full bg-white/2 rounded-lg animate-pulse" />
              ) : (
                <RevenueChart data={revenueData} />
              )}
@@ -173,12 +173,12 @@ export function DashboardPage() {
         </div>
 
         {/* Right Column: Insights & Performance (Small) */}
-        <div className="space-y-8 md:space-y-12">
+        <div className="space-y-6 md:space-y-8">
           {/* Appointments Distribution Chart */}
-          <section className="card-premium">
-            <h3 className="mb-6 font-headline text-lg text-white uppercase tracking-widest">Demanda</h3>
+          <section className="card-premium p-6">
+            <h3 className="mb-6 uppercase tracking-widest text-[11px] font-bold text-text-caption">Demanda</h3>
             {chartsLoading ? (
-               <div className="h-48 w-full bg-bg-base/40 rounded-lg animate-pulse" />
+               <div className="h-40 w-full bg-white/2 rounded-lg animate-pulse" />
              ) : (
                <AppointmentsChart data={appointmentsData} />
              )}
@@ -187,7 +187,7 @@ export function DashboardPage() {
           {/* Top Services */}
           <section>
             {chartsLoading ? (
-              <div className="h-72 rounded-xl bg-bg-surface border border-border-subtle animate-pulse" />
+              <div className="h-64 rounded-xl bg-bg-surface border border-border-subtle animate-pulse" />
             ) : (
               <TopServices data={topServicesData} />
             )}

@@ -44,7 +44,7 @@ interface StatsCardsProps {
 
 export function StatsCards({ metrics }: StatsCardsProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
       {cards.map((card) => {
         const Icon = card.icon
         const value = metrics[card.key] as number
@@ -52,24 +52,22 @@ export function StatsCards({ metrics }: StatsCardsProps) {
         return (
           <div 
             key={card.key} 
-            className="card-premium hover:bg-white/5 group border-white/5 active:scale-[0.98] cursor-default"
+            className="group card-premium p-6 hover:bg-white/[0.02] transition-all cursor-default"
           >
-            <div className="flex items-center justify-between mb-6">
-              <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-primary/10 group-hover:bg-primary/20 transition-all duration-300">
-                <Icon className="w-6 h-6 shrink-0 text-primary group-hover:scale-110 transition-transform" />
+            <div className="flex items-center justify-between mb-4">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0 bg-primary/10 group-hover:bg-primary/20 transition-all">
+                <Icon className="w-5 h-5 shrink-0 text-primary" />
               </div>
-              <div className="p-1 rounded bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity">
-                <TrendingUp className="w-4 h-4 text-primary/50" />
-              </div>
+              <TrendingUp className="w-3.5 h-3.5 text-text-caption opacity-0 group-hover:opacity-40 transition-opacity" />
             </div>
             
-            <p className="text-3xl md:text-4xl font-headline font-bold text-white mb-2 tracking-tight group-hover:text-primary transition-colors">
+            <p className="text-2xl md:text-2xl font-headline font-bold text-white mb-1 tracking-tight">
               {card.format(value)}
             </p>
             
-            <p className="text-[10px] md:text-xs font-black text-text-muted/60 uppercase tracking-[0.2em] leading-none">
+            <h4 className="text-[10px] font-bold text-text-caption uppercase tracking-[0.2em]">
               {card.title}
-            </p>
+            </h4>
           </div>
         )
       })}

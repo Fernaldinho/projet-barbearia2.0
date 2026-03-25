@@ -1,30 +1,31 @@
 @import "tailwindcss";
 
 /* ============================================ */
-/* Design System - Strict SaaS UI               */
+/* Design System - Strict Precision Noir        */
 /* ============================================ */
 
 @theme {
-  /* Colors - Precision Noir Base */
-  --color-primary: #fbbf24;
-  --color-primary-hover: #f59e0b;
+  /* Colors - Restored Premium Palette */
+  --color-primary: #ffe2ab;
+  --color-primary-hover: #fbd68a;
   --color-primary-text: #402d00;
   
-  --color-bg-base: #131313;
-  --color-bg-sidebar: #0e0e0e;
-  --color-bg-surface: #1c1b1b;
-  --color-bg-input: #0e0e0e;
+  --color-bg-base: #000000;
+  --color-bg-sidebar: #050505;
+  --color-bg-surface: #0a0a0a;
+  --color-bg-input: #080808;
   
-  --color-border-subtle: rgba(255, 255, 255, 0.05);
-  --color-border-focus: rgba(251, 191, 36, 0.5);
+  --color-border-subtle: rgba(255, 255, 255, 0.03);
+  --color-border-heavy: rgba(255, 255, 255, 0.08);
+  --color-border-focus: rgba(255, 226, 171, 0.4);
   
-  --color-text-main: #e5e2e1;
-  --color-text-muted: #d3c5ac;
+  --color-text-main: #ffffff;
+  --color-text-muted: #a3a3a3;
+  --color-text-caption: #737373;
   
-  /* Dimensions & Spacing */
+  /* Dimensions */
   --sidebar-w-desktop: 240px;
-  --sidebar-w-tablet: 200px;
-  --topbar-h: 60px;
+  --topbar-h: 64px;
   
   /* Fonts */
   --font-headline: "Space Grotesk", sans-serif;
@@ -32,163 +33,129 @@
 }
 
 /* ============================================ */
-/* Global Reset & Base                          */
+/* Reset & Base                                 */
 /* ============================================ */
 
 body {
-  @apply bg-bg-base text-text-main font-body selection:bg-primary selection:text-primary-text overflow-x-hidden;
-  -webkit-font-smoothing: antialiased;
+  @apply bg-bg-base text-text-main font-body selection:bg-primary selection:text-primary-text antialiased overflow-x-hidden;
+  font-size: 14px;
 }
 
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-bg-surface);
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary);
-}
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { @apply bg-white/5 rounded-full; }
+::-webkit-scrollbar-thumb:hover { @apply bg-primary/40; }
 
 /* ============================================ */
-/* Layout & Grid                                */
-/* ============================================ */
-
-.layout-max-width {
-  @apply max-w-[1240px] mx-auto w-full px-4 md:px-6 lg:px-8;
-}
-
-.section-spacing {
-  @apply py-8 md:py-12 lg:py-16;
-}
-
-/* ============================================ */
-/* Typography                                   */
+/* Typography - Reduced Proportions             */
 /* ============================================ */
 
 h1, .h1 {
-  @apply font-headline font-bold leading-[1.2] text-white;
-  font-size: clamp(22px, 5vw, 32px);
+  @apply font-headline font-bold text-white tracking-tight;
+  font-size: clamp(20px, 4vw, 28px);
 }
 
 h2, .h2 {
-  @apply font-headline font-bold font-semibold leading-[1.2] text-white/90;
-  font-size: clamp(20px, 4vw, 26px);
-}
-
-h3, .h3 {
-  @apply font-headline font-bold font-semibold leading-[1.2] text-white/80;
+  @apply font-headline font-bold text-white tracking-tight;
   font-size: clamp(18px, 3vw, 22px);
 }
 
-.text-p { @apply text-base leading-[1.4] text-text-muted font-normal; }
-.text-small { @apply text-sm leading-[1.4] text-text-muted; }
-.text-caption { @apply text-xs leading-[1.4] text-text-muted/60; }
+h3, .h3 {
+  @apply font-headline font-semibold text-white/90;
+  font-size: 16px;
+}
+
+.text-p { @apply text-[14px] leading-relaxed text-text-muted; }
+.text-small { @apply text-[12px] leading-relaxed text-text-muted; }
+.text-caption { @apply text-[11px] font-bold uppercase tracking-widest text-text-caption; }
 
 /* ============================================ */
-/* Buttons                                      */
+/* Buttons - Elegant & Sleek                    */
 /* ============================================ */
 
 .btn-base {
-  @apply inline-flex items-center justify-center gap-2 rounded-lg font-bold uppercase tracking-wider transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed w-full md:w-auto overflow-hidden;
+  @apply inline-flex items-center justify-center gap-2 rounded-lg font-bold text-[13px] transition-all duration-200 active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed px-5 h-11;
 }
 
 .btn-primary {
-  @apply btn-base bg-primary text-primary-text hover:bg-primary-hover shadow-lg shadow-primary/10;
-  height: clamp(40px, 5vw, 48px);
-  padding: 0 20px;
+  @apply btn-base bg-primary text-primary-text hover:brightness-110 shadow-lg shadow-primary/5 active:bg-primary/90;
 }
 
 .btn-secondary {
-  @apply btn-base bg-bg-surface text-white border border-border-subtle hover:bg-white/5;
-  height: clamp(40px, 4.5vw, 44px);
-  padding: 0 16px;
+  @apply btn-base bg-white/5 text-white border border-border-heavy hover:bg-white/10 hover:border-white/20;
+}
+
+.btn-ghost {
+  @apply btn-base bg-transparent text-text-muted hover:text-white hover:bg-white/5;
 }
 
 /* ============================================ */
-/* Forms & Inputs                               */
+/* Forms                                        */
 /* ============================================ */
 
-.form-group {
-  @apply flex flex-col gap-2 w-full;
-}
-
-.form-label {
-  @apply text-[10px] md:text-xs uppercase tracking-[0.2em] font-bold text-text-muted/60 ml-1;
-}
+.form-group { @apply flex flex-col gap-1.5 w-full mb-4; }
+.form-label { @apply text-[11px] font-bold uppercase tracking-widest text-text-caption mb-1 ml-0.5; }
 
 .input-base {
-  @apply w-full bg-bg-input border border-border-subtle rounded-lg px-4 text-white placeholder:text-white/10 outline-none transition-all duration-200 focus:border-primary/50 focus:ring-1 focus:ring-primary/20;
-  height: 48px;
+  @apply w-full bg-bg-input border border-border-heavy rounded-lg px-4 text-white text-[14px] placeholder:text-white/10 outline-none transition-all duration-200 focus:border-primary/40 focus:bg-white/[0.02];
+  height: 44px;
 }
 
 /* ============================================ */
-/* Cards & Containers                           */
+/* Containers                                   */
 /* ============================================ */
 
 .card-premium {
-  @apply bg-bg-surface border border-border-subtle rounded-xl p-5 md:p-6 lg:p-8 transition-all duration-300;
+  @apply bg-bg-surface border border-border-subtle rounded-xl p-6 md:p-8 overflow-hidden relative;
 }
 
-/* Dashboard Grid */
+.layout-container {
+  @apply max-w-7xl mx-auto px-4 md:px-6 lg:px-8 w-full;
+}
+
+/* Dashboard Utils */
 .dashboard-grid {
-  @apply grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  @apply grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4;
 }
 
 /* ============================================ */
-/* Responsive Utils                             */
+/* Responsive Tabela Pattern                    */
 /* ============================================ */
 
-/* Hide scrollbar but keep functionality */
-.no-scrollbar::-webkit-scrollbar { display: none; }
-.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-/* Tablas Responsivas */
-.responsive-table-container {
-  @apply w-full overflow-x-auto rounded-xl border border-border-subtle bg-bg-surface;
+.responsive-table {
+  @apply w-full overflow-x-auto rounded-xl border border-border-subtle bg-bg-surface no-scrollbar;
 }
 
-/* Trata Tabelas como Cards em Mobile */
 @media (max-width: 768px) {
-  .mobile-card-stack thead { display: none; }
-  .mobile-card-stack tbody { @apply flex flex-col gap-3 p-2; }
-  .mobile-card-stack tr { @apply flex flex-col gap-4 p-5 bg-bg-base/40 border border-border-subtle rounded-xl mb-1; }
-  .mobile-card-stack td { @apply flex justify-between items-center text-sm border-none h-auto p-0 min-h-[32px]; }
-  .mobile-card-stack td::before { 
-    content: attr(data-label); 
-    @apply font-bold text-text-muted/50 uppercase text-[10px] tracking-wider pr-4; 
-  }
+  .mobile-cards thead { display: none; }
+  .mobile-cards tbody { @apply flex flex-col gap-4 p-4; }
+  .mobile-cards tr { @apply flex flex-col p-5 bg-white/2 border border-border-subtle rounded-xl; }
+  .mobile-cards td { @apply flex justify-between items-center py-2 h-auto text-sm border-none; }
+  .mobile-cards td::before { content: attr(data-label); @apply font-bold text-text-caption text-[10px] uppercase tracking-wider; }
 }
 
-/* Sidebars & Topbars helper classes */
-.topbar-fixed {
-  @apply fixed top-0 left-0 right-0 h-[var(--topbar-h)] bg-bg-base/80 backdrop-blur-md border-b border-border-subtle z-[100] flex items-center px-4 md:px-8;
+/* ============================================ */
+/* Layout Core                                  */
+/* ============================================ */
+
+.main-content {
+  @apply pt-[var(--topbar-h)] md:pl-[var(--sidebar-w-desktop)] min-h-screen relative z-0;
 }
 
 .sidebar-container {
-  @apply fixed top-0 left-0 bottom-0 bg-bg-sidebar border-r border-border-subtle z-[101] transition-transform duration-300;
-  width: var(--sidebar-w-desktop);
+  @apply fixed top-0 left-0 bottom-0 w-[var(--sidebar-w-desktop)] bg-bg-sidebar border-r border-border-subtle z-[101] transition-transform duration-300;
+}
+
+.topbar-container {
+  @apply fixed top-0 left-0 right-0 h-[var(--topbar-h)] bg-bg-base/80 backdrop-blur-xl border-b border-border-subtle z-[100] flex items-center px-4 md:px-8 md:pl-[calc(var(--sidebar-w-desktop)+2rem)];
 }
 
 @media (max-width: 1024px) {
-  .sidebar-container { width: var(--sidebar-w-tablet); }
+  :root { --sidebar-w-desktop: 200px; }
 }
 
 @media (max-width: 768px) {
   .sidebar-container { transform: translateX(-100%); }
-  body.sidebar-active .sidebar-container { transform: translateX(0); }
-  body.sidebar-active .sidebar-overlay { @apply fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] block; }
-}
-
-.sidebar-overlay { @apply hidden; }
-
-/* Transitions */
-.transition-layout {
-  @apply transition-all duration-300 ease-in-out;
+  .sidebar-active .sidebar-container { transform: translateX(0); }
+  .topbar-container { @apply pl-4; }
 }
