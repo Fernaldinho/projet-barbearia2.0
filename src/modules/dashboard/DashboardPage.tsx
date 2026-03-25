@@ -112,11 +112,11 @@ export function DashboardPage() {
       {/* Editorial Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div>
-          <h1 className="text-4xl lg:text-5xl font-bold text-white font-headline leading-tight tracking-tight">
-            {greeting()}, <span className="text-primary-container">{userName.split(' ')[0]}</span>.
+          <h1 className="text-3xl sm:text-4xl font-black font-headline tracking-tighter text-[#E5E2E1]">
+            {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(metrics.monthlyRevenue)}
           </h1>
           <p className="text-lg text-on-surface-variant font-medium mt-2 max-w-xl">
-            Sua barbearia está com <span className="text-white font-bold">{metrics.attendanceRate}%</span> de ocupação hoje. Você tem <span className="text-[#10B981] font-bold">R$ {metrics.projectedRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span> em faturamento previsto.
+            Sua barbearia está com <span className="text-white font-bold">{metrics.attendanceRate}%</span> de ocupação hoje. Você tem <span className="text-[#fbbf24] font-bold">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(metrics.projectedRevenue)}</span> em faturamento previsto.
           </p>
         </div>
 
@@ -176,14 +176,16 @@ export function DashboardPage() {
         {/* Right Column: Insights & Performance (Small) */}
         <div className="space-y-8">
           {/* Appointments Distribution Chart */}
-          <section className="p-[24px] rounded-2xl bg-surface-container-low">
-            <h3 className="!mb-6 font-headline text-lg text-white">Demanda por Período</h3>
+          <div className="bg-[#1C1B1B] p-4 sm:p-6 lg:p-8 rounded-[2rem] border border-white/5">
+            <h3 className="text-lg font-black font-headline text-[#E5E2E1] uppercase tracking-tighter mb-6 sm:mb-8">Demanda por Período</h3>
             {chartsLoading ? (
-               <div className="h-[200px] w-full bg-surface-container/30 rounded-xl animate-pulse" />
+               <div className="h-[250px] sm:h-[300px]">
+                 <div className="h-[200px] w-full bg-surface-container/30 rounded-xl animate-pulse" />
+               </div>
              ) : (
                <AppointmentsChart data={appointmentsData} />
              )}
-          </section>
+          </div>
 
           {/* Top Services */}
           <section>

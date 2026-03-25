@@ -287,25 +287,26 @@ export function BookingPage() {
                      <p className="text-[9px] uppercase font-black tracking-[0.3em] text-[#fbbf24] mb-2 relative z-10">Sessão Ativa</p>
                      <p className="text-xl font-headline font-black text-white uppercase relative z-10">{user.user_metadata?.full_name?.split(' ')[0] || 'Cliente'}</p>
                      <p className="text-[10px] text-zinc-500 mt-1 pb-6 border-b border-white/5 relative z-10">{user.email}</p>
-                     <button onClick={() => setStep('service')} className="mt-6 w-full bg-[#fbbf24] text-[#402D00] py-4 rounded-xl font-black text-xs uppercase tracking-widest shadow-xl shadow-[#fbbf24]/10 hover:scale-105 active:scale-95 transition-all relative z-10">CONTINUAR AGENDAMENTO</button>
+                     <button onClick={() => setStep('service')} className="mt-6 bg-[#fbbf24] text-[#402D00] px-10 py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-[#fbbf24]/20 hover:scale-[1.02] transition-all flex items-center gap-3">
+                       Faça Novo Agendamento
+                     </button>
                   </div>
                 ) : (
-                  <button 
-                    onClick={() => navigate('/portal')}
-                    className="w-full bg-white/5 border border-white/10 text-white py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-white/10 transition-all active:scale-95"
+                  <a 
+                    href={company?.slug ? `/portal/${company.slug}` : '/portal'}
+                    className="w-full bg-[#fbbf24] text-[#402D00] py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:shadow-[0_0_30px_rgba(251,191,36,0.3)] transition-all active:scale-95"
                   >
-                     <UserIcon className="w-4 h-4" /> LOGIN / CADASTRO
-                  </button>
+                     <UserIcon className="w-4 h-4" /> MEU PORTAL
+                  </a>
                 )}
                 
                 <button 
                   onClick={() => setStep('service')}
                   className={cn(
-                    "w-full py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all active:scale-95",
-                    user ? "text-zinc-600 hover:text-white" : "bg-[#fbbf24] text-[#402D00] shadow-2xl shadow-[#fbbf24]/20 hover:scale-105"
+                    "w-full py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all active:scale-95 text-zinc-600 hover:text-white"
                   )}
                 >
-                   {user ? 'AGENDAR NOVAMENTE' : 'AGENDAR SEM LOGIN'} {!user && <ChevronRight className="w-4 h-4" />}
+                   {user ? 'FAÇA NOVAMENTE' : 'FAÇA SEM LOGIN'} {!user && <ChevronRight className="w-4 h-4" />}
                 </button>
                 
                 <p className="text-[9px] uppercase font-black tracking-[0.4em] text-zinc-700 pt-8 font-headline">Sua comodidade, nossa precisão.</p>

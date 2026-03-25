@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { toast } from 'react-hot-toast'
 import { Plus, Scissors, Search, Sparkles, TrendingUp, Bell, Settings as SettingsIcon, User as UserIcon } from 'lucide-react'
 import { useCompany } from '@/contexts/CompanyContext'
 import { ServicesTable } from './ServicesTable'
@@ -34,10 +35,11 @@ export function ServicesPage() {
   const handleCreate = async (data: ServiceFormData) => {
     if (!company?.id) return
     if (features.maxServices !== -1 && services.length >= features.maxServices) {
-       alert(`Aviso: Seu plano permite criar apenas ${features.maxServices} serviços. Faça o upgrade para adicionar mais.`)
+       toast.error(`Limite de Plano atingido: Seu plano permite apenas ${features.maxServices} serviços. Faça o upgrade para expandir.`)
        return
     }
     await createService(company.id, data)
+    toast.success('Serviço criado com sucesso!')
     setShowForm(false)
     await loadServices()
   }
@@ -45,14 +47,20 @@ export function ServicesPage() {
   const handleUpdate = async (data: ServiceFormData) => {
     if (!editingService) return
     await updateService(editingService.id, data)
+    toast.success('Serviço atualizado!')
     setEditingService(null)
     await loadServices()
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Tem certeza que deseja excluir este serviço?')) return
-    await deleteService(id)
-    await loadServices()
+    if (!window.confirm('Tem certeza que deseja excluir este serviço?')) return
+    try {
+      await deleteService(id)
+      toast.success('Serviço removido.')
+      await loadServices()
+    } catch (err: any) {
+      toast.error('Erro ao excluir: ' + err.message)
+    }
   }
 
   const handleEdit = (service: Service) => {
@@ -96,8 +104,8 @@ export function ServicesPage() {
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
           <div className="max-w-2xl text-left">
             <span className="font-label text-xs tracking-[0.3em] uppercase text-[#ffe1a7] mb-4 block">Gestão de Portfólio</span>
-            <h1 className="font-headline text-6xl font-black text-[#E5E2E1] leading-none mb-6 tracking-tighter">SERVIÇOS</h1>
-            <p className="text-[#D3C5AC] text-lg font-light leading-relaxed">Gerencie seu menu de experiências com precisão cirúrgica. Defina valores, tempos e ativações premium.</p>
+            <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl font-black text-[#E5E2E1] leading-none mb-4 sm:mb-6 tracking-tighter">SERVIÇOS</h1>
+            <p className="text-[#D3C5AC] text-base sm:text-lg font-light leading-relaxed">Gerencie seu menu de experiências com precisão cirúrgica. Defina valores, tempos e ativações premium.</p>
           </div>
 
           <button 

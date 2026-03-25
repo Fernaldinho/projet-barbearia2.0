@@ -1,7 +1,7 @@
 import { Link as LinkIcon, Palette, Clock, Smartphone, Laptop, CloudUpload, CheckCircle, ExternalLink, MapPin, Copy, Scissors } from 'lucide-react'
 import { useCompany } from '@/contexts/CompanyContext'
 import { cn } from '@/utils/helpers'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { toast } from 'react-hot-toast'
 import { supabase } from '@/lib/supabase'
 
@@ -13,7 +13,7 @@ export function PublicPage() {
   const [previewStaff, setPreviewStaff] = useState<any[]>([])
 
   // Load some real data for the preview
-  useState(() => {
+  useEffect(() => {
     if (company?.id) {
        supabase.from('services').select('*').eq('company_id', company.id).limit(2).then(({data}) => {
          if (data) setPreviewServices(data)
@@ -22,7 +22,7 @@ export function PublicPage() {
          if (data) setPreviewStaff(data)
        })
     }
-  })
+  }, [company?.id])
   
   const generatedSlug = company 
     ? company.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
@@ -60,11 +60,13 @@ export function PublicPage() {
 
       if (updateError) throw updateError
       
+      // We need to refresh the context so the display updates
+      // Instead of reload, we can call refreshCompany if we take it from useCompany
       toast.success('Banner atualizado com sucesso!')
-      window.location.reload()
+      window.location.reload() 
     } catch (err) {
       console.error(err)
-      toast.error('Erro ao subir banner. Verifique as permissões de Bucket no Supabase.')
+      toast.error('Erro ao subir banner.')
     } finally {
       setLoading(false)
     }
@@ -100,7 +102,7 @@ export function PublicPage() {
       window.location.reload()
     } catch (err) {
       console.error(err)
-      toast.error('Erro ao subir logo. Verifique as permissões de Bucket no Supabase.')
+      toast.error('Erro ao subir logo.')
     } finally {
       setLoading(false)
     }
@@ -127,7 +129,7 @@ export function PublicPage() {
         <header className="mb-16 flex flex-col md:flex-row justify-between items-end gap-8">
           <div>
             <span className="text-[#fbbf24] text-xs font-black uppercase tracking-[0.3em] mb-4 block">Personalização</span>
-            <h1 className="text-6xl font-headline font-black text-[#E5E2E1] tracking-tighter uppercase leading-none">Página Pública</h1>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-headline font-black text-[#E5E2E1] tracking-tighter uppercase leading-none">Página Pública</h1>
           </div>
           <a 
             href={`/portal/${generatedSlug}`}
@@ -209,7 +211,7 @@ export function PublicPage() {
                         </span>
                       </div>
                       <img 
-                        className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-60 transition-all duration-1000 scale-105 group-hover:scale-110" 
+                        className="w-full h-full object-cover group-hover:opacity-80 transition-all duration-1000 scale-100 group-hover:scale-110" 
                         src={bannerToDisplay} 
                       />
                     </label>
@@ -289,18 +291,18 @@ export function PublicPage() {
           {/* Preview Column */}
           <div className="lg:col-span-5 sticky top-32">
             <div className={cn(
-              "bg-[#0e0e0e] border border-white/10 rounded-[3rem] p-6 shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden transition-all duration-500 origin-top mx-auto",
-              previewMode === 'mobile' ? "w-[400px] scale-[0.9]" : "w-full max-w-2xl scale-[0.8]"
+              "bg-[#0e0e0e] border border-white/10 rounded-[3rem] p-4 sm:p-6 shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden transition-all duration-500 origin-top mx-auto",
+              previewMode === 'mobile' ? "w-full max-w-[400px]" : "w-full max-w-5xl h-fit overflow-visible"
             )}>
               {/* Device Shell Mockup */}
               <div className={cn(
-                "bg-[#131313] rounded-[2.5rem] overflow-hidden flex flex-col relative border border-white/5 transition-all duration-500",
-                previewMode === 'mobile' ? "h-[700px]" : "h-[500px]"
+                "bg-[#131313] rounded-[2.5rem] overflow-hidden flex flex-col relative border border-white/5 transition-all duration-500 shadow-2xl shadow-black",
+                previewMode === 'mobile' ? "h-[700px]" : "h-auto min-h-[600px]"
               )}>
                 {/* Header Mockup */}
                 <div className={cn(
                   "relative shrink-0 transition-all duration-500",
-                  previewMode === 'mobile' ? "h-60" : "h-48"
+                  previewMode === 'mobile' ? "h-48 sm:h-60" : "h-40 sm:h-48"
                 )}>
                   <img 
                     className="w-full h-full object-cover grayscale-50 opacity-60" 
@@ -309,10 +311,15 @@ export function PublicPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-[#131313] via-[#131313]/50 to-transparent"></div>
                   <div className="absolute bottom-6 left-8 right-8">
                     <h3 className="text-3xl font-headline font-black text-white tracking-tighter uppercase leading-none">{company?.name || 'Sua Barbearia'}</h3>
-                    <p className="text-[10px] text-[#fbbf24] font-black uppercase tracking-widest mt-3 flex items-center gap-2">
-                       <MapPin className="w-3 h-3" />
+                    <p className="text-[11px] text-[#fbbf24] font-black uppercase tracking-[0.2em] mt-3 flex items-center gap-2">
+                       <MapPin className="w-3.5 h-3.5" />
                        {company?.address || 'ENDEREÇO NÃO CONFIGURADO'}
                     </p>
+                    <button 
+                      className="mt-6 bg-[#fbbf24] text-[#402D00] px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl shadow-[#fbbf24]/10"
+                    >
+                       Faça Novo Agendamento
+                    </button>
                   </div>
                 </div>
                 {/* Content Mockup */}
@@ -388,7 +395,7 @@ export function PublicPage() {
 
       {/* Action Bar */}
       <div className="max-w-7xl mx-auto px-4 lg:px-0 mt-16">
-        <div className="bg-[#1C1B1B]/80 backdrop-blur-2xl p-8 rounded-[3rem] border border-white/5 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
+        <div className="bg-[#1C1B1B]/80 backdrop-blur-2xl p-6 sm:p-8 rounded-[3rem] border border-white/5 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
           <div className="flex items-center gap-6">
             <div className="h-4 w-4 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
             <p className="text-sm font-black text-white uppercase tracking-tighter">Alterações salvas automaticamente</p>

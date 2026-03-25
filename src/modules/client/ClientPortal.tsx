@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { cn } from '@/utils/helpers'
+import { toast } from 'react-hot-toast'
 import { 
   Calendar, 
   Clock, 
@@ -64,6 +65,8 @@ export function ClientPortal() {
   const [comment, setComment] = useState('')
   const [submittingReview, setSubmittingReview] = useState(false)
   const [showReviewThanks, setShowReviewThanks] = useState(false)
+  const [showConfirmCancel, setShowConfirmCancel] = useState(false)
+  const [appToCancel, setAppToCancel] = useState<string | null>(null)
 
   useEffect(() => {
     if (user) {
@@ -123,12 +126,38 @@ export function ClientPortal() {
         }
       })
       if (error) throw error
-      alert('Perfil atualizado com sucesso! Estes dados serão preenchidos automaticamente nos próximos agendamentos.')
+      toast.success('Perfil atualizado com sucesso! Estes dados serão preenchidos automaticamente nos próximos agendamentos.')
       setShowSettings(false)
     } catch (err: any) {
-      alert(err.message || 'Erro ao atualizar perfil')
+      toast.error(err.message || 'Erro ao atualizar perfil')
     } finally {
       setProfileSaving(false)
+    }
+  }
+
+  const handleCancelAppointment = (id: string) => {
+    setAppToCancel(id)
+    setShowConfirmCancel(true)
+  }
+
+  const confirmCancelAppointment = async () => {
+    if (!appToCancel) return
+    try {
+      const { error } = await supabase
+        .from('appointments')
+        .update({ status: 'cancelled' })
+        .eq('id', appToCancel)
+      
+      if (error) throw error
+      
+      toast.success('Agendamento cancelado com sucesso!')
+      setShowConfirmCancel(false)
+      setAppToCancel(null)
+      setAppointments(prev => prev.map(app => 
+        app.id === appToCancel ? { ...app, status: 'cancelled' } : app
+      ))
+    } catch (err: any) {
+      toast.error(err.message || 'Erro ao cancelar agendamento')
     }
   }
 
@@ -158,10 +187,11 @@ export function ClientPortal() {
       if (error) throw error
 
       setShowReviewThanks(true)
+      toast.success('Avaliação enviada com sucesso!')
       // Refresh list
       if (user?.email) loadAppointments(user.email, user.user_metadata?.phone)
     } catch (err: any) {
-      alert(err.message || 'Erro ao enviar avaliação')
+      toast.error(err.message || 'Erro ao enviar avaliação')
     } finally {
       setSubmittingReview(false)
     }
@@ -271,7 +301,7 @@ export function ClientPortal() {
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder="Ex: Arthur Morgan"
-                        className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-2xl px-12 py-4 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none"
+                        className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-2xl px-12 py-4 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none text-white"
                       />
                     </div>
                   </div>
@@ -284,7 +314,7 @@ export function ClientPortal() {
                         required 
                         value={birthDate}
                         onChange={(e) => setBirthDate(e.target.value)}
-                        className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-2xl px-12 py-4 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none"
+                        className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-2xl px-12 py-4 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none text-white"
                       />
                     </div>
                   </div>
@@ -301,7 +331,7 @@ export function ClientPortal() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="email@exemplo.com"
-                    className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-2xl px-12 py-4 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none"
+                    className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-2xl px-12 py-4 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none text-white"
                   />
                 </div>
               </div>
@@ -316,7 +346,7 @@ export function ClientPortal() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="Minimal 6 caracteres"
-                    className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-2xl px-12 py-4 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none"
+                    className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-2xl px-12 py-4 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none text-white"
                   />
                 </div>
               </div>
@@ -403,6 +433,7 @@ export function ClientPortal() {
               </div>
            </div>
         </section>
+
         {/* Welcome Block */}
         <section className="flex flex-col md:flex-row md:items-end justify-between gap-8 animate-fade-in">
            <div className="space-y-4">
@@ -419,12 +450,12 @@ export function ClientPortal() {
              onClick={(e) => {
                if (!fallbackTargetSlug) {
                  e.preventDefault();
-                 alert("Você ainda não possui histórico. Para agendar pela primeira vez, utilize o link da sua barbearia!");
+                 toast.error("Você ainda não possui histórico. Para agendar pela primeira vez, utilize o link da sua barbearia!");
                }
              }}
              className="bg-[#fbbf24] text-[#402D00] px-10 py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-[#fbbf24]/20 hover:scale-[1.02] transition-all flex items-center gap-3"
            >
-              Fazer Novo Agendamento
+              Faça Novo Agendamento
               <ChevronRight className="w-4 h-4" />
            </a>
         </section>
@@ -454,7 +485,6 @@ export function ClientPortal() {
                     </div>
                  </div>
               </div>
-
            </div>
 
            {/* Appointments List column */}
@@ -490,36 +520,39 @@ export function ClientPortal() {
                              isFinished && "cursor-pointer active:scale-[0.98]"
                            )}
                          >
-                          <div className="flex items-center gap-6">
-                             <div className="w-16 h-16 rounded-[1.25rem] bg-[#fbbf24] flex items-center justify-center text-[#402D00] flex-shrink-0 group-hover:scale-110 transition-transform">
-                                <Scissors className="w-8 h-8" />
-                             </div>
-                             <div className="space-y-1">
-                                <p className="text-[10px] uppercase font-black tracking-widest text-zinc-500 leading-none">{app.company?.name || 'Sua Barbearia'}</p>
-                                <h4 className="text-xl font-headline font-black text-white uppercase group-hover:text-[#fbbf24] transition-colors tracking-tight">{app.service?.name}</h4>
-                                <div className="flex items-center gap-4 text-xs font-bold text-zinc-500 mt-1 uppercase">
-                                   <div className="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded-lg">
-                                      <Calendar className="w-3 h-3 text-[#fbbf24]" />
-                                      {new Date(app.date + 'T12:00:00').toLocaleDateString('pt-BR')}
-                                   </div>
-                                   <div className="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded-lg">
-                                      <Clock className="w-3 h-3 text-[#fbbf24]" />
-                                      {app.start_time}
-                                   </div>
-                                </div>
-                             </div>
-                          </div>
-                                       <div className="flex flex-col items-end gap-3">
+                           <div className="flex items-center gap-6">
+                              <div className="w-16 h-16 rounded-[1.25rem] bg-[#fbbf24] flex items-center justify-center text-[#402D00] flex-shrink-0 group-hover:scale-110 transition-transform">
+                                 <Scissors className="w-8 h-8" />
+                              </div>
+                              <div className="space-y-1">
+                                 <p className="text-[10px] uppercase font-black tracking-widest text-zinc-500 leading-none">{app.company?.name || 'Sua Barbearia'}</p>
+                                 <h4 className="text-xl font-headline font-black text-white uppercase group-hover:text-[#fbbf24] transition-colors tracking-tight">{app.service?.name}</h4>
+                                 <div className="flex items-center gap-4 text-xs font-bold text-zinc-500 mt-1 uppercase">
+                                    <div className="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded-lg">
+                                       <Calendar className="w-3 h-3 text-[#fbbf24]" />
+                                       {new Date(app.date + 'T12:00:00').toLocaleDateString('pt-BR')}
+                                    </div>
+                                    <div className="flex items-center gap-1.5 bg-white/5 px-2 py-1 rounded-lg">
+                                       <Clock className="w-3 h-3 text-[#fbbf24]" />
+                                       {app.start_time}
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                           
+                           <div className="flex flex-col items-end gap-3">
                               <div className={cn(
                                  "px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.2em] border",
                                  (app.status === 'scheduled' || app.status === 'confirmed') && !isPastAppointment(app.date, app.start_time)
                                    ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" 
+                                   : app.status === 'cancelled'
+                                   ? "bg-red-500/10 text-red-500 border-red-500/20"
                                    : "bg-zinc-800 text-zinc-500 border-white/5"
                               )}>
-                                 {isFinished ? 'Finalizado' : (app.status === 'scheduled' ? 'Agendado' : 'Confirmado')}
+                                 {isFinished ? 'Finalizado' : app.status === 'cancelled' ? 'Cancelado' : (app.status === 'scheduled' ? 'Agendado' : 'Confirmado')}
                               </div>
                               
-                               {isFinished && (
+                              {isFinished && (
                                   <div className="flex items-center gap-1 text-[#fbbf24]">
                                      {[...Array(5)].map((_, i) => (
                                         <Star 
@@ -534,17 +567,61 @@ export function ClientPortal() {
                                      ))}
                                   </div>
                                )}
-                            </div>
-                        </div>
+
+                               {!isFinished && app.status !== 'cancelled' && (
+                                 <button
+                                   onClick={(e) => {
+                                     e.stopPropagation()
+                                     handleCancelAppointment(app.id)
+                                   }}
+                                   className="text-[10px] font-black uppercase text-red-500 hover:text-white px-4 py-2 transition-all flex items-center gap-2 bg-red-500/5 hover:bg-red-500 rounded-full border border-red-500/10 hover:border-red-500 active:scale-95 group/cancel shadow-lg shadow-red-500/5"
+                                 >
+                                   <X className="w-3 h-3 transition-transform group-hover/cancel:rotate-90" />
+                                   Cancelar
+                                 </button>
+                               )}
+                             </div>
+                         </div>
                        )
                     })
-                  )}
+                 )}
               </div>
            </div>
         </div>
       </main>
       
-       {/* Powered By Footer */}
+      {/* Cancellation Confirmation Modal */}
+      {showConfirmCancel && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-fade-in">
+          <div className="bg-[#1C1B1B] border border-white/10 rounded-[2.5rem] p-10 w-full max-w-sm shadow-2xl relative text-center">
+            <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-8 text-red-500 shadow-[0_0_30px_rgba(239,68,68,0.1)]">
+              <AlertCircle className="w-10 h-10" />
+            </div>
+            <h3 className="text-2xl font-headline font-black text-white uppercase tracking-tighter mb-4">Cancelar Agendamento?</h3>
+            <p className="text-zinc-500 text-sm font-medium mb-10 leading-relaxed text-center">Esta ação não pode ser desfeita e o horário será liberado para outros clientes.</p>
+            
+            <div className="flex flex-col gap-3">
+              <button 
+                onClick={confirmCancelAppointment}
+                className="w-full bg-red-500 text-white font-black py-5 rounded-full text-xs uppercase tracking-[0.2em] shadow-2xl shadow-red-500/10 hover:bg-red-600 transition-all active:scale-95"
+              >
+                Confirmar Cancelamento
+              </button>
+              <button 
+                onClick={() => {
+                  setShowConfirmCancel(false)
+                  setAppToCancel(null)
+                }}
+                className="w-full bg-white/5 text-zinc-400 hover:text-white font-black py-5 rounded-full text-xs uppercase tracking-[0.2em] transition-all"
+              >
+                Voltar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Powered By Footer */}
       <footer className="max-w-4xl mx-auto px-6 py-12 text-center opacity-20 hover:opacity-100 transition-opacity">
          <p className="text-[9px] uppercase font-black tracking-[0.4em] text-zinc-500">
             AgendaAI Premium Portal <span className="text-white/20 mx-2">|</span> Precision Noir System
@@ -632,6 +709,7 @@ export function ClientPortal() {
           </div>
         </div>
       )}
+
        {/* Review Modal */}
        {showReviewModal && selectedApp && (
          <div 
@@ -744,7 +822,7 @@ export function ClientPortal() {
             </div>
           </div>
         </div>
-      )}
+       )}
     </div>
   )
 }

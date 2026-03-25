@@ -31,8 +31,8 @@ export function TodaySchedule({ appointments }: TodayScheduleProps) {
   })
 
   return (
-    <div className="p-[24px] rounded-2xl bg-surface-container-low">
-      <h3 className="!mb-[24px] font-headline text-xl text-white">Próximos Agendamentos</h3>
+    <div className="p-4 sm:p-6 lg:p-8 rounded-[2rem] bg-surface-container-low border border-white/5 shadow-2xl">
+      <h3 className="text-lg font-black font-headline text-[#E5E2E1] uppercase tracking-tighter mb-4 sm:mb-6">Próximos Agendamentos</h3>
 
       {upcomingAppointments.length === 0 ? (
         <div className="text-center py-10 text-on-surface-variant/50 text-sm italic">

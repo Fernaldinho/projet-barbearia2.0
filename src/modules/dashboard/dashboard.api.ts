@@ -67,7 +67,13 @@ function getDateRange(period: string): { start: string; end: string } {
     }
     case 'month':
     default: {
-      return { start: `${end.slice(0, 7)}-01`, end }
+      const year = now.getFullYear()
+      const month = now.getMonth()
+      const lastDay = new Date(year, month + 1, 0).getDate()
+      return { 
+        start: `${year}-${(month + 1).toString().padStart(2, '0')}-01`, 
+        end: `${year}-${(month + 1).toString().padStart(2, '0')}-${lastDay}` 
+      }
     }
   }
 }
@@ -114,8 +120,7 @@ export async function getDashboardMetrics(companyId: string): Promise<DashboardM
       .from('appointments')
       .select('status, service:services(price)')
       .eq('company_id', companyId)
-      .gte('date', monthStart)
-      .lte('date', today),
+      .gte('date', monthStart),
   ])
 
   const allAppts = monthAppts.data || []

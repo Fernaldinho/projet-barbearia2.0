@@ -328,7 +328,7 @@ export function AppointmentForm({
           <div className="flex justify-end gap-3 pt-6 mt-2 border-t border-dark-800">
             <button type="button" onClick={onClose} className="btn-secondary">Cancelar</button>
             <button type="submit" disabled={loading} className="btn-primary">
-              {loading ? 'Salvando...' : initialData ? 'Salvar alterações' : 'Agendar'}
+              {loading ? 'Salvando...' : initialData ? 'Salvar alterações' : 'Fazer Agendamento'}
             </button>
           </div>
         </form>

@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from 'react'
+import { toast } from 'react-hot-toast'
 import { Plus, Search, CalendarOff } from 'lucide-react'
 import { useCompany } from '@/contexts/CompanyContext'
 import { BlockedTimesTable } from './BlockedTimesTable'
@@ -51,9 +52,14 @@ export function BlockedTimesPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Tem certeza que deseja excluir este bloqueio?')) return
-    await deleteBlockedTime(id)
-    await loadBlockedTimes()
+    if (!window.confirm('Tem certeza que deseja excluir este bloqueio?')) return
+    try {
+      await deleteBlockedTime(id)
+      toast.success('Bloqueio excluído com sucesso!')
+      await loadBlockedTimes()
+    } catch (err: any) {
+      toast.error('Erro ao excluir: ' + err.message)
+    }
   }
 
   const filteredItems = useMemo(() => {
@@ -104,7 +110,7 @@ export function BlockedTimesPage() {
           <div>
             <p className="text-sm font-medium text-white">Sobre os bloqueios</p>
             <p className="text-xs text-dark-400 mt-1">
-              Bloqueios impedem que clientes agendem nos horários definidos. Use para feriados,
+              Bloqueios impedem que clientes façam agendamentos nos horários definidos. Use para feriados,
               almoço, compromissos pessoais ou qualquer indisponibilidade.
             </p>
           </div>

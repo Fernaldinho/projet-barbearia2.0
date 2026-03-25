@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Clock, Save, AlertCircle, CheckCircle2 } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { useCompany } from '@/contexts/CompanyContext'
 import { getBusinessHours, saveAllBusinessHours } from './business-hours.api'
 
@@ -110,11 +111,10 @@ export function BusinessHoursPage() {
     setSaving(true)
     try {
       await saveAllBusinessHours(company.id, days)
-      setSuccess(true)
-      setTimeout(() => setSuccess(false), 3000)
+      toast.success('Horários salvos com sucesso!')
     } catch (err: any) {
       console.error('Error saving business hours:', err)
-      setError(err.message || 'Ocorreu um erro ao salvar os horários.')
+      toast.error(err.message || 'Ocorreu um erro ao salvar os horários.')
     } finally {
       setSaving(false)
     }

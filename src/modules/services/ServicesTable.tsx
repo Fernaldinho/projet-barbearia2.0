@@ -36,7 +36,7 @@ export function ServicesTable({ services, onEdit, onDelete, onToggleStatus, maxS
           <div 
             key={service.id} 
             className={cn(
-              "group p-8 rounded-[2.5rem] transition-all duration-700 flex flex-col justify-between h-[450px] relative border overflow-hidden",
+              "group p-4 sm:p-6 lg:p-8 rounded-2xl sm:rounded-[2.5rem] transition-all duration-700 flex flex-col justify-between min-h-[380px] lg:h-[450px] relative border overflow-hidden",
               isBestseller 
                 ? "bg-gradient-to-br from-[#1C1B1B] to-[#FBBF24]/5 hover:to-[#FBBF24]/10 border-[#FBBF24]/20 shadow-2xl hover:shadow-[#FBBF24]/10" 
                 : "bg-[#1C1B1B] hover:bg-[#201F1F] border-transparent hover:border-[#4F4633]/20 shadow-lg hover:shadow-black/40",
@@ -52,10 +52,10 @@ export function ServicesTable({ services, onEdit, onDelete, onToggleStatus, maxS
             {/* Top: Icon and Toggle */}
             <div className="flex justify-between items-start relative z-10">
               <div className={cn(
-                "w-16 h-16 rounded-[1.25rem] flex items-center justify-center transition-all duration-700 group-hover:scale-110 shadow-2xl group-hover:rotate-3",
+                "w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-[1.25rem] flex items-center justify-center transition-all duration-700 group-hover:scale-110 shadow-2xl group-hover:rotate-3",
                 isBestseller ? "bg-[#FBBF24] text-[#402D00] shadow-[#FBBF24]/30" : "bg-[#353534] text-[#FBBF24]"
               )}>
-                <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: isBestseller ? "'FILL' 1" : "" }}>
+                <span className="material-symbols-outlined text-2xl sm:text-4xl" style={{ fontVariationSettings: isBestseller ? "'FILL' 1" : "" }}>
                   {getIconName()}
                 </span>
               </div>
@@ -93,7 +93,7 @@ export function ServicesTable({ services, onEdit, onDelete, onToggleStatus, maxS
                 </div>
               )}
               <h3 className={cn(
-                "font-headline text-3xl font-black mb-4 transition-colors tracking-tighter uppercase",
+                "font-headline text-2xl sm:text-3xl font-black mb-2 sm:mb-4 transition-colors tracking-tighter uppercase",
                 isBestseller ? "text-[#FBBF24]" : "text-[#E5E2E1] group-hover:text-[#FBBF24]"
               )}>
                 {service.name}
@@ -111,8 +111,8 @@ export function ServicesTable({ services, onEdit, onDelete, onToggleStatus, maxS
                <div className="flex flex-col">
                 <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-600 mb-1">Preço Final</span>
                 <span className={cn(
-                  "font-headline font-black text-[#FBBF24] leading-none",
-                  isBestseller ? "text-4xl" : "text-3xl"
+                  isBestseller ? "text-2xl sm:text-4xl" : "text-xl sm:text-3xl",
+                  "font-headline font-black text-[#FBBF24] leading-none"
                 )}>
                   {formatCurrency(service.price).replace(',00', '')}
                 </span>

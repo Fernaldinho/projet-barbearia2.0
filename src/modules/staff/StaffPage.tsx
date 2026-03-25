@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { toast } from 'react-hot-toast'
 import { Plus, UserPlus, Star, MoreHorizontal, CheckCircle2, AlertCircle } from 'lucide-react'
 import { useCompany } from '@/contexts/CompanyContext'
 import { StaffForm } from './StaffForm'
@@ -29,6 +30,7 @@ export function StaffPage() {
   const handleCreate = async (data: StaffFormData) => {
     if (!company?.id) return
     await createStaff(company.id, data)
+    toast.success('Profissional cadastrado!')
     setShowForm(false)
     await load()
   }
@@ -36,6 +38,7 @@ export function StaffPage() {
   const handleUpdate = async (data: StaffFormData) => {
     if (!editing) return
     await updateStaff(editing.id, data)
+    toast.success('Perfil atualizado!')
     setEditing(null)
     await load()
   }
@@ -46,9 +49,14 @@ export function StaffPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Excluir este profissional? Os agendamentos vinculados não serão apagados.')) return
-    await deleteStaff(id)
-    await load()
+    if (!window.confirm('Excluir este profissional? Os agendamentos vinculados não serão apagados.')) return
+    try {
+      await deleteStaff(id)
+      toast.success('Profissional removido.')
+      await load()
+    } catch (err: any) {
+      toast.error('Erro ao remover: ' + err.message)
+    }
   }
 
   return (
@@ -57,7 +65,7 @@ export function StaffPage() {
       <div className="flex flex-col md:flex-row justify-between items-end gap-8 px-4 lg:px-0">
         <div className="space-y-4">
           <span className="text-xs tracking-[0.3em] uppercase font-label text-[#fbbf24] font-bold block">Equipe de Elite</span>
-          <h1 className="text-6xl font-black font-headline tracking-tighter text-[#E5E2E1] uppercase leading-none">Profissionais</h1>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black font-headline tracking-tighter text-[#E5E2E1] uppercase leading-none">Profissionais</h1>
           <p className="text-[#D3C5AC] text-lg font-light leading-relaxed max-w-2xl">
             Gerencie sua equipe de especialistas com visão 360°. Acompanhe performance, horários e avaliações.
           </p>
@@ -87,7 +95,7 @@ export function StaffPage() {
             <div 
               key={s.id} 
               className={cn(
-                "bg-[#1C1B1B] rounded-[2rem] p-8 group hover:bg-[#201F1F] transition-all duration-500 flex items-start gap-8 border border-transparent hover:border-[#4F4633]/20 cursor-pointer relative",
+                "bg-[#1C1B1B] rounded-[2rem] p-4 sm:p-6 lg:p-8 group hover:bg-[#201F1F] transition-all duration-500 flex flex-col sm:flex-row items-start lg:items-center gap-6 lg:gap-8 border border-transparent hover:border-[#4F4633]/20 cursor-pointer relative",
                 !s.active && "opacity-60"
               )}
               onClick={() => setEditing(s)}
@@ -178,8 +186,8 @@ export function StaffPage() {
       {/* Performance Summary Section */}
       <div className="px-4 lg:px-0">
         <section className="bg-[#1C1B1B] rounded-[2.5rem] overflow-hidden border border-white/5 shadow-2xl">
-          <div className="p-10 border-b border-[#4F4633]/10 flex justify-between items-center">
-            <h2 className="text-3xl font-black font-headline uppercase tracking-tighter text-[#E5E2E1]">Fatos & Performance</h2>
+          <div className="p-6 sm:p-10 border-b border-[#4F4633]/10 flex justify-between items-center">
+            <h2 className="text-2xl sm:text-3xl font-black font-headline uppercase tracking-tighter text-[#E5E2E1]">Fatos & Performance</h2>
             <button className="text-zinc-600 hover:text-white transition-colors">
               <span className="material-symbols-outlined">more_horiz</span>
             </button>
@@ -188,11 +196,11 @@ export function StaffPage() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="text-[10px] uppercase tracking-[0.2em] text-[#D3C5AC]/40 font-bold bg-[#131313]/30">
-                  <th className="px-10 py-6 font-medium">Profissional</th>
-                  <th className="px-10 py-6 font-medium">Agendamentos (Mês)</th>
-                  <th className="px-10 py-6 font-medium">Concluídos</th>
-                  <th className="px-10 py-6 font-medium">Geração de Receita</th>
-                  <th className="px-10 py-6 font-medium text-right">Status</th>
+                  <th className="px-4 sm:px-6 lg:px-10 py-4 lg:py-6 font-medium">Profissional</th>
+                  <th className="px-4 sm:px-6 lg:px-10 py-4 lg:py-6 font-medium">Agendamentos (Mês)</th>
+                  <th className="px-4 sm:px-6 lg:px-10 py-4 lg:py-6 font-medium">Concluídos</th>
+                  <th className="px-4 sm:px-6 lg:px-10 py-4 lg:py-6 font-medium">Geração de Receita</th>
+                  <th className="px-4 sm:px-6 lg:px-10 py-4 lg:py-6 font-medium text-right">Status</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#4F4633]/10">
@@ -212,7 +220,7 @@ export function StaffPage() {
 
                   return (
                     <tr key={s.id} className="hover:bg-white/[0.02] transition-colors group">
-                      <td className="px-10 py-8">
+                      <td className="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8">
                         <div className="flex items-center gap-4">
                           <div className="w-10 h-10 rounded-xl bg-[#0e0e0e] flex items-center justify-center text-sm font-black text-[#fbbf24] border border-white/5 shadow-inner">
                             {s.name.substring(0,2).toUpperCase()}
@@ -220,12 +228,12 @@ export function StaffPage() {
                           <span className="text-base font-bold text-[#E5E2E1] group-hover:text-[#fbbf24] transition-colors">{s.name}</span>
                         </div>
                       </td>
-                      <td className="px-10 py-8 text-base font-black text-[#E5E2E1]">{totalAppts}</td>
-                      <td className="px-10 py-8 text-base font-black text-[#E5E2E1]">{completedAppts}</td>
-                      <td className="px-10 py-8 text-base font-black text-[#fbbf24]">
+                      <td className="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 text-base font-black text-[#E5E2E1]">{totalAppts}</td>
+                      <td className="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 text-base font-black text-[#E5E2E1]">{completedAppts}</td>
+                      <td className="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 text-base font-black text-[#fbbf24]">
                         {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(receita)}
                       </td>
-                      <td className="px-10 py-8 text-right">
+                      <td className="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 text-right">
                         <div className="flex items-center justify-end gap-3">
                           <div className={cn(
                             "w-2 h-2 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]",

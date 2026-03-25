@@ -37,16 +37,16 @@ export function ClientsTable({ clients, onEdit, onDelete, onViewHistory, maxClie
   }
 
   return (
-    <div className="bg-[#1C1B1B] rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/5">
+    <div className="bg-[#1C1B1B] rounded-2xl sm:rounded-[2.5rem] overflow-hidden shadow-2xl border border-white/5">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-[#0e0e0e]/50 border-b border-white/5">
-              <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Cliente</th>
-              <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Contato</th>
-              <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Última Visita</th>
-              <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Gasto Total</th>
-              <th className="px-10 py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 text-right">Ações</th>
+              <th className="px-4 sm:px-6 lg:px-10 py-4 lg:py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Cliente</th>
+              <th className="px-4 sm:px-6 lg:px-10 py-4 lg:py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Contato</th>
+              <th className="px-4 sm:px-6 lg:px-10 py-4 lg:py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Última Visita</th>
+              <th className="px-4 sm:px-6 lg:px-10 py-4 lg:py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Gasto Total</th>
+              <th className="px-4 sm:px-6 lg:px-10 py-4 lg:py-6 text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 text-right">Ações</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-white/[0.03]">
@@ -60,43 +60,43 @@ export function ClientsTable({ clients, onEdit, onDelete, onViewHistory, maxClie
                     : ""
                 )}
               >
-                <td className="px-10 py-8">
+                <td className="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8">
                   <div className="flex items-center gap-5">
-                    <div className="w-12 h-12 rounded-full bg-[#353534] flex items-center justify-center overflow-hidden border border-white/5 shadow-inner grow-0 shrink-0">
-                      <span className="text-sm font-black text-[#fbbf24]">{client.name.substring(0, 2).toUpperCase()}</span>
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#353534] flex items-center justify-center overflow-hidden border border-white/5 shadow-inner grow-0 shrink-0">
+                      <span className="text-xs sm:text-sm font-black text-[#fbbf24]">{client.name.substring(0, 2).toUpperCase()}</span>
                     </div>
                     <div>
-                      <p className="font-bold text-[#E5E2E1] text-lg group-hover:text-[#fbbf24] transition-colors">{client.name}</p>
+                      <p className="font-bold text-[#E5E2E1] text-base sm:text-lg group-hover:text-[#fbbf24] transition-colors line-clamp-1">{client.name}</p>
                       <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-bold mt-1">Cliente Ativo</p>
                     </div>
                   </div>
                 </td>
-                <td className="px-10 py-8 text-base text-zinc-400 font-medium">{client.phone}</td>
-                <td className="px-10 py-8 text-base text-zinc-400 font-medium">{getLastVisit(client.appointments)}</td>
-                <td className="px-10 py-8">
-                  <span className="text-[#fbbf24] font-black font-headline text-lg tracking-tighter">
+                <td className="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 text-sm sm:text-base text-zinc-400 font-medium whitespace-nowrap">{client.phone}</td>
+                <td className="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 text-sm sm:text-base text-zinc-400 font-medium whitespace-nowrap">{getLastVisit(client.appointments)}</td>
+                <td className="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8">
+                  <span className="text-[#fbbf24] font-black font-headline text-base sm:text-lg tracking-tighter whitespace-nowrap">
                     {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(calculateTotalSpent(client.appointments))}
                   </span>
                 </td>
-                <td className="px-10 py-8 text-right">
-                  <div className="flex justify-end gap-3 opacity-40 group-hover:opacity-100 transition-all">
+                <td className="px-4 sm:px-6 lg:px-10 py-4 sm:py-6 lg:py-8 text-right">
+                  <div className="flex justify-end gap-2 sm:gap-3 opacity-40 group-hover:opacity-100 transition-all">
                     <button 
                       onClick={() => onViewHistory(client)}
-                      className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl text-zinc-400 hover:text-white transition-all shadow-lg active:scale-95"
+                      className="p-2 sm:p-3 bg-white/5 hover:bg-white/10 rounded-xl sm:rounded-2xl text-zinc-400 hover:text-white transition-all shadow-lg active:scale-95"
                     >
-                      <History className="w-5 h-5" />
+                      <History className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                     <button 
                       onClick={() => onEdit(client)}
-                      className="p-3 bg-white/5 hover:bg-[#fbbf24]/10 rounded-2xl text-zinc-400 hover:text-[#fbbf24] transition-all shadow-lg active:scale-95"
+                      className="p-2 sm:p-3 bg-white/5 hover:bg-[#fbbf24]/10 rounded-xl sm:rounded-2xl text-zinc-400 hover:text-[#fbbf24] transition-all shadow-lg active:scale-95"
                     >
-                      <Edit className="w-5 h-5" />
+                      <Edit className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                     <button 
                       onClick={() => onDelete(client.id)}
-                      className="p-3 bg-white/5 hover:bg-red-500/10 rounded-2xl text-zinc-400 hover:text-red-500 transition-all shadow-lg active:scale-95"
+                      className="p-2 sm:p-3 bg-white/5 hover:bg-red-500/10 rounded-xl sm:rounded-2xl text-zinc-400 hover:text-red-500 transition-all shadow-lg active:scale-95"
                     >
-                      <Trash2 className="w-5 h-5" />
+                      <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                   </div>
                 </td>
@@ -107,7 +107,7 @@ export function ClientsTable({ clients, onEdit, onDelete, onViewHistory, maxClie
       </div>
       
       {/* Pagination Style */}
-      <div className="px-10 py-10 bg-[#0e0e0e]/20 flex justify-between items-center border-t border-white/5">
+      <div className="px-6 py-6 sm:px-10 sm:py-10 bg-[#0e0e0e]/20 flex flex-col sm:flex-row justify-between items-center gap-4 border-t border-white/5">
         <p className="text-xs text-zinc-600 font-bold uppercase tracking-widest">
           Mostrando <span className="text-[#E5E2E1]">{clients.length}</span> de {clients.length} clientes premium
         </p>

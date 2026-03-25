@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react'
+import { toast } from 'react-hot-toast'
 import { Plus, ChevronLeft, ChevronRight, Calendar, List, Users2, Search, Filter, MoreVertical, Scissors, Edit, CheckCircle, XCircle, Trash2 } from 'lucide-react'
 import { useCompany } from '@/contexts/CompanyContext'
 import { AppointmentsList } from './AppointmentsList'
@@ -69,12 +70,13 @@ export function AppointmentsPage() {
         .lte('date', lastDay)
   
       if (!error && count !== null && count >= features.maxAppointmentsPerMonth) {
-        alert(`Aviso: Seu plano permite apenas ${features.maxAppointmentsPerMonth} agendamentos neste mês. Faça o upgrade para agendar mais.`)
+        toast.error(`Aviso: Seu plano permite apenas ${features.maxAppointmentsPerMonth} agendamentos neste mês. Faça o upgrade para agendar mais.`)
         return
       }
     }
 
     await createAppointment(company.id, data, serviceDuration)
+    toast.success('Agendamento realizado com sucesso!')
     setShowForm(false)
     setPreselectedTime(undefined)
     await loadAppointments()
@@ -83,6 +85,7 @@ export function AppointmentsPage() {
   const handleUpdate = async (data: AppointmentFormData, serviceDuration: number) => {
     if (!editingAppointment || !company?.id) return
     await updateAppointment(company.id, editingAppointment.id, data, serviceDuration)
+    toast.success('Agendamento atualizado!')
     setEditingAppointment(null)
     await loadAppointments()
   }
@@ -90,20 +93,22 @@ export function AppointmentsPage() {
   const handleStatusChange = async (id: string, status: string) => {
     try {
       await updateAppointmentStatus(id, status)
+      toast.success('Status atualizado!')
       await loadAppointments()
     } catch (err: any) {
-      alert('Erro ao atualizar status: ' + err.message)
+      toast.error('Erro ao atualizar status: ' + err.message)
       console.error('Error updating status:', err)
     }
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Tem certeza que deseja excluir permanentemente este agendamento?')) return
+    if (!window.confirm('Tem certeza que deseja excluir permanentemente este agendamento?')) return
     try {
       await deleteAppointment(id)
+      toast.success('Agendamento excluído.')
       await loadAppointments()
     } catch (err: any) {
-      alert('Erro ao excluir: ' + err.message)
+      toast.error('Erro ao excluir: ' + err.message)
     }
   }
 
@@ -160,7 +165,7 @@ export function AppointmentsPage() {
         <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
           <div className="text-left">
             <span className="text-xs font-label text-[#fbbf24] uppercase tracking-[0.3em] font-black block mb-4">Calendário de Gestão</span>
-            <h1 className="text-6xl font-headline font-black text-[#E5E2E1] leading-none tracking-tighter uppercase">Agendamentos</h1>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-headline font-black text-[#E5E2E1] leading-none tracking-tighter uppercase">Agendamentos</h1>
           </div>
           <button 
             onClick={() => {
@@ -180,7 +185,7 @@ export function AppointmentsPage() {
         <div className="grid grid-cols-12 gap-12">
           {/* Filters Sidebar */}
           <div className="col-span-12 lg:col-span-3 space-y-10">
-            <div className="bg-[#1C1B1B] rounded-[2rem] p-8 border border-white/5 shadow-xl">
+            <div className="bg-[#1C1B1B] rounded-[2rem] p-4 sm:p-6 lg:p-8 border border-white/5 shadow-xl">
               <div className="flex items-center gap-3 mb-8">
                 <Filter className="w-5 h-5 text-[#fbbf24]" />
                 <h3 className="font-headline text-xl font-black text-white uppercase tracking-tighter">Filtros</h3>
@@ -228,7 +233,7 @@ export function AppointmentsPage() {
             </div>
 
             {/* Mini Calendar Visual */}
-            <div className="bg-[#1C1B1B] rounded-[2rem] p-8 border border-white/5 shadow-xl relative overflow-hidden group">
+            <div className="bg-[#1C1B1B] rounded-[2rem] p-4 sm:p-6 lg:p-8 border border-white/5 shadow-xl relative overflow-hidden group">
               <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#fbbf24]/5 rounded-full blur-2xl group-hover:bg-[#fbbf24]/10 transition-colors"></div>
               
               {(() => {
@@ -311,7 +316,7 @@ export function AppointmentsPage() {
                   ))}
                 </div>
               ) : filteredAppointments.length === 0 ? (
-                <div className="bg-[#1C1B1B]/50 rounded-[2.5rem] p-20 text-center border border-dashed border-white/5">
+                <div className="bg-[#1C1B1B]/50 rounded-[2.5rem] p-10 sm:p-20 text-center border border-dashed border-white/5">
                   <p className="text-zinc-500 font-medium tracking-wide">Nenhum agendamento para este período.</p>
                 </div>
               ) : (
@@ -326,15 +331,15 @@ export function AppointmentsPage() {
                           : ""
                       )}
                     >
-                      <div className="bg-[#1C1B1B] rounded-[1.9rem] p-8 flex items-center justify-between group-hover:translate-x-2 transition-transform duration-500">
-                        <div className="flex items-center gap-10">
+                      <div className="bg-[#1C1B1B] rounded-[1.9rem] p-4 sm:p-6 lg:p-8 flex flex-col md:flex-row items-center justify-between group-hover:translate-x-2 transition-transform duration-500 gap-6">
+                        <div className="flex flex-col sm:flex-row items-center gap-6 lg:gap-10 w-full md:w-auto">
                           <div className="text-center min-w-[80px]">
-                            <p className="text-3xl font-headline font-black text-white tracking-tighter">{app.start_time.slice(0, 5)}</p>
+                            <p className="text-2xl sm:text-3xl font-headline font-black text-white tracking-tighter">{app.start_time.slice(0, 5)}</p>
                             <p className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-bold mt-1">45 min</p>
                           </div>
-                          <div className="w-[1px] h-12 bg-white/5"></div>
-                          <div className="flex items-center gap-6">
-                            <div className="w-14 h-14 rounded-2xl bg-[#0e0e0e] overflow-hidden border border-white/5 group-hover:border-[#fbbf24]/30 transition-all">
+                          <div className="hidden sm:block w-[1px] h-12 bg-white/5"></div>
+                          <div className="flex items-center gap-4 sm:gap-6">
+                            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#0e0e0e] overflow-hidden border border-white/5 group-hover:border-[#fbbf24]/30 transition-all flex-shrink-0">
                               {app.client?.name ? (
                                 <div className="w-full h-full flex items-center justify-center bg-[#1c1c1c] text-[#fbbf24] font-black text-lg shadow-inner">
                                   {app.client.name.substring(0, 2).toUpperCase()}
@@ -344,13 +349,13 @@ export function AppointmentsPage() {
                               )}
                             </div>
                             <div>
-                              <h4 className="font-black text-xl text-white tracking-tight group-hover:text-[#fbbf24] transition-colors capitalize">{app.client?.name || 'Cliente'}</h4>
-                              <p className="text-xs text-[#D3C5AC]/60 uppercase tracking-widest font-bold mt-1">{app.service?.name || 'Serviço Premium'}</p>
+                              <h4 className="font-black text-lg sm:text-xl text-white tracking-tight group-hover:text-[#fbbf24] transition-colors capitalize">{app.client?.name || 'Cliente'}</h4>
+                              <p className="text-[10px] sm:text-xs text-[#D3C5AC]/60 uppercase tracking-widest font-bold mt-1">{app.service?.name || 'Serviço Premium'}</p>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-16">
+                        <div className="flex items-center justify-between md:justify-end gap-6 sm:gap-16 w-full md:w-auto mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-t-0 border-white/5">
                           <div className="hidden xl:block">
                             <p className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black mb-2">Especialista</p>
                             <div className="flex items-center gap-3">
@@ -363,7 +368,7 @@ export function AppointmentsPage() {
                           
                           <div className="flex items-center gap-8">
                             <span className={cn(
-                              "px-5 py-2 text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg",
+                              "px-3 py-1.5 sm:px-5 sm:py-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg",
                               app.status === 'confirmed' ? "bg-blue-500/10 text-blue-400" : 
                               app.status === 'completed' ? "bg-emerald-500/10 text-emerald-400" :
                               app.status === 'scheduled' ? "bg-[#fbbf24]/10 text-[#fbbf24]" :
@@ -420,17 +425,17 @@ export function AppointmentsPage() {
       </div>
 
       {/* Floating Analytics Summary */}
-      <div className="fixed bottom-12 right-12 z-20">
-        <div className="bg-[#1C1B1B]/90 backdrop-blur-2xl px-8 py-5 rounded-[2rem] shadow-2xl border border-white/10 flex items-center gap-10 hover:scale-105 transition-transform cursor-pointer">
+      <div className="fixed bottom-6 right-6 sm:bottom-12 sm:right-12 z-20">
+        <div className="bg-[#1C1B1B]/90 backdrop-blur-2xl px-4 py-3 sm:px-8 sm:py-5 rounded-2xl sm:rounded-[2rem] shadow-2xl border border-white/10 flex items-center gap-6 sm:gap-10 hover:scale-105 transition-transform cursor-pointer">
           <div>
-            <p className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black mb-1">Status Hoje</p>
-            <p className="text-2xl font-headline font-black text-[#fbbf24] tracking-tighter">{appointments.length} Atendimentos</p>
+            <p className="text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black mb-1">Status Hoje</p>
+            <p className="text-lg sm:text-2xl font-headline font-black text-[#fbbf24] tracking-tighter text-nowrap">{appointments.length} Agendamentos</p>
           </div>
-          <div className="w-[1px] h-10 bg-white/10"></div>
+          <div className="w-[1px] h-8 sm:h-10 bg-white/10"></div>
           <div>
-            <p className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black mb-1">Ocupação</p>
-            <div className="flex items-center gap-3">
-              <p className="text-2xl font-headline font-black text-white tracking-tighter">84%</p>
+            <p className="text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black mb-1">Ocupação</p>
+            <div className="flex items-center gap-2 sm:gap-3">
+              <p className="text-xl sm:text-2xl font-headline font-black text-white tracking-tighter">84%</p>
               <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
             </div>
           </div>

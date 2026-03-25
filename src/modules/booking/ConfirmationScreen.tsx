@@ -46,7 +46,7 @@ export function ConfirmationScreen({
 
       <div className="text-center space-y-4 max-w-md mx-auto">
         <h2 className="text-4xl lg:text-5xl font-black font-headline text-white uppercase tracking-tighter leading-tight">
-          Agendamento <span className="text-[#fbbf24]">confirmado!</span>
+          Agendamento <span className="text-[#fbbf24]">Realizado!</span>
         </h2>
         <p className="text-[#D3C5AC] text-lg font-light leading-relaxed">
           Olá <span className="text-white font-bold">{clientName}</span>, seu lugar na <span className="text-white font-bold">{companyName}</span> já está reservado.

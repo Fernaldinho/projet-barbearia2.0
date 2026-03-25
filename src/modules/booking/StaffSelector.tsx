@@ -13,7 +13,7 @@ export function StaffSelector({ staff, selectedId, onSelect }: StaffSelectorProp
     <div className="animate-fade-in space-y-12">
       <div className="flex flex-col gap-4">
         <h2 className="text-4xl lg:text-5xl font-black font-headline text-white uppercase tracking-tighter leading-none">
-          Com quem você quer <span className="text-[#fbbf24]">agendar?</span>
+          Com quem deseja fazer seu <span className="text-[#fbbf24]">agendamento?</span>
         </h2>
         <p className="text-[#D3C5AC] text-lg font-light leading-relaxed max-w-xl">
           Selecione o seu barbeiro preferido ou escolha sem preferência para a primeira disponibilidade.

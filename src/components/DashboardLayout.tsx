@@ -16,16 +16,17 @@ export function DashboardLayout() {
       {/* Mobile Sidebar overlay backdrop */}
       {isMobileMenuOpen && (
         <div 
-          className="fixed inset-0 bg-black/60 z-30 md:hidden" 
+          className="fixed inset-0 bg-black/60 z-30 md:hidden animate-fade-in" 
           onClick={() => setIsMobileMenuOpen(false)} 
         />
       )}
 
-      <div className="flex-1 flex flex-col min-w-0 md:pl-[240px]">
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0 md:ml-[240px] w-full">
         <Navbar onMenuClick={() => setIsMobileMenuOpen(true)} />
         
-        <main className="flex-1 overflow-x-hidden pt-[64px] min-h-screen">
-          <div className="p-[16px] sm:p-[20px] lg:p-[24px] max-w-[1280px] mx-auto w-full page-container">
+        <main className="flex-1 pt-[80px] pb-12 w-full flex flex-col items-center">
+          <div className="page-container flex-1">
             <Outlet />
           </div>
         </main>

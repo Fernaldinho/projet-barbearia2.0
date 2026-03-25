@@ -31,8 +31,14 @@ const cards: CardConfig[] = [
     format: (v) => formatter.format(v),
   },
   {
+    key: 'projectedRevenue',
+    title: 'Faturamento previsto',
+    icon: DollarSign,
+    format: (v) => formatter.format(v),
+  },
+  {
     key: 'attendanceRate',
-    title: 'Taxa de comparecimento',
+    title: 'Comparecimento',
     icon: TrendingUp,
     format: (v) => `${v}%`,
   },
@@ -44,7 +50,7 @@ interface StatsCardsProps {
 
 export function StatsCards({ metrics }: StatsCardsProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[20px]">
+    <div className="grid grid-cols-2 lg:grid-cols-5 gap-[20px]">
       {cards.map((card) => {
         const Icon = card.icon
         const value = metrics[card.key] as number
@@ -52,17 +58,17 @@ export function StatsCards({ metrics }: StatsCardsProps) {
         return (
           <div 
             key={card.key} 
-            className="p-[24px] rounded-2xl bg-surface-container-low transition-all hover:bg-surface-container-highest group"
+            className="p-4 sm:p-5 lg:p-6 rounded-2xl bg-surface-container-low transition-all hover:bg-surface-container-highest group"
           >
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-primary-container/10 group-hover:bg-primary-container/20 transition-colors">
-                <Icon className="w-5 h-5 shrink-0 text-primary-container" />
+            <div className="flex items-center justify-between mb-3 sm:mb-4">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 bg-primary-container/10 group-hover:bg-primary-container/20 transition-colors">
+                <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 text-primary-container" />
               </div>
             </div>
-            <p className="text-3xl font-bold text-white mb-1 font-headline tracking-tight">
+            <p className="text-2xl sm:text-3xl font-bold text-white mb-0.5 sm:mb-1 font-headline tracking-tighter">
               {card.format(value)}
             </p>
-            <p className="text-sm font-medium text-on-surface-variant/80 uppercase tracking-wider">
+            <p className="text-[10px] sm:text-xs font-semibold text-on-surface-variant/70 uppercase tracking-widest">
               {card.title}
             </p>
           </div>

@@ -115,36 +115,60 @@
  /* Structural Layout                            */
  /* ============================================ */
 
- .page-container {
-   max-width: 1280px;
-   margin: 0 auto;
-   width: 100%;
- }
+  .page-container {
+    max-width: 1280px; /* Reduzido de 1440px para melhor faturamento em 100% zoom */
+    margin: 0 auto;
+    width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  @media (min-width: 640px) {
+    .page-container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .page-container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
 
  /* ============================================ */
  /* UI Components                                */
  /* ============================================ */
 
  /* Cards */
- .card {
-   background: var(--color-dark-900);
-   border: 1px solid var(--color-dark-700);
-   border-radius: 12px;
-   padding: 24px;
-   box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.5);
- }
+  .card {
+    background: var(--color-dark-900);
+    border: 1px solid var(--color-dark-700);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 24px -4px rgba(0, 0, 0, 0.5);
+  }
+
+  @media (min-width: 768px) {
+    .card {
+      padding: 24px;
+    }
+  }
 
  .card-sm {
    padding: 16px;
  }
 
  /* Tables */
- .table-container {
-   background: var(--color-dark-800);
-   border: 1px solid var(--color-dark-700);
-   border-radius: 12px;
-   overflow: hidden;
- }
+  .table-container {
+    background: var(--color-dark-800);
+    border: 1px solid var(--color-dark-700);
+    border-radius: 12px;
+    overflow-x: auto;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
 
  table {
    width: 100%;

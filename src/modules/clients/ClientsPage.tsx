@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo, useCallback } from 'react'
 import { Plus, UserPlus, Search, Users, TrendingUp, ShieldCheck, Lightbulb, Sparkles, ArrowRight } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { useCompany } from '@/contexts/CompanyContext'
 import { ClientsTable } from './ClientsTable'
 import { ClientsForm } from './ClientsForm'
@@ -37,10 +38,11 @@ export function ClientsPage() {
   const handleCreate = async (data: ClientFormData) => {
     if (!company?.id) return
     if (features.maxClients !== -1 && clients.length >= features.maxClients) {
-       alert(`Aviso: Seu plano permite apenas ${features.maxClients} clientes. Faça o upgrade para adicionar mais.`)
+       toast.error(`Aviso: Seu plano permite apenas ${features.maxClients} clientes. Faça o upgrade para adicionar mais.`)
        return
     }
     await createClient(company.id, data)
+    toast.success('Cliente cadastrado com sucesso!')
     setShowForm(false)
     await loadClients()
   }
@@ -49,16 +51,18 @@ export function ClientsPage() {
     if (!editingClient || !company?.id) return
     await updateClient(company.id, editingClient.id, data)
     setEditingClient(null)
+    toast.success('Dados do cliente atualizados.')
     await loadClients()
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Tem certeza que deseja excluir este cliente?')) return
+    if (!window.confirm('Tem certeza que deseja excluir este cliente?')) return
     try {
       await deleteClient(id)
+      toast.success('Cliente removido.')
       await loadClients()
     } catch (err: any) {
-      alert('Erro ao excluir cliente: ' + err.message)
+      toast.error('Erro ao excluir cliente: ' + err.message)
     }
   }
 
@@ -106,12 +110,12 @@ export function ClientsPage() {
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
           <div className="text-left">
             <span className="text-xs font-label text-[#fbbf24] uppercase tracking-[0.3em] font-black block mb-4">CRM & Relacionamento</span>
-            <h1 className="text-6xl font-headline font-black text-[#E5E2E1] leading-none tracking-tighter uppercase">Gerenciador de Clientes</h1>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-headline font-black text-[#E5E2E1] leading-none tracking-tighter uppercase">Gerenciador de Clientes</h1>
           </div>
           <button 
             onClick={() => {
               if (features.maxClients !== -1 && clients.length >= features.maxClients) {
-                alert(`Plano Gratuito atinge o limite máximo de ${features.maxClients} clientes. O próximo seria borrado.`)
+                toast.error(`Plano Gratuito atinge o limite máximo de ${features.maxClients} clientes.`)
               }
               setShowForm(true)
             }}
@@ -123,32 +127,32 @@ export function ClientsPage() {
         </div>
 
         {/* Dashboard Stats Summary (Bento Lite) */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          <div className="bg-[#1C1B1B] p-8 rounded-[2rem] flex items-center justify-between group hover:bg-[#201F1F] transition-all border border-white/5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 lg:mb-16">
+          <div className="bg-[#1C1B1B] p-4 sm:p-6 lg:p-8 rounded-[2rem] flex items-center justify-between group hover:bg-[#201F1F] transition-all border border-white/5">
             <div>
               <p className="text-zinc-500 text-[10px] uppercase tracking-[0.2em] font-black mb-2">Total de Clientes</p>
-              <p className="text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{clients.length}</p>
+              <p className="text-3xl lg:text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{clients.length}</p>
             </div>
-            <div className="bg-[#fbbf24]/10 p-5 rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
-              <Users className="w-8 h-8" />
+            <div className="bg-[#fbbf24]/10 p-3 sm:p-5 rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
+              <Users className="w-6 h-6 sm:w-8 h-8" />
             </div>
           </div>
-          <div className="bg-[#1C1B1B] p-8 rounded-[2rem] flex items-center justify-between group hover:bg-[#201F1F] transition-all border border-white/5">
+          <div className="bg-[#1C1B1B] p-4 sm:p-6 lg:p-8 rounded-[2rem] flex items-center justify-between group hover:bg-[#201F1F] transition-all border border-white/5">
             <div>
               <p className="text-zinc-500 text-[10px] uppercase tracking-[0.2em] font-black mb-2">Novos este Mês</p>
-              <p className="text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{novosEsteMes}</p>
+              <p className="text-3xl lg:text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{novosEsteMes}</p>
             </div>
-            <div className="bg-[#fbbf24]/10 p-5 rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
-              <TrendingUp className="w-8 h-8" />
+            <div className="bg-[#fbbf24]/10 p-3 sm:p-5 rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
+              <TrendingUp className="w-6 h-6 sm:w-8 h-8" />
             </div>
           </div>
-          <div className="bg-[#1C1B1B] p-8 rounded-[2rem] flex items-center justify-between group hover:bg-[#201F1F] transition-all border border-white/5">
+          <div className="bg-[#1C1B1B] p-4 sm:p-6 lg:p-8 rounded-[2rem] flex items-center justify-between group hover:bg-[#201F1F] transition-all border border-white/5 sm:col-span-2 lg:col-span-1">
             <div>
               <p className="text-zinc-500 text-[10px] uppercase tracking-[0.2em] font-black mb-2">Taxa de Fidelidade</p>
-              <p className="text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{taxaFidelidade}%</p>
+              <p className="text-3xl lg:text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{taxaFidelidade}%</p>
             </div>
-            <div className="bg-[#fbbf24]/10 p-5 rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
-              <ShieldCheck className="w-8 h-8" />
+            <div className="bg-[#fbbf24]/10 p-3 sm:p-5 rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
+              <ShieldCheck className="w-6 h-6 sm:w-8 h-8" />
             </div>
           </div>
         </div>
@@ -168,18 +172,18 @@ export function ClientsPage() {
 
         {/* Contextual Insights Section */}
         <div className="mt-20 grid grid-cols-1 lg:grid-cols-2 gap-10">
-          <div className="p-10 rounded-[2.5rem] bg-gradient-to-br from-[#1C1B1B] to-[#131313] border border-white/5 shadow-2xl">
-            <h3 className="font-headline text-2xl font-black text-white uppercase tracking-tighter mb-8 bg-zinc-900/50 p-4 rounded-2xl inline-block -ml-4">
+          <div className="p-6 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] bg-gradient-to-br from-[#1C1B1B] to-[#131313] border border-white/5 shadow-2xl">
+            <h3 className="font-headline text-xl sm:text-2xl font-black text-white uppercase tracking-tighter mb-6 sm:mb-8 bg-zinc-900/50 p-3 sm:p-4 rounded-2xl inline-block -ml-2 sm:-ml-4">
               Insights de Clientes
             </h3>
-            <div className="space-y-6">
-              <div className="flex items-start gap-6 p-6 rounded-3xl bg-[#0e0e0e] border border-white/[0.02] hover:border-[#fbbf24]/20 transition-all group">
+            <div className="space-y-4 sm:space-y-6">
+              <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 p-4 sm:p-6 rounded-3xl bg-[#0e0e0e] border border-white/[0.02] hover:border-[#fbbf24]/20 transition-all group">
                 <div className="bg-[#fbbf24]/10 p-3 rounded-xl text-[#fbbf24] group-hover:scale-110 transition-transform">
-                  <Lightbulb className="w-6 h-6" />
+                  <Lightbulb className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
                 <div>
-                  <p className="text-lg font-bold text-white tracking-tight">Oportunidade de Reengajamento</p>
-                  <p className="text-sm text-zinc-500 mt-2 leading-relaxed">
+                  <p className="text-base sm:text-lg font-bold text-white tracking-tight">Oportunidade de Reengajamento</p>
+                  <p className="text-xs sm:text-sm text-zinc-500 mt-1 sm:text-sm text-zinc-500 mt-2 leading-relaxed">
                     12 clientes fiéis não agendam há mais de 30 dias. Considere enviar uma oferta personalizada via WhatsApp.
                   </p>
                 </div>
@@ -204,10 +208,10 @@ export function ClientsPage() {
               src="https://lh3.googleusercontent.com/aida-public/AB6AXuAB1CDi9QrKlkvk8BKnZ3-M6T6TKVKVByml0IhIno84riqyH_S1_-9qKsxHUDsQPHuOj23W19Ju_dEYspFYprToowk9DdMuY3vd8kIPem-wxUNKO7LVMg1YOReSuxLNu3haELSJ-f0GtXaWTvtRpVWqFNq2YyNrMcCK1RNl3dX5pJmyzA1MQ-5a4upK3R47mDfBsjH0-SyjrlsBs9GVC9fPxM9zpx7lQLsLkQ7Q91nvrgi77Pjuh4Lffc-aZvXOGRoMxqE3DUjSOY5c" 
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-[#0e0e0e]/40 to-transparent"></div>
-            <div className="relative p-12 flex flex-col h-full justify-between">
+            <div className="relative p-6 sm:p-12 flex flex-col h-full justify-between">
               <div>
-                <span className="bg-[#fbbf24] text-[#402D00] px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">Premium AI</span>
-                <h3 className="font-headline text-4xl font-black mt-6 leading-none text-white tracking-tighter uppercase">Relatórios Avançados<br/>de Consumo</h3>
+                <span className="bg-[#fbbf24] text-[#402D00] px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">Premium AI</span>
+                <h3 className="font-headline text-2xl sm:text-3xl lg:text-4xl font-black mt-4 sm:mt-6 leading-none text-white tracking-tighter uppercase">Relatórios Avançados<br/>de Consumo</h3>
               </div>
               <div className="space-y-6">
                 <p className="text-zinc-400 text-base font-medium max-w-sm leading-relaxed">
