@@ -118,7 +118,7 @@ export async function getDashboardMetrics(companyId: string): Promise<DashboardM
 
     supabase
       .from('appointments')
-      .select('status, service:services(price)')
+      .select('status, date, start_time, service:services(price)')
       .eq('company_id', companyId)
       .gte('date', monthStart),
   ])
