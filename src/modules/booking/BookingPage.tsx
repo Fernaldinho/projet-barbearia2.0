@@ -144,7 +144,7 @@ export function BookingPage() {
     goNext()
   }
 
-  const handleClientSubmit = async (data: { name: string; phone: string; email: string }) => {
+  const handleClientSubmit = async (data: { name: string; phone: string; email: string; notes: string }) => {
     if (!company || !selectedService || !selectedDate || !selectedTime) return
     setBookingLoading(true)
     setError(null)
@@ -152,7 +152,8 @@ export function BookingPage() {
       const clientId = await findOrCreateClient(company.id, data.name, data.phone, data.email)
       await createPublicBooking(
         company.id, clientId, selectedService.id, selectedDate,
-        selectedTime, selectedService.duration, selectedStaff?.id
+        selectedTime, selectedService.duration, selectedStaff?.id,
+        data.notes
       )
       setClientName(data.name)
       setStep('confirmation')

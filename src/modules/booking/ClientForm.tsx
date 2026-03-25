@@ -3,7 +3,7 @@ import { User, AlertCircle, ShieldCheck, Mail, Phone, UserRound } from 'lucide-r
 import { cn } from '@/utils/helpers'
 
 interface ClientFormProps {
-  onSubmit: (data: { name: string; phone: string; email: string }) => void
+  onSubmit: (data: { name: string; phone: string; email: string; notes: string }) => void
   loading: boolean
   error: string | null
   initialData?: { name: string; phone: string; email: string }
@@ -22,6 +22,7 @@ export function ClientForm({ onSubmit, loading, error, initialData }: ClientForm
   const [name, setName] = useState(initialData?.name || '')
   const [phone, setPhone] = useState(initialData?.phone || '')
   const [email, setEmail] = useState(initialData?.email || '')
+  const [notes, setNotes] = useState('')
   const [website, setWebsite] = useState('')
   const [localError, setLocalError] = useState<string | null>(null)
 
@@ -45,7 +46,7 @@ export function ClientForm({ onSubmit, loading, error, initialData }: ClientForm
       return
     }
 
-    onSubmit({ name: name.trim(), phone, email: email.trim() })
+    onSubmit({ name: name.trim(), phone, email: email.trim(), notes: notes.trim() })
   }
 
   const displayError = error || localError
@@ -134,6 +135,17 @@ export function ClientForm({ onSubmit, loading, error, initialData }: ClientForm
                   className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-14 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none placeholder-zinc-800"
                 />
               </div>
+            </div>
+
+            <div className="space-y-3 p-1">
+              <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-4">Observações (Opcional)</label>
+              <textarea 
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="Ex: Prefiro corte degradê, ou alguma restrição..."
+                rows={3}
+                className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-8 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none placeholder-zinc-800 resize-none"
+              />
             </div>
           </div>
 

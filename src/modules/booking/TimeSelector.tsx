@@ -17,12 +17,6 @@ export function TimeSelector({ slots, selectedTime, loading, isDayClosed, onSele
         <h2 className="text-4xl lg:text-5xl font-black font-headline text-white uppercase tracking-tighter leading-none">
           Qual <span className="text-[#fbbf24]">horário?</span>
         </h2>
-        <div className="flex items-center gap-3 bg-[#fbbf24]/5 border border-[#fbbf24]/10 rounded-2xl px-5 py-3 w-fit">
-          <Sparkles className="w-5 h-5 text-[#fbbf24] animate-pulse" />
-          <p className="text-[#fbbf24] text-xs font-black uppercase tracking-widest leading-none">
-            IA Recomendando os melhores horários para você
-          </p>
-        </div>
       </div>
 
       <div className="bg-[#1C1B1B] border border-white/5 rounded-[3rem] p-8 shadow-2xl relative overflow-hidden min-h-[400px]">

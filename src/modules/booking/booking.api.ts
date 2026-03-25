@@ -64,7 +64,8 @@ export async function createPublicBooking(
   date: string,
   startTime: string,
   serviceDuration: number,
-  staffId?: string
+  staffId?: string,
+  notes?: string
 ): Promise<{ id: string }> {
   const endTime = minutesToTime(timeToMinutes(startTime) + serviceDuration)
 
@@ -85,6 +86,7 @@ export async function createPublicBooking(
       start_time: startTime,
       end_time: endTime,
       status: 'scheduled',
+      notes: notes || null
     })
     .select('id')
     .single()
