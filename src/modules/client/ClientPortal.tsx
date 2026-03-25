@@ -118,9 +118,9 @@ export function ClientPortal() {
     }
   }
 
-  const handleReview = (app: any, initialRating: number = 5) => {
+  const handleReview = (app: any) => {
     setSelectedApp(app)
-    setRating(initialRating)
+    setRating(5)
     setComment('')
     setShowReviewModal(true)
   }
@@ -432,7 +432,14 @@ export function ClientPortal() {
                     </div>
                  ) : (
                     appointments.map((app) => (
-                       <div key={app.id} className="group bg-[#1C1B1B] border border-white/5 rounded-[2.5rem] p-8 flex items-center justify-between hover:bg-[#201F1F] transition-all">
+                       <div 
+                         key={app.id} 
+                         onClick={() => app.status === 'completed' ? handleReview(app) : null}
+                         className={cn(
+                           "group bg-[#1C1B1B] border border-white/5 rounded-[2.5rem] p-8 flex items-center justify-between hover:bg-[#201F1F] transition-all",
+                           app.status === 'completed' && "cursor-pointer active:scale-[0.98]"
+                         )}
+                       >
                           <div className="flex items-center gap-6">
                              <div className="w-16 h-16 rounded-[1.25rem] bg-[#fbbf24] flex items-center justify-center text-[#402D00] flex-shrink-0 group-hover:scale-110 transition-transform">
                                 <Scissors className="w-8 h-8" />
@@ -463,35 +470,22 @@ export function ClientPortal() {
                                 {app.status === 'scheduled' ? 'Agendado' : app.status === 'confirmed' ? 'Confirmado' : 'Finalizado'}
                              </div>
                              
-                             {app.status === 'completed' && !app.reviews?.[0] && (
-                                <div className="flex flex-col items-end gap-2">
-                                   <div className="flex items-center gap-1">
-                                      {[1, 2, 3, 4, 5].map((star) => (
-                                         <button 
-                                           key={star}
-                                           onClick={(e) => {
-                                              e.stopPropagation()
-                                              handleReview(app, star)
-                                           }}
-                                           className="text-zinc-800 hover:text-[#fbbf24] transition-all hover:scale-125"
-                                           title={`Avaliar com ${star} estrelas`}
-                                         >
-                                            <Star className="w-4 h-4 fill-current" />
-                                         </button>
-                                      ))}
-                                   </div>
-                                   <p className="text-[8px] font-black uppercase tracking-[0.2em] text-zinc-500">Avaliar Atendimento</p>
-                                </div>
-                             )}
-
-                             {app.reviews?.[0] && (
-                                <div className="flex items-center gap-1 text-[#fbbf24]">
-                                   {[...Array(5)].map((_, i) => (
-                                      <Star key={i} className={cn("w-3 h-3", i < app.reviews[0].rating ? "fill-[#fbbf24]" : "text-zinc-700")} />
-                                   ))}
-                                </div>
-                             )}
-                          </div>
+                              {app.status === 'completed' && (
+                                 <div className="flex items-center gap-1 text-[#fbbf24]">
+                                    {[...Array(5)].map((_, i) => (
+                                       <Star 
+                                         key={i} 
+                                         className={cn(
+                                           "w-3.5 h-3.5 transition-all", 
+                                           app.reviews?.[0] 
+                                             ? (i < app.reviews[0].rating ? "fill-[#fbbf24]" : "text-zinc-800")
+                                             : "text-zinc-800 group-hover:text-zinc-600"
+                                         )} 
+                                       />
+                                    ))}
+                                 </div>
+                              )}
+                           </div>
                        </div>
                     ))
                  )}
