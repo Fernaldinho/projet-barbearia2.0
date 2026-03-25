@@ -8,6 +8,7 @@ export interface DashboardMetrics {
   appointmentsToday: number
   newClientsThisMonth: number
   monthlyRevenue: number
+  projectedRevenue: number
   attendanceRate: number
   totalAppointmentsMonth: number
   completedAppointmentsMonth: number
@@ -17,6 +18,7 @@ export interface DailyRevenuePoint {
   date: string
   label: string
   revenue: number
+  projected: number
 }
 
 export interface DailyAppointmentsPoint {
@@ -24,6 +26,8 @@ export interface DailyAppointmentsPoint {
   label: string
   total: number
   completed: number
+  confirmed: number
+  scheduled: number
   cancelled: number
 }
 
@@ -125,13 +129,21 @@ export async function getDashboardMetrics(companyId: string): Promise<DashboardM
     .filter((a) => a.status === 'completed')
     .reduce((sum, a) => {
       const service = a.service as unknown as { price: number } | null
-      return sum + (service?.price || 0)
+      return sum + (Number(service?.price) || 0)
+    }, 0)
+
+  const projectedRevenue = allAppts
+    .filter((a) => ['scheduled', 'confirmed'].includes(a.status))
+    .reduce((sum, a) => {
+      const service = a.service as unknown as { price: number } | null
+      return sum + (Number(service?.price) || 0)
     }, 0)
 
   return {
     appointmentsToday: todayAppts.count || 0,
     newClientsThisMonth: newClients.count || 0,
     monthlyRevenue,
+    projectedRevenue,
     attendanceRate: Math.round(attendanceRate),
     totalAppointmentsMonth: totalMonth,
     completedAppointmentsMonth: completedMonth,
@@ -148,25 +160,35 @@ export async function getDailyRevenue(companyId: string, period: string): Promis
 
   const { data, error } = await supabase
     .from('appointments')
-    .select('date, service:services(price)')
+    .select('date, status, service:services(price)')
     .eq('company_id', companyId)
-    .eq('status', 'completed')
+    .in('status', ['completed', 'confirmed', 'scheduled'])
     .gte('date', start)
     .lte('date', end)
 
   if (error) throw error
 
   const revenueByDay = new Map<string, number>()
+  const projectedByDay = new Map<string, number>()
+  
   for (const appt of data || []) {
     const service = appt.service as unknown as { price: number } | null
-    const prev = revenueByDay.get(appt.date) || 0
-    revenueByDay.set(appt.date, prev + (service?.price || 0))
+    const price = Number(service?.price) || 0
+    
+    if (appt.status === 'completed') {
+      const prev = revenueByDay.get(appt.date) || 0
+      revenueByDay.set(appt.date, prev + price)
+    } else {
+      const prev = projectedByDay.get(appt.date) || 0
+      projectedByDay.set(appt.date, prev + price)
+    }
   }
 
   return days.map((day) => ({
     date: day,
     label: formatDayLabel(day),
     revenue: revenueByDay.get(day) || 0,
+    projected: projectedByDay.get(day) || 0,
   }))
 }
 
@@ -183,17 +205,19 @@ export async function getDailyAppointments(companyId: string, period: string): P
 
   if (error) throw error
 
-  const byDay = new Map<string, { total: number; completed: number; cancelled: number }>()
+  const byDay = new Map<string, { total: number; completed: number; confirmed: number; scheduled: number; cancelled: number }>()
   for (const a of data || []) {
-    const prev = byDay.get(a.date) || { total: 0, completed: 0, cancelled: 0 }
+    const prev = byDay.get(a.date) || { total: 0, completed: 0, confirmed: 0, scheduled: 0, cancelled: 0 }
     prev.total++
     if (a.status === 'completed') prev.completed++
+    if (a.status === 'confirmed') prev.confirmed++
+    if (a.status === 'scheduled') prev.scheduled++
     if (a.status === 'cancelled' || a.status === 'no_show') prev.cancelled++
     byDay.set(a.date, prev)
   }
 
   return days.map((day) => {
-    const stats = byDay.get(day) || { total: 0, completed: 0, cancelled: 0 }
+    const stats = byDay.get(day) || { total: 0, completed: 0, confirmed: 0, scheduled: 0, cancelled: 0 }
     return {
       date: day,
       label: formatDayLabel(day),

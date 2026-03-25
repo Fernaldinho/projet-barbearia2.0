@@ -42,6 +42,7 @@ export function DashboardPage() {
     appointmentsToday: 0,
     newClientsThisMonth: 0,
     monthlyRevenue: 0,
+    projectedRevenue: 0,
     attendanceRate: 0,
     totalAppointmentsMonth: 0,
     completedAppointmentsMonth: 0,
@@ -115,7 +116,7 @@ export function DashboardPage() {
             {greeting()}, <span className="text-primary-container">{userName.split(' ')[0]}</span>.
           </h1>
           <p className="text-lg text-on-surface-variant font-medium mt-2 max-w-xl">
-            Sua barbearia está com <span className="text-white font-bold">{metrics.attendanceRate}%</span> de ocupação hoje. Aqui está o que está acontecendo.
+            Sua barbearia está com <span className="text-white font-bold">{metrics.attendanceRate}%</span> de ocupação hoje. Você tem <span className="text-[#10B981] font-bold">R$ {metrics.projectedRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span> em faturamento previsto.
           </p>
         </div>
 
