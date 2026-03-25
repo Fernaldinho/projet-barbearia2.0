@@ -397,17 +397,10 @@ export function ClientPortal() {
                  <h3 className="text-3xl md:text-5xl font-headline font-black text-white uppercase tracking-tighter leading-none">
                     Redefina seu <span className="text-[#fbbf24]">Estilo</span>.
                  </h3>
-                 <p className="text-[#D3C5AC] text-sm md:text-base font-light max-w-md">
-                    Agende agora o seu próximo atendimento e garanta o padrão que você merece.
+                 <p className="text-[#D3C5AC] text-sm md:text-base font-light max-w-sm">
+                    Faça agora o seu próximo atendimento e garanta o padrão que você merece.
                  </p>
               </div>
-              <Link 
-                to={fallbackTargetSlug ? `/book/${fallbackTargetSlug}` : '#'}
-                className="bg-white/10 backdrop-blur-md border border-white/10 text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:bg-[#fbbf24] hover:text-[#402D00] transition-all flex items-center justify-center gap-3 group/btn"
-              >
-                 Reservar Agora
-                 <ChevronRight className="w-4 h-4 transition-transform group-hover/btn:translate-x-1" />
-              </Link>
            </div>
         </section>
         {/* Welcome Block */}
@@ -417,7 +410,7 @@ export function ClientPortal() {
                  Olá, <span className="text-[#fbbf24]">{user.user_metadata?.full_name?.split(' ')[0] || 'Cliente'}</span>.
               </h2>
               <p className="text-[#D3C5AC] text-xl font-light max-w-xl">
-                 Bem-vindo de volta à sua área exclusiva. O que vamos agendar hoje?
+                 Bem-vindo de volta à sua área exclusiva. O que vamos fazer hoje?
               </p>
            </div>
            {/* Direct CTA */}
