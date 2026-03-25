@@ -78,6 +78,18 @@ export function ClientPortal() {
     try {
       const data = await getClientAppointmentsForPortal(email, phone)
       setAppointments(data)
+      
+      // Auto-trigger review modal for the last unreviewed completed appointment
+      const lastUnreviewed = data.find(app => 
+        app.status === 'completed' && 
+        (!app.reviews || app.reviews.length === 0)
+      )
+      
+      if (lastUnreviewed) {
+        setTimeout(() => {
+          handleReview(lastUnreviewed)
+        }, 1200)
+      }
     } catch (err) {
       console.error('Portal load error:', err)
     } finally {
