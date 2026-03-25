@@ -1,3 +1,4 @@
+import { Scissors, Star, User, Sparkles, Pencil, Trash2, Eye, EyeOff } from 'lucide-react'
 import type { Service } from '@/types'
 import { formatCurrency, cn } from '@/utils/helpers'
 
@@ -12,118 +13,106 @@ interface ServicesTableProps {
 export function ServicesTable({ services, onEdit, onDelete, onToggleStatus, maxServices }: ServicesTableProps) {
   if (services.length === 0) {
     return (
-      <div className="p-16 text-center rounded-[2rem] bg-surface-container-low border border-outline-variant/10">
-        <p className="text-on-surface-variant font-medium">Nenhum serviço encontrado no catálogo premium.</p>
+      <div className="card-premium py-16 text-center">
+        <p className="text-text-muted font-medium">Nenhum serviço encontrado no catálogo premium.</p>
       </div>
     )
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
       {services.map((service, index) => {
         const isBestseller = service.name.toLowerCase().includes('signature') || 
                             service.name.toLowerCase().includes('combo')
         
-        // Match icons to Stitch HTML: content_cut, face, star, spa
-        const getIconName = () => {
-          if (isBestseller) return 'star'
-          if (service.name.toLowerCase().includes('barba')) return 'face'
-          if (service.name.toLowerCase().includes('massagem') || service.name.toLowerCase().includes('capilar')) return 'spa'
-          return 'content_cut'
-        }
+        const isInactive = !service.is_active
+        const isBlocked = maxServices !== undefined && maxServices !== -1 && index >= maxServices
 
         return (
           <div 
             key={service.id} 
             className={cn(
-              "group p-8 rounded-[2.5rem] transition-all duration-700 flex flex-col justify-between h-[450px] relative border overflow-hidden",
-              isBestseller 
-                ? "bg-gradient-to-br from-[#1C1B1B] to-[#FBBF24]/5 hover:to-[#FBBF24]/10 border-[#FBBF24]/20 shadow-2xl hover:shadow-[#FBBF24]/10" 
-                : "bg-[#1C1B1B] hover:bg-[#201F1F] border-transparent hover:border-[#4F4633]/20 shadow-lg hover:shadow-black/40",
-              !service.is_active && "opacity-60",
-              maxServices !== undefined && maxServices !== -1 && index >= maxServices
-                ? "blur-[4px] opacity-40 select-none pointer-events-none"
-                : ""
+              "card-premium group flex flex-col h-full transition-all duration-500",
+              isInactive && "opacity-60 grayscale",
+              isBlocked && "blur-[6px] opacity-40 select-none pointer-events-none"
             )}
           >
-            {/* Glossy Overlay effect */}
-            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.02] to-transparent pointer-events-none"></div>
-
             {/* Top: Icon and Toggle */}
-            <div className="flex justify-between items-start relative z-10">
+            <div className="flex justify-between items-start mb-8">
               <div className={cn(
-                "w-16 h-16 rounded-[1.25rem] flex items-center justify-center transition-all duration-700 group-hover:scale-110 shadow-2xl group-hover:rotate-3",
-                isBestseller ? "bg-[#FBBF24] text-[#402D00] shadow-[#FBBF24]/30" : "bg-[#353534] text-[#FBBF24]"
+                "w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-3 shadow-xl",
+                isBestseller ? "bg-primary text-primary-text shadow-primary/20" : "bg-white/5 text-primary border border-white/5"
               )}>
-                <span className="material-symbols-outlined text-4xl" style={{ fontVariationSettings: isBestseller ? "'FILL' 1" : "" }}>
-                  {getIconName()}
-                </span>
+                {isBestseller ? <Star className="w-7 h-7" /> : <Scissors className="w-7 h-7" />}
               </div>
 
-              <div className="flex flex-col items-end gap-3">
+              <div className="flex flex-col items-end gap-2">
                 <button 
                   onClick={() => onToggleStatus(service)}
-                  className="group/toggle flex flex-col items-end gap-1"
+                  title={service.is_active ? 'Desativar' : 'Ativar'}
+                  className="flex flex-col items-end gap-1.5 group/toggle"
                 >
                   <div className={cn(
-                    "relative inline-flex h-7 w-12 items-center rounded-full transition-all duration-500 shadow-inner",
-                    service.is_active ? "bg-[#FBBF24]" : "bg-[#353534]"
+                    "relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300",
+                    service.is_active ? "bg-primary" : "bg-white/10"
                   )}>
                     <span className={cn(
-                      "inline-block h-5 w-5 transform rounded-full bg-[#1c1b1b] transition-transform duration-500 shadow-xl",
+                      "inline-block h-4 w-4 transform rounded-full bg-bg-base transition-transform duration-300",
                       service.is_active ? "translate-x-6" : "translate-x-1"
                     )} />
                   </div>
                   <span className={cn(
-                    "text-[9px] uppercase font-black tracking-[0.2em] transition-colors",
-                    service.is_active ? "text-[#FBBF24]" : "text-zinc-600"
+                    "text-[8px] uppercase font-black tracking-widest transition-colors",
+                    service.is_active ? "text-primary" : "text-text-muted/40"
                   )}>
-                    {service.is_active ? 'DESATIVAR' : 'ATIVAR'}
+                    {service.is_active ? 'ON' : 'OFF'}
                   </span>
                 </button>
               </div>
             </div>
 
-            {/* Middle: Name and Description */}
-            <div className="mt-8 relative z-10 flex-1">
+            {/* Content Area */}
+            <div className="flex-1">
               {isBestseller && (
-                <div className="flex items-center gap-2 mb-4">
-                   <div className="h-1 w-8 bg-[#FBBF24] rounded-full"></div>
-                   <span className="text-[#FBBF24] text-[10px] font-black uppercase tracking-[0.3em]">Bestseller</span>
+                <div className="flex items-center gap-2 mb-3">
+                   <div className="h-0.5 w-6 bg-primary rounded-full"></div>
+                   <span className="text-primary text-[9px] font-black uppercase tracking-[0.3em]">Bestseller</span>
                 </div>
               )}
               <h3 className={cn(
-                "font-headline text-3xl font-black mb-4 transition-colors tracking-tighter uppercase",
-                isBestseller ? "text-[#FBBF24]" : "text-[#E5E2E1] group-hover:text-[#FBBF24]"
+                "font-headline text-2xl font-bold mb-3 transition-colors uppercase tracking-tight",
+                isBestseller ? "text-primary" : "text-white group-hover:text-primary"
               )}>
                 {service.name}
               </h3>
-              <p className="text-[#D3C5AC]/50 text-sm line-clamp-2 leading-relaxed font-medium">
+              <p className="text-text-muted text-sm line-clamp-3 leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity">
                 {service.description || 'Experiência exclusiva com produtos premium e consultoria personalizada.'}
               </p>
             </div>
 
-            {/* Price and Edit Button Area */}
-            <div className={cn(
-              "mt-auto pt-8 flex items-end justify-between border-t transition-colors",
-              isBestseller ? "border-[#FBBF24]/10" : "border-[#4F4633]/10"
-            )}>
+            {/* Price and Actions */}
+            <div className="mt-8 pt-8 border-t border-white/5 flex items-end justify-between">
                <div className="flex flex-col">
-                <span className="text-[10px] uppercase font-bold tracking-widest text-zinc-600 mb-1">Preço Final</span>
-                <span className={cn(
-                  "font-headline font-black text-[#FBBF24] leading-none",
-                  isBestseller ? "text-4xl" : "text-3xl"
-                )}>
+                <span className="text-[9px] uppercase font-black tracking-widest text-text-muted/30 mb-1">Investimento</span>
+                <span className="font-headline font-bold text-primary text-3xl">
                   {formatCurrency(service.price).replace(',00', '')}
                 </span>
               </div>
 
-              <div className="flex gap-4">
+              <div className="flex gap-2">
                 <button 
                   onClick={() => onEdit(service)}
-                  className="bg-[#0e0e0e] text-[#fbbf24] px-6 py-3 rounded-2xl font-black text-[10px] tracking-widest uppercase border border-white/5 hover:border-[#fbbf24]/30 hover:bg-[#fbbf24]/5 transition-all active:scale-95 shadow-lg shadow-black/40"
+                  className="w-10 h-10 rounded-lg bg-white/5 border border-white/5 flex items-center justify-center text-white hover:bg-primary hover:text-primary-text hover:border-primary transition-all active:scale-90"
+                  title="Editar"
                 >
-                  EDITAR
+                  <Pencil className="w-4 h-4" />
+                </button>
+                <button 
+                  onClick={() => onDelete(service.id)}
+                  className="w-10 h-10 rounded-lg bg-white/5 border border-white/5 flex items-center justify-center text-red-500 hover:bg-red-500 hover:text-white hover:border-red-500 transition-all active:scale-90"
+                  title="Excluir"
+                >
+                  <Trash2 className="w-4 h-4" />
                 </button>
               </div>
             </div>

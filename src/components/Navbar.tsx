@@ -1,7 +1,8 @@
-import { Bell, Menu } from 'lucide-react'
+import { Bell, Menu, User } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { getInitials } from '@/utils/helpers'
 import { useLocation } from 'react-router-dom'
+import { cn } from '@/utils/helpers'
 
 const routeTitles: Record<string, string> = {
   '/dashboard': 'DASHBOARD',
@@ -14,6 +15,7 @@ const routeTitles: Record<string, string> = {
   '/billing': 'FATURAMENTO',
   '/settings': 'CONFIGURAÇÕES',
   '/public-page': 'PÁGINA PÚBLICA',
+  '/subscription': 'ASSINATURA',
 }
 
 interface NavbarProps {
@@ -28,35 +30,38 @@ export function Navbar({ onMenuClick }: NavbarProps) {
   const pageTitle = routeTitles[location.pathname] || 'Dashboard'
 
   return (
-    <header style={{ backgroundColor: '#121212', borderBottom: '1px solid #262626' }} className="fixed top-0 right-0 z-30 h-[64px] backdrop-blur-lg left-0 md:left-[240px] transition-all">
-      <div className="flex items-center justify-between h-full px-[24px]">
+    <header className="topbar-fixed transition-layout md:left-[200px] lg:left-[240px] left-0">
+      <div className="flex items-center justify-between h-full w-full">
         
         {/* Left side: Mobile Hamburger + Title */}
         <div className="flex items-center gap-4 flex-1">
           <button 
             onClick={onMenuClick}
-            className="md:hidden p-2 -ml-2 text-dark-400 hover:text-white rounded-lg transition-colors"
+            className="md:hidden p-2 -ml-2 text-text-muted hover:text-white rounded-lg transition-colors"
           >
-            <Menu className="w-5 h-5" />
+            <Menu className="w-6 h-6" />
           </button>
           
-          <h2 className="!mb-0 whitespace-nowrap" style={{ fontFamily: "'Bebas Neue', 'Inter', sans-serif", textTransform: 'uppercase', letterSpacing: '0.04em', fontSize: '22px', fontWeight: 400, color: '#f2f2f2' }}>{pageTitle}</h2>
+          <h2 className="text-xl md:text-2xl font-headline font-bold uppercase tracking-wider text-white !mb-0 hidden sm:block">
+            {pageTitle}
+          </h2>
         </div>
 
         {/* Right side: Actions & User Info */}
-        <div className="flex items-center gap-[16px] shrink-0">
-          <button className="relative p-2 rounded-lg text-dark-400 hover:bg-dark-800 hover:text-white transition-all">
+        <div className="flex items-center gap-4 md:gap-6 shrink-0">
+          <button className="relative p-2 rounded-lg text-text-muted hover:bg-white/5 hover:text-white transition-all">
             <Bell className="w-5 h-5" />
-            <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#e7b008' }} />
+            <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
           </button>
 
-          <div className="flex items-center gap-[8px] pl-[16px] border-l border-dark-800">
-            <div className="hidden sm:block text-right mr-2">
-              <p className="text-small font-medium text-white mb-0.5">{userName}</p>
-              <p className="text-[10px] text-dark-400 leading-none">Admin</p>
+          <div className="flex items-center gap-3 pl-4 md:pl-6 border-l border-border-subtle h-8">
+            <div className="hidden sm:block text-right">
+              <p className="text-xs font-bold text-white leading-none mb-1">{userName}</p>
+              <p className="text-[10px] text-primary uppercase tracking-widest font-black leading-none">Admin</p>
             </div>
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ backgroundColor: '#1a1a1a', border: '1px solid #333333' }}>
-              <span className="text-xs font-semibold" style={{ color: '#e7b008' }}>{getInitials(userName)}</span>
+            
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center bg-bg-surface border border-border-subtle group cursor-pointer hover:border-primary/50 transition-colors">
+              <span className="text-xs font-bold text-primary">{getInitials(userName)}</span>
             </div>
           </div>
         </div>

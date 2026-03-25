@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "tertiary-container": "#04dcff",
+              "inverse-surface": "#e5e2e1",
+              "tertiary-fixed": "#aaedff",
+              "on-surface": "#e5e2e1",
+              "on-error-container": "#ffdad6",
+              "secondary-container": "#59461d",
+              "outline-variant": "#504532",
+              "outline": "#9c8f78",
+              "on-secondary": "#3e2e06",
+              "on-primary-fixed": "#261a00",
+              "tertiary": "#b4efff",
+              "surface-variant": "#353534",
+              "on-surface-variant": "#d4c5ab",
+              "secondary": "#dec38e",
+              "on-tertiary-fixed": "#001f26",
+              "on-secondary-fixed": "#261a00",
+              "secondary-fixed": "#fcdfa8",
+              "on-primary-fixed-variant": "#5c4300",
+              "inverse-on-surface": "#313030",
+              "surface-container-high": "#2a2a2a",
+              "surface-tint": "#fbbc00",
+              "surface": "#131313",
+              "background": "#131313",
+              "on-tertiary": "#003640",
+              "error": "#ffb4ab",
+              "surface-container-low": "#1c1b1b",
+              "primary": "#ffe2ab",
+              "primary-fixed-dim": "#fbbc00",
+              "on-primary-container": "#6d5000",
+              "on-error": "#690005",
+              "on-secondary-fixed-variant": "#57441b",
+              "surface-container-highest": "#353534",
+              "surface-dim": "#131313",
+              "surface-bright": "#393939",
+              "on-tertiary-fixed-variant": "#004e5c",
+              "on-secondary-container": "#d0b582",
+              "surface-container-lowest": "#0e0e0e",
+              "inverse-primary": "#795900",
+              "on-tertiary-container": "#005d6d",
+              "tertiary-fixed-dim": "#00d9fc",
+              "surface-container": "#201f1f",
+              "on-background": "#e5e2e1",
+              "on-primary": "#402d00",
+              "primary-container": "#ffbf00",
+              "primary-fixed": "#ffdfa0",
+              "error-container": "#93000a",
+              "secondary-fixed-dim": "#dec38e"
+            },
+            fontFamily: {
+              "headline": ["Noto Serif"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      .glass-card {
+        background: rgba(53, 53, 52, 0.6);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .gold-gradient {
+        background: linear-gradient(135deg, #ffe2ab 0%, #ffbf00 100%);
+      }
+      .ambient-glow {
+        box-shadow: 0 0 60px rgba(255, 191, 0, 0.08);
+      }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary-fixed overflow-x-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full flex justify-between items-center px-6 h-16 bg-[#131313]/60 backdrop-blur-xl z-50">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-[#ffe2ab]" data-icon="menu">menu</span>
+<h1 class="text-2xl font-bold italic tracking-tighter text-[#ffe2ab] font-headline">agendai</h1>
+</div>
+<div class="hidden md:flex gap-8 items-center text-sm font-medium tracking-widest uppercase">
+<a class="text-[#ffe2ab]/70 hover:text-[#fff] transition-colors duration-300" href="#">Suporte</a>
+<a class="text-[#ffe2ab]/70 hover:text-[#fff] transition-colors duration-300" href="#">Documentação</a>
+</div>
+</header>
+<main class="relative min-h-screen w-full flex items-center justify-center py-24 px-4 overflow-hidden">
+<!-- Background Immersive Image -->
+<div class="absolute inset-0 z-0">
+<img alt="Atmospheric barbershop interior" class="w-full h-full object-cover opacity-20 grayscale brightness-50" data-alt="cinematic low-key shot of a luxury vintage barbershop with leather chairs and warm amber highlights on polished wood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiRFxAbwLvpr2s3d21BgMleF1mr7uUlUAZb3LtP6MRPfGRBl-fXR8tLiP3nMAgP-TkUfeTgtpwXyyaqS60U28LVOsiFcndH6BziMRWrdQSEzpOofcDNFz2uArsqFHvq08cwYTnq6pgg-yro5u1XGoxOn90yiqZSy6TbGFBV2HXulvO-lGSLuWnyvt6AKREDpRc3KVjgl_ELqrJFrbOWjaZjeaCLP6qglpJbUeXVohW6w_oTX9DSJiLUtZi6ReFh9btOsJzblRdnUY"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-surface/80"></div>
+</div>
+<!-- Central Card (Glassmorphism) -->
+<section class="relative z-10 w-full max-w-2xl glass-card p-8 md:p-12 rounded-none ambient-glow">
+<div class="space-y-2 mb-10">
+<h2 class="text-4xl md:text-5xl font-headline font-bold italic text-primary leading-tight tracking-tight">
+                    Seu Ritual Começa Aqui
+                </h2>
+<p class="text-on-surface-variant text-lg font-light max-w-md">
+                    Configure os detalhes fundamentais para começar a agendar seus clientes com precisão.
+                </p>
+</div>
+<form class="grid grid-cols-1 md:grid-cols-6 gap-6">
+<!-- Nome da Barbearia -->
+<div class="md:col-span-6 flex flex-col gap-2">
+<label class="text-[0.65rem] uppercase tracking-[0.2em] font-bold text-on-surface-variant/70">Nome da Barbearia</label>
+<input class="bg-surface-container-lowest border border-outline-variant/20 focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all outline-none px-4 py-4 text-on-surface placeholder:text-on-surface-variant/30 rounded-none" placeholder="Ex: O Legado de Navalha" type="text"/>
+</div>
+<!-- Telefone de Contato -->
+<div class="md:col-span-6 flex flex-col gap-2">
+<label class="text-[0.65rem] uppercase tracking-[0.2em] font-bold text-on-surface-variant/70">Telefone de Contato</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-primary/60 text-xl" data-icon="call">call</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant/20 focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all outline-none pl-12 pr-4 py-4 text-on-surface placeholder:text-on-surface-variant/30 rounded-none" placeholder="(11) 99999-9999" type="tel"/>
+</div>
+</div>
+<!-- Endereço Grid -->
+<div class="md:col-span-4 flex flex-col gap-2">
+<label class="text-[0.65rem] uppercase tracking-[0.2em] font-bold text-on-surface-variant/70">Rua</label>
+<input class="bg-surface-container-lowest border border-outline-variant/20 focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all outline-none px-4 py-4 text-on-surface placeholder:text-on-surface-variant/30 rounded-none" placeholder="Logradouro" type="text"/>
+</div>
+<div class="md:col-span-2 flex flex-col gap-2">
+<label class="text-[0.65rem] uppercase tracking-[0.2em] font-bold text-on-surface-variant/70">Número</label>
+<input class="bg-surface-container-lowest border border-outline-variant/20 focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all outline-none px-4 py-4 text-on-surface placeholder:text-on-surface-variant/30 rounded-none" placeholder="123" type="text"/>
+</div>
+<div class="md:col-span-3 flex flex-col gap-2">
+<label class="text-[0.65rem] uppercase tracking-[0.2em] font-bold text-on-surface-variant/70">Bairro</label>
+<input class="bg-surface-container-lowest border border-outline-variant/20 focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all outline-none px-4 py-4 text-on-surface placeholder:text-on-surface-variant/30 rounded-none" placeholder="Centro" type="text"/>
+</div>
+<div class="md:col-span-3 flex flex-col gap-2">
+<label class="text-[0.65rem] uppercase tracking-[0.2em] font-bold text-on-surface-variant/70">CEP</label>
+<input class="bg-surface-container-lowest border border-outline-variant/20 focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all outline-none px-4 py-4 text-on-surface placeholder:text-on-surface-variant/30 rounded-none" placeholder="00000-000" type="text"/>
+</div>
+<div class="md:col-span-4 flex flex-col gap-2">
+<label class="text-[0.65rem] uppercase tracking-[0.2em] font-bold text-on-surface-variant/70">Cidade</label>
+<input class="bg-surface-container-lowest border border-outline-variant/20 focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all outline-none px-4 py-4 text-on-surface placeholder:text-on-surface-variant/30 rounded-none" placeholder="São Paulo" type="text"/>
+</div>
+<div class="md:col-span-2 flex flex-col gap-2">
+<label class="text-[0.65rem] uppercase tracking-[0.2em] font-bold text-on-surface-variant/70">Estado</label>
+<select class="bg-surface-container-lowest border border-outline-variant/20 focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all outline-none px-4 py-4 text-on-surface appearance-none rounded-none">
+<option value="SP">SP</option>
+<option value="RJ">RJ</option>
+<option value="MG">MG</option>
+<option value="RS">RS</option>
+<option value="PR">PR</option>
+</select>
+</div>
+<!-- CTA -->
+<div class="md:col-span-6 pt-6">
+<button class="gold-gradient w-full py-5 text-on-primary-fixed font-bold uppercase tracking-[0.15em] text-sm hover:scale-[0.98] active:scale-95 transition-transform duration-200 rounded-[4px] shadow-lg shadow-primary-container/20" type="button">
+                        Finalizar Configuração
+                    </button>
+</div>
+</form>
+<!-- Precision Indicator Footer -->
+<div class="mt-8 flex items-center justify-center gap-3">
+<div class="h-1 w-12 bg-primary"></div>
+<span class="font-headline italic text-primary text-sm">Passo 01 de 01</span>
+<div class="h-1 w-4 bg-outline-variant/30"></div>
+</div>
+</section>
+</main>
+<!-- Decoration element: Overlapping Type -->
+<div class="fixed bottom-[-10%] left-[-5%] pointer-events-none select-none z-0 hidden lg:block">
+<span class="text-[20rem] font-headline font-bold italic text-white/[0.02] leading-none">ATELIER</span>
+</div>
+<!-- Mobile Navigation Suppressed for Onboarding Flow as per instructions -->
+</body></html>

@@ -44,7 +44,7 @@ interface StatsCardsProps {
 
 export function StatsCards({ metrics }: StatsCardsProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[20px]">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
       {cards.map((card) => {
         const Icon = card.icon
         const value = metrics[card.key] as number
@@ -52,17 +52,22 @@ export function StatsCards({ metrics }: StatsCardsProps) {
         return (
           <div 
             key={card.key} 
-            className="p-[24px] rounded-2xl bg-surface-container-low transition-all hover:bg-surface-container-highest group"
+            className="card-premium hover:bg-white/5 group border-white/5 active:scale-[0.98] cursor-default"
           >
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-primary-container/10 group-hover:bg-primary-container/20 transition-colors">
-                <Icon className="w-5 h-5 shrink-0 text-primary-container" />
+            <div className="flex items-center justify-between mb-6">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-primary/10 group-hover:bg-primary/20 transition-all duration-300">
+                <Icon className="w-6 h-6 shrink-0 text-primary group-hover:scale-110 transition-transform" />
+              </div>
+              <div className="p-1 rounded bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity">
+                <TrendingUp className="w-4 h-4 text-primary/50" />
               </div>
             </div>
-            <p className="text-3xl font-bold text-white mb-1 font-headline tracking-tight">
+            
+            <p className="text-3xl md:text-4xl font-headline font-bold text-white mb-2 tracking-tight group-hover:text-primary transition-colors">
               {card.format(value)}
             </p>
-            <p className="text-sm font-medium text-on-surface-variant/80 uppercase tracking-wider">
+            
+            <p className="text-[10px] md:text-xs font-black text-text-muted/60 uppercase tracking-[0.2em] leading-none">
               {card.title}
             </p>
           </div>
