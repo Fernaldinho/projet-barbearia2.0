@@ -222,9 +222,18 @@ export async function getAvailableSlots(
     occupiedRanges.push({ start: blocked.start_time.slice(0, 5), end: blocked.end_time.slice(0, 5) })
   }
 
-  const availableSlots = allSlots.filter((slot) =>
-    !occupiedRanges.some((o) => rangesOverlap(slot.start_time, slot.end_time, o.start, o.end))
-  )
+  const availableSlots = allSlots.filter((slot) => {
+    // Check if slot is in the past (if date is today)
+    const isToday = new Date().toLocaleDateString('en-CA') === date // YYYY-MM-DD
+    if (isToday) {
+      const now = new Date()
+      const currentMinutes = now.getHours() * 60 + now.getMinutes()
+      if (timeToMinutes(slot.start_time) <= currentMinutes) return false
+    }
+
+    // Check overlaps with appointments or blocked times
+    return !occupiedRanges.some((o) => rangesOverlap(slot.start_time, slot.end_time, o.start, o.end))
+  })
 
   return {
     date, weekday, is_open: true, slots: availableSlots,
@@ -251,6 +260,14 @@ export async function isSlotAvailable(
 
   const bhStart = businessHours.start_time.slice(0, 5)
   const bhEnd = businessHours.end_time.slice(0, 5)
+
+  // Prevent past slots if booking for today
+  const isToday = new Date().toLocaleDateString('en-CA') === date
+  if (isToday) {
+    const now = new Date()
+    const currentMinutes = now.getHours() * 60 + now.getMinutes()
+    if (timeToMinutes(startTime) <= currentMinutes) return false
+  }
 
   if (timeToMinutes(startTime) < timeToMinutes(bhStart)) return false
   if (timeToMinutes(endTime) > timeToMinutes(bhEnd)) return false
