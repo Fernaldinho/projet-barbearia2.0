@@ -62,7 +62,12 @@ export function BookingPage() {
     if (user?.user_metadata?.full_name && !clientName) {
       setClientName(user.user_metadata.full_name)
     }
-  }, [user])
+    
+    // Auto-skip intro if already logged in
+    if (user && step === 'intro') {
+      setStep('service')
+    }
+  }, [user, step])
 
   const loadCompany = async () => {
     try {
