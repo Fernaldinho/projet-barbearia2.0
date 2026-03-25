@@ -63,6 +63,7 @@ export function ClientPortal() {
   const [rating, setRating] = useState(5)
   const [comment, setComment] = useState('')
   const [submittingReview, setSubmittingReview] = useState(false)
+  const [showReviewThanks, setShowReviewThanks] = useState(false)
 
   useEffect(() => {
     if (user) {
@@ -135,6 +136,7 @@ export function ClientPortal() {
     setSelectedApp(app)
     setRating(5)
     setComment('')
+    setShowReviewThanks(false)
     setShowReviewModal(true)
   }
 
@@ -155,8 +157,7 @@ export function ClientPortal() {
 
       if (error) throw error
 
-      alert('Avaliação enviada com sucesso! Obrigado pelo feedback.')
-      setShowReviewModal(false)
+      setShowReviewThanks(true)
       // Refresh list
       if (user?.email) loadAppointments(user.email, user.user_metadata?.phone)
     } catch (err: any) {
@@ -598,10 +599,15 @@ export function ClientPortal() {
           </div>
         </div>
       )}
-      {/* Review Modal */}
-      {showReviewModal && selectedApp && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl animate-fade-in">
-          <div className="bg-[#1C1B1B] border border-white/5 rounded-[3rem] p-10 w-full max-w-lg shadow-2xl relative overflow-hidden">
+       {/* Review Modal */}
+       {showReviewModal && selectedApp && (
+         <div 
+           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-xl animate-fade-in"
+           onClick={(e) => {
+             if (e.target === e.currentTarget) setShowReviewModal(false)
+           }}
+         >
+           <div className="bg-[#1C1B1B] border border-white/5 rounded-[3rem] p-10 w-full max-w-lg shadow-2xl relative overflow-hidden animate-scale-up">
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#fbbf24]/5 blur-3xl -mr-32 -mt-32"></div>
             
             <button 
@@ -628,14 +634,15 @@ export function ClientPortal() {
                        <User className="w-10 h-10" />
                     )}
                  </div>
-                 <div className="space-y-1">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-[#fbbf24]">Profissional</p>
-                    <h4 className="text-2xl font-headline font-black text-white uppercase">{selectedApp.staff?.name || 'Seu Barbeiro'}</h4>
-                    <p className="text-xs font-bold text-zinc-500 uppercase">{selectedApp.service?.name}</p>
-                 </div>
+                  <div className="space-y-1">
+                     <p className="text-[10px] font-black uppercase tracking-widest text-[#fbbf24]">Profissional</p>
+                     <h4 className="text-2xl font-headline font-black text-white uppercase">{selectedApp.staff?.name || 'Seu Barbeiro'}</h4>
+                     <p className="text-xs font-bold text-zinc-500 uppercase">{selectedApp.service?.name}</p>
+                  </div>
               </div>
 
-              <form onSubmit={submitReview} className="space-y-8">
+              {!showReviewThanks && (
+               <form onSubmit={submitReview} className="space-y-8">
                 {/* Stars */}
                 <div className="space-y-4 text-center">
                   <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Como foi sua experiência?</p>
@@ -671,20 +678,36 @@ export function ClientPortal() {
                     className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-[2rem] px-8 py-6 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none text-white resize-none"
                   />
                 </div>
-
+                
                 <button 
                   type="submit" 
                   disabled={submittingReview}
                   className="w-full bg-[#fbbf24] text-[#402D00] py-6 rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-[#fbbf24]/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                 >
-                  {submittingReview ? <div className="w-5 h-5 border-2 border-[#402D00]/20 border-t-[#402D00] rounded-full animate-spin" /> : (
-                    <>
-                      Enviar Minha Avaliação
-                      <ChevronRight className="w-4 h-4" />
-                    </>
-                  )}
+                  {submittingReview ? <div className="w-5 h-5 border-2 border-[#402D00]/20 border-t-[#402D00] rounded-full animate-spin" /> : 'Enviar Avaliação'}
                 </button>
               </form>
+              )}
+
+              {showReviewThanks && (
+                <div className="text-center py-12 space-y-8 animate-fade-in">
+                  <div className="w-24 h-24 rounded-full bg-[#fbbf24]/10 border border-[#fbbf24]/20 flex items-center justify-center mx-auto animate-bounce-short">
+                    <Sparkles className="w-10 h-10 text-[#fbbf24]" />
+                  </div>
+                  <div className="space-y-4">
+                    <h4 className="text-4xl font-headline font-black text-white uppercase tracking-tighter">Obrigado!</h4>
+                    <p className="text-[#D3C5AC] text-base font-light">
+                      Sua avaliação foi registrada com sucesso.<br/>Isso nos ajuda a manter o padrão premium.
+                    </p>
+                  </div>
+                  <button 
+                    onClick={() => setShowReviewModal(false)}
+                    className="w-full bg-[#fbbf24] text-[#402D00] py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] hover:scale-105 transition-all shadow-xl shadow-[#fbbf24]/20"
+                  >
+                    Fechar
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
