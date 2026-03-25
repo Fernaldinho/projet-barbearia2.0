@@ -8,6 +8,21 @@ import { supabase } from '@/lib/supabase'
 export function PublicPage() {
   const { company } = useCompany()
   const [loading, setLoading] = useState(false)
+  const [previewMode, setPreviewMode] = useState<'mobile' | 'desktop'>('mobile')
+  const [previewServices, setPreviewServices] = useState<any[]>([])
+  const [previewStaff, setPreviewStaff] = useState<any[]>([])
+
+  // Load some real data for the preview
+  useState(() => {
+    if (company?.id) {
+       supabase.from('services').select('*').eq('company_id', company.id).limit(2).then(({data}) => {
+         if (data) setPreviewServices(data)
+       })
+       supabase.from('staff').select('*').eq('company_id', company.id).limit(3).then(({data}) => {
+         if (data) setPreviewStaff(data)
+       })
+    }
+  })
   
   const generatedSlug = company 
     ? company.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
@@ -273,11 +288,20 @@ export function PublicPage() {
 
           {/* Preview Column */}
           <div className="lg:col-span-5 sticky top-32">
-            <div className="bg-[#0e0e0e] border border-white/10 rounded-[3rem] p-6 shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden scale-[0.95] origin-top">
-              {/* Mobile Shell Mockup */}
-              <div className="bg-[#131313] h-[750px] rounded-[2.5rem] overflow-hidden flex flex-col relative border border-white/5">
+            <div className={cn(
+              "bg-[#0e0e0e] border border-white/10 rounded-[3rem] p-6 shadow-[0_0_100px_rgba(0,0,0,0.8)] overflow-hidden transition-all duration-500 origin-top mx-auto",
+              previewMode === 'mobile' ? "w-[400px] scale-[0.9]" : "w-full max-w-2xl scale-[0.8]"
+            )}>
+              {/* Device Shell Mockup */}
+              <div className={cn(
+                "bg-[#131313] rounded-[2.5rem] overflow-hidden flex flex-col relative border border-white/5 transition-all duration-500",
+                previewMode === 'mobile' ? "h-[700px]" : "h-[500px]"
+              )}>
                 {/* Header Mockup */}
-                <div className="relative h-60 shrink-0">
+                <div className={cn(
+                  "relative shrink-0 transition-all duration-500",
+                  previewMode === 'mobile' ? "h-60" : "h-48"
+                )}>
                   <img 
                     className="w-full h-full object-cover grayscale-50 opacity-60" 
                     src={bannerToDisplay} 
@@ -296,32 +320,65 @@ export function PublicPage() {
                   <section>
                     <h4 className="text-[10px] uppercase tracking-[0.3em] text-[#fbbf24] font-black mb-6">NOSSOS SERVIÇOS</h4>
                     <div className="space-y-4">
-                      <div className="text-center py-10 bg-[#1C1B1B] rounded-3xl border border-dashed border-white/5">
-                          <p className="text-[10px] text-zinc-600 font-black uppercase tracking-widest">Seus serviços aparecerão aqui</p>
-                      </div>
+                      {previewServices.length > 0 ? (
+                        previewServices.map(s => (
+                          <div key={s.id} className="flex justify-between items-center p-4 bg-[#1C1B1B] rounded-2xl border border-white/5">
+                            <div>
+                               <p className="text-xs font-black text-white uppercase">{s.name}</p>
+                               <p className="text-[10px] text-zinc-600 uppercase">{s.duration} min</p>
+                            </div>
+                            <span className="text-xs font-black text-[#fbbf24]">R$ {s.price}</span>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-center py-10 bg-[#1C1B1B] rounded-3xl border border-dashed border-white/5">
+                           <p className="text-[10px] text-zinc-600 font-black uppercase tracking-widest">Seus serviços aparecerão aqui</p>
+                        </div>
+                      )}
                     </div>
                   </section>
                   <section>
                     <h4 className="text-[10px] uppercase tracking-[0.3em] text-[#fbbf24] font-black mb-6">PROFISSIONAIS</h4>
-                    <div className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide">
-                       <div className="text-center w-full py-4 border border-dashed border-white/5 rounded-2xl">
-                           <p className="text-[10px] text-zinc-600 font-black uppercase tracking-widest">Sua equipe aqui</p>
-                       </div>
+                    <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                       {previewStaff.length > 0 ? (
+                         previewStaff.map(st => (
+                           <div key={st.id} className="shrink-0 text-center space-y-2">
+                              <div className="w-12 h-12 rounded-full bg-zinc-800 border border-[#fbbf24]/20 overflow-hidden">
+                                 {st.avatar_url && <img src={st.avatar_url} className="w-full h-full object-cover" />}
+                              </div>
+                              <p className="text-[8px] font-black text-white uppercase tracking-tighter">{st.name.split(' ')[0]}</p>
+                           </div>
+                         ))
+                       ) : (
+                         <div className="text-center w-full py-4 border border-dashed border-white/5 rounded-2xl">
+                            <p className="text-[10px] text-zinc-600 font-black uppercase tracking-widest">Sua equipe aqui</p>
+                         </div>
+                       )}
                     </div>
                   </section>
                 </div>
                 {/* Floating Brand Badge */}
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/60 backdrop-blur-3xl px-6 py-3 rounded-full border border-white/10 shadow-2xl">
-                  <span className="text-[10px] tracking-tight font-bold text-zinc-500">Powered by</span>
-                  <span className="text-xs font-headline font-black text-[#fbbf24] uppercase tracking-tighter">AgendaAI</span>
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/60 backdrop-blur-3xl px-6 py-2 rounded-full border border-white/10 shadow-2xl">
+                  <span className="text-[8px] tracking-tight font-bold text-zinc-500">Powered by</span>
+                  <span className="text-[10px] font-headline font-black text-[#fbbf24] uppercase tracking-tighter">AgendaAI</span>
                 </div>
               </div>
-              {/* Preview Caption */}
-              <div className="mt-10 px-4 flex justify-between items-center bg-[#131313] p-6 rounded-[2rem] border border-white/5">
+              {/* Preview Caption / Switcher */}
+              <div className="mt-6 px-4 flex justify-between items-center bg-[#131313] p-4 rounded-[1.5rem] border border-white/5">
                 <span className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">VISUALIZAÇÃO EM TEMPO REAL</span>
-                <div className="flex gap-6">
-                  <Smartphone className="w-5 h-5 text-[#fbbf24]" />
-                  <Laptop className="w-5 h-5 text-zinc-700" />
+                <div className="flex gap-4">
+                  <button 
+                    onClick={() => setPreviewMode('mobile')}
+                    className={cn("p-2 rounded-xl transition-all", previewMode === 'mobile' ? "bg-[#fbbf24]/20 text-[#fbbf24]" : "text-zinc-700 hover:text-zinc-500")}
+                  >
+                    <Smartphone className="w-5 h-5" />
+                  </button>
+                  <button 
+                    onClick={() => setPreviewMode('desktop')}
+                    className={cn("p-2 rounded-xl transition-all", previewMode === 'desktop' ? "bg-[#fbbf24]/20 text-[#fbbf24]" : "text-zinc-700 hover:text-zinc-500")}
+                  >
+                    <Laptop className="w-5 h-5" />
+                  </button>
                 </div>
               </div>
             </div>
