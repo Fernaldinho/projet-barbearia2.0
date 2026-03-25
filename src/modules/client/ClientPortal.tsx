@@ -18,7 +18,8 @@ import {
   Sparkles,
   Settings,
   X,
-  Phone
+  Phone,
+  Star
 } from 'lucide-react'
 import { getClientAppointmentsForPortal } from '../clients/clients.api'
 import { supabase } from '@/lib/supabase'
@@ -53,13 +54,22 @@ export function ClientPortal() {
   const [showSettings, setShowSettings] = useState(false)
   const [profileName, setProfileName] = useState('')
   const [profilePhone, setProfilePhone] = useState('')
+  const [profileBirthDate, setProfileBirthDate] = useState('')
   const [profileSaving, setProfileSaving] = useState(false)
+
+  // Review State
+  const [showReviewModal, setShowReviewModal] = useState(false)
+  const [selectedApp, setSelectedApp] = useState<any>(null)
+  const [rating, setRating] = useState(5)
+  const [comment, setComment] = useState('')
+  const [submittingReview, setSubmittingReview] = useState(false)
 
   useEffect(() => {
     if (user) {
       if (user.email) loadAppointments(user.email, user.user_metadata?.phone)
       setProfileName(user.user_metadata?.full_name || '')
       setProfilePhone(user.user_metadata?.phone || '')
+      setProfileBirthDate(user.user_metadata?.birth_date || '')
     }
   }, [user])
 
@@ -80,7 +90,11 @@ export function ClientPortal() {
     setProfileSaving(true)
     try {
       const { error } = await supabase.auth.updateUser({
-        data: { full_name: profileName, phone: profilePhone }
+        data: { 
+          full_name: profileName, 
+          phone: profilePhone,
+          birth_date: profileBirthDate
+        }
       })
       if (error) throw error
       alert('Perfil atualizado com sucesso! Estes dados serão preenchidos automaticamente nos próximos agendamentos.')
@@ -89,6 +103,41 @@ export function ClientPortal() {
       alert(err.message || 'Erro ao atualizar perfil')
     } finally {
       setProfileSaving(false)
+    }
+  }
+
+  const handleReview = (app: any) => {
+    setSelectedApp(app)
+    setRating(5)
+    setComment('')
+    setShowReviewModal(true)
+  }
+
+  const submitReview = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!selectedApp) return
+    setSubmittingReview(true)
+
+    try {
+      const { error } = await supabase.from('reviews').insert({
+        company_id: selectedApp.company_id,
+        appointment_id: selectedApp.id,
+        client_id: selectedApp.client_id,
+        staff_id: selectedApp.staff_id,
+        rating: rating,
+        comment: comment
+      })
+
+      if (error) throw error
+
+      alert('Avaliação enviada com sucesso! Obrigado pelo feedback.')
+      setShowReviewModal(false)
+      // Refresh list
+      if (user?.email) loadAppointments(user.email, user.user_metadata?.phone)
+    } catch (err: any) {
+      alert(err.message || 'Erro ao enviar avaliação')
+    } finally {
+      setSubmittingReview(false)
     }
   }
 
@@ -347,13 +396,6 @@ export function ClientPortal() {
                  </div>
               </div>
 
-              {/* Tips / Promo Box */}
-              <div className="bg-gradient-to-br from-[#fbbf24] to-[#402D00] rounded-[2.5rem] p-8 text-[#402D00] shadow-2xl group cursor-pointer overflow-hidden relative">
-                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/20 blur-3xl -mr-16 -mt-16 group-hover:scale-150 transition-all duration-700"></div>
-                 <Sparkles className="w-10 h-10 mb-6 font-bold" />
-                 <h4 className="text-2xl font-headline font-black uppercase tracking-tight mb-2">Clube VIP</h4>
-                 <p className="text-sm font-bold opacity-70 leading-relaxed uppercase tracking-wider">Acumule 10 cortes e ganhe uma barboterapia completa.</p>
-              </div>
            </div>
 
            {/* Appointments List column */}
@@ -399,13 +441,32 @@ export function ClientPortal() {
                              </div>
                           </div>
                           
-                          <div className={cn(
-                             "px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.2em] border",
-                             app.status === 'scheduled' || app.status === 'confirmed' 
-                               ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" 
-                               : "bg-zinc-800 text-zinc-500 border-white/5"
-                          )}>
-                             {app.status === 'scheduled' ? 'Agendado' : app.status === 'confirmed' ? 'Confirmado' : 'Finalizado'}
+                          <div className="flex flex-col items-end gap-3">
+                             <div className={cn(
+                                "px-4 py-2 rounded-full text-[9px] font-black uppercase tracking-[0.2em] border",
+                                app.status === 'scheduled' || app.status === 'confirmed' 
+                                  ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" 
+                                  : "bg-zinc-800 text-zinc-500 border-white/5"
+                             )}>
+                                {app.status === 'scheduled' ? 'Agendado' : app.status === 'confirmed' ? 'Confirmado' : 'Finalizado'}
+                             </div>
+                             
+                             {app.status === 'completed' && !app.reviews?.[0] && (
+                                <button 
+                                  onClick={() => handleReview(app)}
+                                  className="text-[10px] font-black uppercase tracking-widest text-[#fbbf24] hover:underline"
+                                >
+                                   Avaliar Atendimento
+                                </button>
+                             )}
+
+                             {app.reviews?.[0] && (
+                                <div className="flex items-center gap-1 text-[#fbbf24]">
+                                   {[...Array(5)].map((_, i) => (
+                                      <Star key={i} className={cn("w-3 h-3", i < app.reviews[0].rating ? "fill-[#fbbf24]" : "text-zinc-700")} />
+                                   ))}
+                                </div>
+                             )}
                           </div>
                        </div>
                     ))
@@ -451,27 +512,41 @@ export function ClientPortal() {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-4">Telefone (Celular)</label>
-                <div className="relative group">
-                  <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-[#fbbf24]" />
-                  <input 
-                    type="tel" 
-                    required 
-                    value={profilePhone}
-                    onChange={(e) => {
-                      const v = e.target.value.replace(/\D/g, '')
-                      let formatted = v
-                      if (v.length <= 11) {
-                         formatted = v.replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3')
-                      }
-                      setProfilePhone(formatted)
-                    }}
-                    placeholder="(00) 00000-0000"
-                    className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-2xl px-12 py-4 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none text-white"
-                  />
-                </div>
-              </div>
+               <div className="space-y-2">
+                 <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-4">Data de Nascimento</label>
+                 <div className="relative group">
+                   <Baby className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-[#fbbf24]" />
+                   <input 
+                     type="date" 
+                     required 
+                     value={profileBirthDate}
+                     onChange={(e) => setProfileBirthDate(e.target.value)}
+                     className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-2xl px-12 py-4 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none text-white"
+                   />
+                 </div>
+               </div>
+
+               <div className="space-y-2">
+                 <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-4">Telefone (Celular)</label>
+                 <div className="relative group">
+                   <Phone className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 group-focus-within:text-[#fbbf24]" />
+                   <input 
+                     type="tel" 
+                     required 
+                     value={profilePhone}
+                     onChange={(e) => {
+                       const v = e.target.value.replace(/\D/g, '')
+                       let formatted = v
+                       if (v.length <= 11) {
+                          formatted = v.replace(/(\d{2})(\d{4,5})(\d{4})/, '($1) $2-$3')
+                       }
+                       setProfilePhone(formatted)
+                     }}
+                     placeholder="(00) 00000-0000"
+                     className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-2xl px-12 py-4 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none text-white"
+                   />
+                 </div>
+               </div>
               
               <div className="pt-4 border-t border-white/5 space-y-4">
                 <p className="text-[10px] text-zinc-500 uppercase font-medium tracking-widest text-center">
@@ -486,6 +561,97 @@ export function ClientPortal() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+      {/* Review Modal */}
+      {showReviewModal && selectedApp && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl animate-fade-in">
+          <div className="bg-[#1C1B1B] border border-white/5 rounded-[3rem] p-10 w-full max-w-lg shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#fbbf24]/5 blur-3xl -mr-32 -mt-32"></div>
+            
+            <button 
+              onClick={() => setShowReviewModal(false)}
+              className="absolute top-8 right-8 w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center text-zinc-500 hover:text-white transition-all"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="space-y-8 relative z-10">
+              <div className="text-center space-y-4">
+                <h3 className="text-4xl font-headline font-black uppercase text-white tracking-tighter">
+                   Avaliar <span className="text-[#fbbf24]">Atendimento</span>
+                </h3>
+                <p className="text-zinc-500 text-xs font-black uppercase tracking-widest">Sua opinião é fundamental para nossa excelência</p>
+              </div>
+
+              {/* Staff Info */}
+              <div className="flex items-center gap-6 p-6 bg-[#0e0e0e] rounded-[2rem] border border-white/[0.03]">
+                 <div className="w-20 h-20 rounded-2xl bg-[#fbbf24] flex items-center justify-center text-[#402D00] overflow-hidden">
+                    {selectedApp.staff?.avatar_url ? (
+                       <img src={selectedApp.staff.avatar_url} alt={selectedApp.staff.name} className="w-full h-full object-cover" />
+                    ) : (
+                       <User className="w-10 h-10" />
+                    )}
+                 </div>
+                 <div className="space-y-1">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-[#fbbf24]">Profissional</p>
+                    <h4 className="text-2xl font-headline font-black text-white uppercase">{selectedApp.staff?.name || 'Seu Barbeiro'}</h4>
+                    <p className="text-xs font-bold text-zinc-500 uppercase">{selectedApp.service?.name}</p>
+                 </div>
+              </div>
+
+              <form onSubmit={submitReview} className="space-y-8">
+                {/* Stars */}
+                <div className="space-y-4 text-center">
+                  <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Como foi sua experiência?</p>
+                  <div className="flex items-center justify-center gap-4">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        onClick={() => setRating(star)}
+                        className="group transition-all"
+                      >
+                        <Star 
+                          className={cn(
+                            "w-10 h-10 transition-all",
+                            star <= rating 
+                              ? "text-[#fbbf24] fill-[#fbbf24] scale-110 drop-shadow-[0_0_15px_rgba(251,191,36,0.3)]" 
+                              : "text-zinc-800 group-hover:text-zinc-600"
+                          )} 
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Comment */}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-6">Comentário (Opcional)</label>
+                  <textarea 
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    placeholder="Conte-nos o que achou do atendimento..."
+                    rows={4}
+                    className="w-full bg-[#0e0e0e] border border-white/[0.03] rounded-[2rem] px-8 py-6 text-sm focus:ring-1 focus:ring-[#fbbf24] transition-all outline-none text-white resize-none"
+                  />
+                </div>
+
+                <button 
+                  type="submit" 
+                  disabled={submittingReview}
+                  className="w-full bg-[#fbbf24] text-[#402D00] py-6 rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-[#fbbf24]/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                >
+                  {submittingReview ? <div className="w-5 h-5 border-2 border-[#402D00]/20 border-t-[#402D00] rounded-full animate-spin" /> : (
+                    <>
+                      Enviar Minha Avaliação
+                      <ChevronRight className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       )}

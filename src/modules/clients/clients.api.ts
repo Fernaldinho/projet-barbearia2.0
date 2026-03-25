@@ -113,7 +113,7 @@ export async function getClientAppointmentsForPortal(email: string, phone?: stri
 
   const { data, error } = await supabase
     .from('appointments')
-    .select('*, client:clients(*), service:services(*), staff:staff(*), company:companies(*)')
+    .select('*, client:clients(*), service:services(*), staff:staff(*), company:companies(*), reviews!left(id, rating, comment, staff_id)')
     .in('client_id', clientIds)
     .order('date', { ascending: false })
     .order('start_time', { ascending: false })
