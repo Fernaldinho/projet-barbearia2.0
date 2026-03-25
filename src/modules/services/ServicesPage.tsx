@@ -76,13 +76,13 @@ export function ServicesPage() {
   )
 
   return (
-    <div className="animate-fade-in pb-20">
+    <div className="animate-fade-in pb-20 mt-4">
       {/* Search Bar Section */}
-      <div className="flex items-center mb-8 md:mb-12">
-        <div className="relative flex-1 max-w-md group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted/40 group-focus-within:text-primary transition-colors" />
+      <div className="flex items-center mb-8 px-4 lg:px-0">
+        <div className="relative flex items-center group">
+          <span className="material-symbols-outlined absolute left-3 text-[#E5E2E1]/40 group-focus-within:text-[#FBBF24] transition-colors">search</span>
           <input 
-            className="input-base pl-12 h-12" 
+            className="bg-[#1c1b1b] border-none rounded-full pl-10 pr-6 py-2 text-sm focus:ring-1 focus:ring-[#FBBF24] w-64 text-[#E5E2E1] placeholder-[#E5E2E1]/20 outline-none transition-all" 
             placeholder="Buscar serviços..." 
             type="text"
             value={searchTerm}
@@ -91,34 +91,34 @@ export function ServicesPage() {
         </div>
       </div>
 
-      <div>
+      <div className="max-w-7xl mx-auto px-4 lg:px-0">
         {/* Hero Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 gap-8">
-          <div className="max-w-2xl">
-            <span className="text-caption uppercase tracking-[0.3em] text-primary/60 mb-3 block font-bold">Gestão de Portfólio</span>
-            <h1 className="mb-4">SERVIÇOS</h1>
-            <p className="text-p text-lg">Gerencie seu menu de experiências com precisão. Defina valores, tempos e ativações premium.</p>
+        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+          <div className="max-w-2xl text-left">
+            <span className="font-label text-xs tracking-[0.3em] uppercase text-[#ffe1a7] mb-4 block">Gestão de Portfólio</span>
+            <h1 className="font-headline text-6xl font-black text-[#E5E2E1] leading-none mb-6 tracking-tighter">SERVIÇOS</h1>
+            <p className="text-[#D3C5AC] text-lg font-light leading-relaxed">Gerencie seu menu de experiências com precisão cirúrgica. Defina valores, tempos e ativações premium.</p>
           </div>
 
           <button 
             onClick={() => {
               if (features.maxServices !== -1 && services.length >= features.maxServices) {
-                alert(`Plano Gratuito atinge o limite máximo de ${features.maxServices} serviços.`)
+                alert(`Plano Gratuito atinge o limite máximo de ${features.maxServices} serviços. O próximo seria borrado.`)
               }
               setShowForm(true)
             }}
-            className="btn-primary"
+            className="group relative flex items-center gap-3 bg-[#fbbf24] text-[#402D00] px-8 py-4 rounded-full font-headline font-bold text-lg hover:pr-10 transition-all duration-300 active:scale-95 shadow-xl shadow-[#fbbf24]/10"
           >
-            <Plus className="w-5 h-5" />
+            <span className="material-symbols-outlined">add</span>
             NOVO SERVIÇO
           </button>
         </div>
 
         {/* Content Area */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-80 rounded-xl bg-bg-surface border border-border-subtle animate-pulse" />
+              <div key={i} className="h-[420px] rounded-[2rem] bg-[#1c1b1b] animate-pulse" />
             ))}
           </div>
         ) : (

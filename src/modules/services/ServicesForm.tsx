@@ -30,74 +30,86 @@ export function ServicesForm({ initialData, onSubmit, onClose }: ServicesFormPro
   }
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/90 backdrop-blur-md animate-fade-in px-4">
-      <div className="bg-bg-surface w-full max-w-[560px] rounded-2xl shadow-2xl overflow-hidden animate-scale-in border border-border-subtle">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-xl animate-fade-in px-4">
+      <div className="bg-surface-container-low w-full max-w-[600px] rounded-[2.5rem] shadow-2xl shadow-black/50 overflow-hidden animate-scale-in relative border border-white/5">
         
         {/* Header Section */}
-        <div className="px-6 py-8 md:px-10 md:py-10 flex items-center justify-between border-b border-border-subtle">
+        <div className="p-8 lg:p-10 flex items-center justify-between bg-white/[0.02]">
           <div className="flex items-center gap-4">
-            <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20">
-              <Scissors className="w-6 h-6 text-primary" />
+            <div className="w-12 h-12 bg-primary-container/20 rounded-2xl flex items-center justify-center shadow-[0_0_20px_rgba(251,191,36,0.1)]">
+              <Scissors className="w-6 h-6 text-primary-container" />
             </div>
             <div>
-              <h2 className="text-xl md:text-2xl font-bold text-white font-headline tracking-tight uppercase">
+              <h2 className="text-2xl lg:text-3xl font-bold text-white font-headline tracking-tight">
                 {initialData ? 'Editar Serviço' : 'Novo Serviço'}
               </h2>
-              <p className="text-[10px] text-text-muted/60 font-black uppercase tracking-widest mt-1">
-                {initialData ? 'Refinamento do portfólio' : 'Expansão de catálogo premium'}
+              <p className="text-xs text-on-surface-variant font-bold uppercase tracking-widest mt-1 opacity-60">
+                {initialData ? 'Atualize os detalhes da experiência' : 'Crie uma nova experiência premium'}
               </p>
             </div>
           </div>
           <button 
             onClick={onClose} 
-            className="w-10 h-10 rounded-full flex items-center justify-center text-text-muted hover:bg-white/5 hover:text-white transition-all"
+            className="w-12 h-12 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-white/5 hover:text-white transition-all group"
           >
-            <X className="w-5 h-5" />
+            <X className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 md:p-10 space-y-6 md:space-y-8">
+        <form onSubmit={handleSubmit} className="p-8 lg:p-10 space-y-8">
           
           {/* Service Name */}
-          <div className="form-group">
-            <label htmlFor="service-name" className="form-label">Nome do Serviço</label>
+          <div className="space-y-3">
+            <label htmlFor="service-name" className="text-[11px] font-bold text-primary-container uppercase tracking-[0.2em] ml-1">
+              Nome do Serviço
+            </label>
             <div className="relative group">
-               <Scissors className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted/20 group-focus-within:text-primary transition-colors" />
+               <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                 <Scissors className="w-5 h-5 text-on-surface-variant/40 group-focus-within:text-primary-container transition-colors" />
+               </div>
                <input
                 id="service-name"
                 type="text"
                 autoFocus
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                placeholder="Ex: Corte Artístico"
-                className="input-base pl-12"
+                placeholder="Ex: Corte Artístico & Barba"
+                className="w-full bg-surface-container-lowest h-16 pl-14 pr-6 rounded-2xl text-white placeholder:text-on-surface-variant/20 focus:bg-surface-container-highest transition-all outline-none font-medium border border-transparent focus:border-primary-container/20 shadow-inner"
                 required
               />
             </div>
           </div>
 
           {/* Description */}
-          <div className="form-group">
-            <label htmlFor="service-description" className="form-label">Descrição Adicional</label>
+          <div className="space-y-3">
+            <label htmlFor="service-description" className="text-[11px] font-bold text-on-surface-variant/60 uppercase tracking-[0.2em] ml-1">
+              Descrição (Opcional)
+            </label>
             <div className="relative group">
-               <Info className="absolute left-4 top-5 w-5 h-5 text-text-muted/20 group-focus-within:text-primary transition-colors" />
+               <div className="absolute top-5 left-0 pl-5 pointer-events-none">
+                 <Info className="w-5 h-5 text-on-surface-variant/40 group-focus-within:text-primary-container transition-colors" />
+               </div>
                <textarea
                 id="service-description"
                 rows={3}
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Diferenciais e detalhes técnicos..."
-                className="input-base pl-12 py-4 h-auto resize-none"
+                placeholder="Descreva os diferenciais deste serviço..."
+                className="w-full bg-surface-container-lowest py-4 pl-14 pr-6 rounded-2xl text-white placeholder:text-on-surface-variant/20 focus:bg-surface-container-highest transition-all outline-none font-medium border border-transparent focus:border-primary-container/20 shadow-inner resize-none"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
             {/* Duration */}
-            <div className="form-group">
-              <label htmlFor="service-duration" className="form-label">Tempo (Min)</label>
+            <div className="space-y-3">
+              <label htmlFor="service-duration" className="text-[11px] font-bold text-on-surface-variant/60 uppercase tracking-[0.2em] ml-1">
+                Duração (Minutos)
+              </label>
               <div className="relative group">
-                <Clock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted/20 group-focus-within:text-primary transition-colors" />
+                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                  <Clock className="w-5 h-5 text-on-surface-variant/40 group-focus-within:text-primary-container transition-colors" />
+                </div>
                 <input
                   id="service-duration"
                   type="number"
@@ -105,17 +117,21 @@ export function ServicesForm({ initialData, onSubmit, onClose }: ServicesFormPro
                   onChange={(e) => setFormData({ ...formData, duration: Number(e.target.value) })}
                   min="5"
                   step="5"
-                  className="input-base pl-12"
+                  className="w-full bg-surface-container-lowest h-16 pl-14 pr-6 rounded-2xl text-white placeholder:text-on-surface-variant/20 focus:bg-surface-container-highest transition-all outline-none font-medium border border-transparent focus:border-primary-container/20 shadow-inner"
                   required
                 />
               </div>
             </div>
 
             {/* Price */}
-            <div className="form-group">
-              <label htmlFor="service-price" className="form-label">Investimento (R$)</label>
+            <div className="space-y-3">
+              <label htmlFor="service-price" className="text-[11px] font-bold text-on-surface-variant/60 uppercase tracking-[0.2em] ml-1">
+                Investimento (R$)
+              </label>
               <div className="relative group">
-                <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-primary/40 group-focus-within:text-primary transition-colors" />
+                <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                  <DollarSign className="w-5 h-5 text-primary-container transition-colors" />
+                </div>
                 <input
                   id="service-price"
                   type="number"
@@ -123,7 +139,7 @@ export function ServicesForm({ initialData, onSubmit, onClose }: ServicesFormPro
                   onChange={(e) => setFormData({ ...formData, price: Number(e.target.value) })}
                   min="0"
                   step="0.01"
-                  className="input-base pl-12"
+                  className="w-full bg-surface-container-lowest h-16 pl-14 pr-6 rounded-2xl text-white placeholder:text-on-surface-variant/20 focus:bg-surface-container-highest transition-all outline-none font-medium border border-transparent focus:border-primary-container/20 shadow-inner"
                   required
                 />
               </div>
@@ -131,7 +147,7 @@ export function ServicesForm({ initialData, onSubmit, onClose }: ServicesFormPro
           </div>
 
           {/* Active Status */}
-          <label className="flex items-center gap-4 cursor-pointer group bg-white/2 p-4 rounded-xl border border-white/5 hover:border-primary/20 transition-all">
+          <label className="flex items-center gap-4 cursor-pointer group bg-white/[0.02] p-5 rounded-3xl hover:bg-white/[0.05] transition-colors">
             <div className="relative flex items-center">
               <input
                 type="checkbox"
@@ -139,30 +155,30 @@ export function ServicesForm({ initialData, onSubmit, onClose }: ServicesFormPro
                 onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
                 className="sr-only peer"
               />
-              <div className="w-6 h-6 rounded-lg border-2 border-border-subtle peer-checked:border-primary peer-checked:bg-primary transition-all" />
-              <Check className="w-4 h-4 text-primary-text absolute left-1 opacity-0 peer-checked:opacity-100 transition-opacity" />
+              <div className="w-6 h-6 rounded-lg border-2 border-on-surface-variant/20 peer-checked:border-primary-container peer-checked:bg-primary-container transition-all" />
+              <Check className="w-4 h-4 text-on-primary-fixed absolute left-1 opacity-0 peer-checked:opacity-100 transition-opacity" />
             </div>
             <div className="flex flex-col">
               <span className="text-sm font-bold text-white uppercase tracking-wider">Serviço Ativo</span>
-              <span className="text-[10px] text-text-muted/40 font-bold uppercase tracking-widest">Disponível para portfólio</span>
+              <span className="text-xs text-on-surface-variant/40 font-medium">Este serviço ficará visível para agendamento online</span>
             </div>
           </label>
 
           {/* Actions */}
-          <div className="flex items-center justify-end gap-4 pt-4 border-t border-white/5">
+          <div className="flex items-center justify-end gap-5 pt-4">
             <button 
               type="button" 
               onClick={onClose} 
-              className="btn-secondary h-12"
+              className="text-on-surface-variant hover:text-white font-bold text-xs uppercase tracking-widest px-8 h-14 rounded-full hover:bg-white/5 transition-all"
             >
               Cancelar
             </button>
             <button 
               type="submit" 
               disabled={loading} 
-              className="btn-primary h-12"
+              className="bg-primary-container text-on-primary-fixed px-10 h-14 rounded-full font-bold shadow-xl shadow-primary-container/20 hover:scale-[1.05] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 uppercase text-xs tracking-widest"
             >
-              {loading ? 'Salvando...' : initialData ? 'Atualizar' : 'Confirmar'}
+              {loading ? 'Sincronizando...' : initialData ? 'Salvar Alterações' : 'Confirmar Criação'}
             </button>
           </div>
         </form>

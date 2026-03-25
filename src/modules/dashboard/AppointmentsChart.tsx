@@ -8,13 +8,13 @@ interface AppointmentsChartProps {
 function CustomTooltip({ active, payload, label }: any) {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-bg-surface border border-border-heavy rounded-xl px-4 py-3 shadow-2xl backdrop-blur-md">
-      <p className="text-[10px] font-bold text-text-caption uppercase tracking-widest mb-2">{label}</p>
+    <div className="bg-surface-container-highest border border-outline-variant/10 rounded-xl px-4 py-3 shadow-2xl backdrop-blur-md">
+      <p className="text-xs font-bold text-on-surface-variant/60 uppercase tracking-wider mb-2">{label}</p>
       {payload.map((item: any) => (
         <div key={item.name} className="flex items-center justify-between gap-4 mt-1">
           <div className="flex items-center gap-2">
             <div className="w-2 h-2 rounded-full" style={{ backgroundColor: item.color }} />
-            <span className="text-[11px] font-bold text-white uppercase tracking-wider">
+            <span className="text-xs font-medium text-white">
               {item.name === 'completed' ? 'Concluídos' : 'Cancelados'}
             </span>
           </div>
@@ -29,7 +29,7 @@ export function AppointmentsChart({ data }: AppointmentsChartProps) {
   return (
     <div className="h-[200px] w-full">
       {data.length === 0 ? (
-        <div className="flex items-center justify-center h-full text-text-muted/40 text-sm italic">
+        <div className="flex items-center justify-center h-full text-on-surface-variant/40 text-sm italic">
           Sem dados para o período
         </div>
       ) : (
@@ -37,13 +37,13 @@ export function AppointmentsChart({ data }: AppointmentsChartProps) {
           <BarChart data={data} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
             <XAxis 
               dataKey="label" 
-              tick={{ fontSize: 10, fill: '#737373', fontWeight: 600 }} 
+              tick={{ fontSize: 11, fill: 'var(--color-on-surface-variant)', fontWeight: 500 }} 
               axisLine={false} 
               tickLine={false}
               dy={10}
             />
             <YAxis 
-              tick={{ fontSize: 10, fill: '#737373', fontWeight: 600 }} 
+              tick={{ fontSize: 11, fill: 'var(--color-on-surface-variant)', fontWeight: 500 }} 
               axisLine={false} 
               tickLine={false} 
               allowDecimals={false} 
@@ -52,18 +52,18 @@ export function AppointmentsChart({ data }: AppointmentsChartProps) {
             <Bar 
               dataKey="completed" 
               name="completed" 
-              fill="#ffe2ab" 
+              fill="#FBBF24" 
               radius={[4, 4, 0, 0]} 
-              maxBarSize={12} 
+              maxBarSize={16} 
               animationDuration={1500}
             />
             <Bar 
               dataKey="cancelled" 
               name="cancelled" 
-              fill="#737373" 
+              fill="var(--color-outline-variant)" 
               radius={[4, 4, 0, 0]} 
-              maxBarSize={12} 
-              opacity={0.2}
+              maxBarSize={16} 
+              opacity={0.3}
               animationDuration={1500}
             />
           </BarChart>
@@ -71,14 +71,14 @@ export function AppointmentsChart({ data }: AppointmentsChartProps) {
       )}
 
       {/* Legend */}
-      <div className="flex items-center gap-4 mt-6 justify-start">
+      <div className="flex items-center gap-6 mt-6 justify-start">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-primary" />
-          <span className="text-[10px] font-bold text-text-caption uppercase tracking-widest">Concluídos</span>
+          <div className="w-2.5 h-2.5 rounded-full bg-primary-container shadow-[0_0_8px_rgba(251,191,36,0.3)]" />
+          <span className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Concluídos</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-text-caption opacity-20" />
-          <span className="text-[10px] font-bold text-text-caption uppercase tracking-widest">Cancelados</span>
+          <div className="w-2.5 h-2.5 rounded-full bg-outline-variant opacity-30" />
+          <span className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Cancelados</span>
         </div>
       </div>
     </div>

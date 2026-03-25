@@ -216,10 +216,5 @@ organizada
 integrada
 sem erros
 com boa UX
-
-e para usar esse projeto 'AgendaAI Landing Page'
-
-
-
 com boa estrutura
 pronta para produção
