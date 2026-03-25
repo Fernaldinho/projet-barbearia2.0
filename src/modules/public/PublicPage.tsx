@@ -1,4 +1,4 @@
-import { Link as LinkIcon, Palette, Clock, Smartphone, Laptop, CloudUpload, CheckCircle, ExternalLink, MapPin, Copy } from 'lucide-react'
+import { Link as LinkIcon, Palette, Clock, Smartphone, Laptop, CloudUpload, CheckCircle, ExternalLink, MapPin, Copy, Scissors } from 'lucide-react'
 import { useCompany } from '@/contexts/CompanyContext'
 import { cn } from '@/utils/helpers'
 import { useState } from 'react'
@@ -46,10 +46,46 @@ export function PublicPage() {
       if (updateError) throw updateError
       
       toast.success('Banner atualizado com sucesso!')
-      window.location.reload() // Recarrega para refletir a mudança via Contexto
+      window.location.reload()
     } catch (err) {
       console.error(err)
       toast.error('Erro ao subir banner. Verifique as permissões de Bucket no Supabase.')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file || !company) return
+
+    try {
+      setLoading(true)
+      const fileExt = file.name.split('.').pop()
+      const filePath = `company-logos/${company.id}-${Math.random()}.${fileExt}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('logos')
+        .upload(filePath, file)
+
+      if (uploadError) throw uploadError
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('logos')
+        .getPublicUrl(filePath)
+
+      const { error: updateError } = await supabase
+        .from('companies')
+        .update({ logo_url: publicUrl })
+        .eq('id', company.id)
+
+      if (updateError) throw updateError
+      
+      toast.success('Logo atualizada com sucesso!')
+      window.location.reload()
+    } catch (err) {
+      console.error(err)
+      toast.error('Erro ao subir logo. Verifique as permissões de Bucket no Supabase.')
     } finally {
       setLoading(false)
     }
@@ -138,29 +174,62 @@ export function PublicPage() {
                 <h2 className="text-2xl font-black font-headline text-white uppercase tracking-tighter">Aparência e Identidade</h2>
               </div>
               <div className="space-y-10">
-                <div>
-                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-6 ml-1">Banner de Capa (Noir Style)</label>
-                  <label 
-                    className="relative h-64 rounded-[2rem] overflow-hidden group cursor-pointer border-2 border-dashed border-white/5 hover:border-[#fbbf24]/30 transition-all shadow-inner block"
-                  >
-                    <input 
-                      type="file" 
-                      className="hidden" 
-                      accept="image/*" 
-                      onChange={handleBannerUpload}
-                      disabled={loading}
-                    />
-                    <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 backdrop-blur-sm">
-                      <CloudUpload className={cn("text-[#fbbf24] w-10 h-10 mb-4", loading && "animate-bounce")} />
-                      <span className="text-white text-[10px] font-black uppercase tracking-[0.2em]">
-                        {loading ? 'ENVIANDO...' : 'ALTERAR BANNER'}
-                      </span>
-                    </div>
-                    <img 
-                      className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-60 transition-all duration-1000 scale-105 group-hover:scale-110" 
-                      src={bannerToDisplay} 
-                    />
-                  </label>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                  <div className="md:col-span-2">
+                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-6 ml-1">Banner de Capa (Noir Style)</label>
+                    <label 
+                      className="relative h-64 rounded-[2rem] overflow-hidden group cursor-pointer border-2 border-dashed border-white/5 hover:border-[#fbbf24]/30 transition-all shadow-inner block"
+                    >
+                      <input 
+                        type="file" 
+                        className="hidden" 
+                        accept="image/*" 
+                        onChange={handleBannerUpload}
+                        disabled={loading}
+                      />
+                      <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 backdrop-blur-sm">
+                        <CloudUpload className={cn("text-[#fbbf24] w-10 h-10 mb-4", loading && "animate-bounce")} />
+                        <span className="text-white text-[10px] font-black uppercase tracking-[0.2em]">
+                          {loading ? 'ENVIANDO...' : 'ALTERAR BANNER'}
+                        </span>
+                      </div>
+                      <img 
+                        className="w-full h-full object-cover grayscale opacity-40 group-hover:opacity-60 transition-all duration-1000 scale-105 group-hover:scale-110" 
+                        src={bannerToDisplay} 
+                      />
+                    </label>
+                  </div>
+
+                  <div>
+                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-6 ml-1">Logo (Quadrada)</label>
+                    <label 
+                      className="relative h-64 rounded-[2rem] overflow-hidden group cursor-pointer border-2 border-dashed border-white/5 hover:border-[#fbbf24]/30 transition-all shadow-inner block"
+                    >
+                      <input 
+                        type="file" 
+                        className="hidden" 
+                        accept="image/*" 
+                        onChange={handleLogoUpload}
+                        disabled={loading}
+                      />
+                      <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 backdrop-blur-sm">
+                        <CloudUpload className={cn("text-[#fbbf24] w-10 h-10 mb-4", loading && "animate-bounce")} />
+                        <span className="text-white text-[10px] font-black uppercase tracking-[0.2em]">
+                          {loading ? 'LOGO...' : 'ALTERAR LOGO'}
+                        </span>
+                      </div>
+                      <div className="w-full h-full flex items-center justify-center bg-[#0e0e0e] p-10">
+                        {company?.logo_url ? (
+                          <img 
+                            className="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-500" 
+                            src={company.logo_url} 
+                          />
+                        ) : (
+                          <Scissors className="w-16 h-16 text-zinc-800" />
+                        )}
+                      </div>
+                    </label>
+                  </div>
                 </div>
 
               </div>
