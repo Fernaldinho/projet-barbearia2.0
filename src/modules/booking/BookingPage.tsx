@@ -119,6 +119,10 @@ export function BookingPage() {
   const currentProgressIndex = progressSteps.indexOf(step as any)
 
   const goBack = () => {
+    if (step === 'service' && user) {
+      navigate(company?.slug ? `/portal/${company.slug}` : '/portal')
+      return
+    }
     if (currentStepIndex > 0) setStep(activeSteps[currentStepIndex - 1])
   }
   const goNext = () => {
