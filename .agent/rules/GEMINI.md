@@ -51,9 +51,10 @@ Agent activated → Check frontmatter "skills:" → Read SKILL.md (INDEX) → Re
 ### Auto-Selection Protocol
 
 1. **Analyze (Silent)**: Detect domains (Frontend, Backend, Security, etc.) from user request.
-2. **Select Agent(s)**: Choose the most appropriate specialist(s).
+2. **Select Agent(s)**: Choose the most appropriate specialist(s) from `ag-kit`.
 3. **Inform User**: Concisely state which expertise is being applied.
-4. **Apply**: Generate response using the selected agent's persona and rules.
+4. **Apply**: Execute the specific command or logic of the selected `ag-kit` agent.
+5. **Dynamic Search**: Always search for the best agent in `ag-kit` that fits the request and execute its command.
 
 ### Response Format (MANDATORY)
 
