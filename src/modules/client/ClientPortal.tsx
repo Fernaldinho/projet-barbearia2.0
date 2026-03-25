@@ -45,7 +45,7 @@ export function ClientPortal() {
 
   useEffect(() => {
     if (slug) {
-      supabase.from('companies').select('name, logo_url').eq('slug', slug).single().then(({data}) => {
+      supabase.from('companies').select('name, logo_url, banner_url').eq('slug', slug).single().then(({data}) => {
         if (data) setCompanyContext(data)
       })
     }
@@ -384,9 +384,9 @@ export function ClientPortal() {
         {/* Hero Banner */}
         <section className="relative h-64 md:h-80 rounded-[3rem] overflow-hidden group shadow-2xl">
            <img 
-              src="/barber_portal_banner_1774459878962.png" 
+              src={companyContext?.banner_url || "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=1200"} 
               alt="Banner" 
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105"
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105 transition-all"
            />
            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
            <div className="absolute inset-x-0 bottom-0 p-8 md:p-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
