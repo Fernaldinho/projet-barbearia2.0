@@ -118,9 +118,9 @@ export function ClientPortal() {
     }
   }
 
-  const handleReview = (app: any) => {
+  const handleReview = (app: any, initialRating: number = 5) => {
     setSelectedApp(app)
-    setRating(5)
+    setRating(initialRating)
     setComment('')
     setShowReviewModal(true)
   }
@@ -464,12 +464,24 @@ export function ClientPortal() {
                              </div>
                              
                              {app.status === 'completed' && !app.reviews?.[0] && (
-                                <button 
-                                  onClick={() => handleReview(app)}
-                                  className="text-[10px] font-black uppercase tracking-widest text-[#fbbf24] hover:underline"
-                                >
-                                   Avaliar Atendimento
-                                </button>
+                                <div className="flex flex-col items-end gap-2">
+                                   <div className="flex items-center gap-1">
+                                      {[1, 2, 3, 4, 5].map((star) => (
+                                         <button 
+                                           key={star}
+                                           onClick={(e) => {
+                                              e.stopPropagation()
+                                              handleReview(app, star)
+                                           }}
+                                           className="text-zinc-800 hover:text-[#fbbf24] transition-all hover:scale-125"
+                                           title={`Avaliar com ${star} estrelas`}
+                                         >
+                                            <Star className="w-4 h-4 fill-current" />
+                                         </button>
+                                      ))}
+                                   </div>
+                                   <p className="text-[8px] font-black uppercase tracking-[0.2em] text-zinc-500">Avaliar Atendimento</p>
+                                </div>
                              )}
 
                              {app.reviews?.[0] && (
