@@ -15,17 +15,32 @@ interface TodayScheduleProps {
 }
 
 export function TodaySchedule({ appointments }: TodayScheduleProps) {
+  // Filtrar apenas agendamentos futuros que não foram finalizados/cancelados
+  const upcomingAppointments = appointments.filter((appt) => {
+    if (['completed', 'cancelled', 'no_show'].includes(appt.status)) {
+      return false
+    }
+
+    // Se passou do horário de término, sai dos "Próximos"
+    const now = new Date()
+    const [hours, minutes] = appt.end_time.split(':').map(Number)
+    const apptEndTime = new Date()
+    apptEndTime.setHours(hours, minutes, 0, 0)
+
+    return apptEndTime > now
+  })
+
   return (
     <div className="p-[24px] rounded-2xl bg-surface-container-low">
       <h3 className="!mb-[24px] font-headline text-xl text-white">Próximos Agendamentos</h3>
 
-      {appointments.length === 0 ? (
+      {upcomingAppointments.length === 0 ? (
         <div className="text-center py-10 text-on-surface-variant/50 text-sm italic">
-          Nenhum agendamento para hoje
+          Nenhum agendamento próximo para hoje
         </div>
       ) : (
         <div className="space-y-[12px]">
-          {appointments.map((appt) => {
+          {upcomingAppointments.map((appt) => {
             const status = statusConfig[appt.status] || statusConfig.scheduled
             const StatusIcon = status.icon
             const isInactive = appt.status === 'cancelled' || appt.status === 'no_show'
