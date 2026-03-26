@@ -26,14 +26,14 @@ interface DayConfig {
 function getDefaultDays(): DayConfig[] {
   return Array.from({ length: 7 }, (_, i) => ({
     weekday: i,
-    enabled: i >= 1 && i <= 5, // Mon-Fri enabled by default
+    enabled: false,
     start_time: '09:00',
     end_time: '18:00',
   }))
 }
 
 export function BusinessHoursPage() {
-  const { company } = useCompany()
+  const { company, features } = useCompany()
   const [days, setDays] = useState<DayConfig[]>(getDefaultDays())
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
@@ -73,6 +73,18 @@ export function BusinessHoursPage() {
   }
 
   const handleToggle = (weekday: number) => {
+    const isEnabling = !days.find(d => d.weekday === weekday)?.enabled
+    const enabledCount = days.filter(d => d.enabled).length
+    
+    // Check plan limits
+    if (isEnabling && enabledCount >= (features as any).maxBusinessDays) {
+      toast.error(`Seu plano permite ativar no máximo ${(features as any).maxBusinessDays} dia(s) de funcionamento.`, {
+         icon: '🔒',
+         style: { background: '#131313', color: '#fff', border: '1px solid #4f463320' }
+      })
+      return
+    }
+
     setDays((prev) =>
       prev.map((d) => (d.weekday === weekday ? { ...d, enabled: !d.enabled } : d))
     )

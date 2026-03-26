@@ -40,6 +40,7 @@ export const PLAN_FEATURES = {
     maxAppointmentsPerMonth: 2,
     hasReports: false,
     hasBilling: false,
+    maxBusinessDays: 1,
     upgradeLinks: {
       monthly: 'https://pay.kirvano.com/bb14fe58-689e-4ef7-80a8-f43bf972a209',
       semiannual: 'https://pay.kirvano.com/f6753696-480f-4b00-9a16-73463b09f9b7'
@@ -52,6 +53,7 @@ export const PLAN_FEATURES = {
     maxAppointmentsPerMonth: 500,
     hasReports: true,
     hasBilling: false,
+    maxBusinessDays: 7,
   },
   [PLANS.PRO]: {
     name: 'Profissional',
