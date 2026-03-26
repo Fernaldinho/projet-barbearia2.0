@@ -35,7 +35,6 @@ export function BlockedTimesTable({ blockedTimes, onEdit, onDelete }: BlockedTim
         <p className="text-dark-400 text-sm max-w-xs mx-auto">Adicione bloqueios para impedir agendamentos em horários específicos.</p>
       </div>
     )
-    )
   }
 
   return (
