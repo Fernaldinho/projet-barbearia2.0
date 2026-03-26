@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Building2, Phone, Mail, ArrowRight, Loader2, Scissors, Sparkles, ShieldCheck } from 'lucide-react'
+import { Building2, Phone, ArrowRight, Loader2, Scissors, Sparkles, ShieldCheck, MapPin } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks'
 import { generateSlug } from '@/utils/helpers'
@@ -16,7 +16,7 @@ export default function OnboardingPage() {
   const [formData, setFormData] = useState({
     companyName: '',
     phone: '',
-    email: user?.email || '',
+    address: '',
   })
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -37,7 +37,8 @@ export default function OnboardingPage() {
             name: formData.companyName,
             slug,
             phone: formData.phone,
-            email: formData.email,
+            address: formData.address,
+            email: user.email, // Use account email as default company email
             created_by: user.id
           }
         ])
@@ -157,10 +158,10 @@ export default function OnboardingPage() {
               ) : (
                 <div className="space-y-5 animate-fade-in">
                    <div className="space-y-4">
-                    <p className="text-white text-lg font-headline font-bold tracking-tight">Estamos quase lá!</p>
+                    <p className="text-white text-lg font-headline font-bold tracking-tight">Informações de Contato</p>
                     
                     <div className="space-y-1.5">
-                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Telefone de Contato</label>
+                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Telefone Comercial</label>
                         <div className="relative group">
                           <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                             <Phone className="w-4 h-4 text-zinc-600 group-focus-within:text-[#fbbf24] transition-colors" />
@@ -178,19 +179,20 @@ export default function OnboardingPage() {
                         </div>
                     </div>
 
-                    <div className="space-y-1.5 opacity-60">
-                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">E-mail Comercial</label>
+                    <div className="space-y-1.5">
+                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1">Endereço da Barbearia</label>
                         <div className="relative group">
                           <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                            <Mail className="w-4 h-4 text-zinc-600 group-focus-within:text-[#fbbf24] transition-colors" />
+                            <MapPin className="w-4 h-4 text-zinc-600 group-focus-within:text-[#fbbf24] transition-colors" />
                           </div>
                           <input
-                            id="email"
-                            type="email"
+                            id="address"
+                            type="text"
                             required
                             className="w-full bg-[#080808] border border-white/5 rounded-2xl py-4 pl-12 pr-4 text-white text-sm focus:ring-1 focus:ring-[#fbbf24] focus:border-[#fbbf24]/50 outline-none transition-all placeholder:text-zinc-700 font-medium"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                            placeholder="Rua Exemplo, 123 - Centro"
+                            value={formData.address}
+                            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                           />
                         </div>
                     </div>
@@ -206,7 +208,7 @@ export default function OnboardingPage() {
                     </button>
                     <button
                         type="submit"
-                        disabled={loading || !formData.phone}
+                        disabled={loading || !formData.phone || !formData.address}
                         className="flex-1 py-4 bg-[#fbbf24] text-[#402d00] hover:bg-[#fbbf24]/90 rounded-2xl font-headline font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-[#fbbf24]/10 flex items-center justify-center gap-2 group disabled:opacity-30"
                     >
                         {loading ? (
