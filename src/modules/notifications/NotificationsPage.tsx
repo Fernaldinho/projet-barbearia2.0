@@ -137,45 +137,42 @@ export function NotificationsPage() {
   }
 
   return (
-    <div className="animate-fade-in pb-20 mt-8 space-y-12">
+    <div className="animate-fade-in pb-10 sm:pb-20 mt-4 sm:mt-8 space-y-4 sm:space-y-12">
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-end gap-8 px-4 lg:px-0">
-        <div className="space-y-4">
-          <span className="text-xs tracking-[0.3em] uppercase font-label text-[#fbbf24] font-bold block">Central de Alertas</span>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black font-headline tracking-tighter text-[#E5E2E1] uppercase leading-none">Notificações</h1>
-          <p className="text-[#D3C5AC] text-lg font-light leading-relaxed max-w-2xl">
-            Acompanhe em tempo real tudo o que acontece na sua barbearia.
-          </p>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 sm:gap-8 px-2 sm:px-4 lg:px-0">
+        <div className="space-y-2 sm:space-y-4">
+          <span className="text-[8px] sm:text-xs tracking-[0.3em] uppercase font-label text-[#fbbf24] font-bold block">Central de Alertas</span>
+          <h1 className="text-xl sm:text-4xl md:text-5xl lg:text-6xl font-black font-headline tracking-tighter text-[#E5E2E1] uppercase leading-none">Notificações</h1>
         </div>
         
-        <div className="flex gap-4">
+        <div className="flex gap-2 sm:gap-4 w-full sm:w-auto">
           <button 
             onClick={handleMarkAllRead}
             disabled={!notifications.some(n => !n.read)}
-            className="text-[10px] font-black uppercase tracking-widest text-[#fbbf24] px-6 py-3 border border-[#fbbf24]/20 rounded-full hover:bg-[#fbbf24]/5 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex-1 sm:flex-none text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-[#fbbf24] px-4 sm:px-6 py-2 sm:py-3 border border-[#fbbf24]/20 rounded-full hover:bg-[#fbbf24]/5 transition-all disabled:opacity-30"
           >
             Lidas
           </button>
           <button 
             onClick={handleClearAll}
             disabled={notifications.length === 0}
-            className="text-[10px] font-black uppercase tracking-widest text-red-500/60 px-6 py-3 border border-red-500/10 rounded-full hover:bg-red-500/5 transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex-1 sm:flex-none text-[8px] sm:text-[10px] font-black uppercase tracking-widest text-red-500/60 px-4 sm:px-6 py-2 sm:py-3 border border-red-500/10 rounded-full hover:bg-red-500/5 transition-all disabled:opacity-30"
           >
-            Limpar tudo
+            Limpar
           </button>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 lg:px-0 grid grid-cols-12 gap-12">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-0 grid grid-cols-12 gap-4 sm:gap-12">
         {/* Filters Sidebar */}
-        <div className="col-span-12 lg:col-span-3 space-y-10">
-          <div className="bg-[#1C1B1B] rounded-[2rem] p-8 border border-white/5 shadow-xl">
-            <div className="flex items-center gap-3 mb-8">
-              <Filter className="w-5 h-5 text-[#fbbf24]" />
-              <h3 className="font-headline text-xl font-black text-white uppercase tracking-tighter">Filtros</h3>
+        <div className="col-span-12 lg:col-span-3 space-y-4 sm:space-y-10">
+          <div className="bg-[#1C1B1B] rounded-2xl sm:rounded-[2rem] p-4 sm:p-8 border border-white/5 shadow-xl">
+            <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-8">
+              <Filter className="w-4 h-4 sm:w-5 sm:h-5 text-[#fbbf24]" />
+              <h3 className="font-headline text-lg sm:text-xl font-black text-white uppercase tracking-tighter">Filtros</h3>
             </div>
             
-            <div className="space-y-4">
+            <div className="flex lg:flex-col gap-2 sm:gap-4 overflow-x-auto pb-2 lg:pb-0 scrollbar-hide">
               {[
                 { id: 'all', label: 'Todas', count: notifications.length },
                 { id: 'unread', label: 'Não lidas', count: notifications.filter(n => !n.read).length }
@@ -184,7 +181,7 @@ export function NotificationsPage() {
                   key={item.id}
                   onClick={() => setFilter(item.id as any)}
                   className={cn(
-                    "w-full flex items-center justify-between px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all",
+                    "flex-1 lg:w-full flex items-center justify-between gap-3 px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-[8px] sm:text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap",
                     filter === item.id 
                       ? "bg-[#fbbf24] text-[#402D00]" 
                       : "bg-[#0e0e0e] text-zinc-500 hover:text-white"
@@ -192,7 +189,7 @@ export function NotificationsPage() {
                 >
                   <span>{item.label}</span>
                   <span className={cn(
-                    "px-2 py-0.5 rounded-lg text-[8px]",
+                    "px-1.5 py-0.5 rounded-lg text-[8px]",
                     filter === item.id ? "bg-[#402D00]/10" : "bg-white/5"
                   )}>{item.count}</span>
                 </button>
@@ -218,54 +215,52 @@ export function NotificationsPage() {
               <p className="text-zinc-500 max-w-sm mx-auto">Tudo certo! Você não tem novas notificações no momento.</p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-2 sm:space-y-4">
               {filteredNotifications.map((notification) => (
                 <div 
                   key={notification.id}
                   className={cn(
-                    "bg-[#1C1B1B] rounded-[2rem] p-1 transition-all border border-white/[0.02] hover:bg-gradient-to-r hover:from-[#fbbf24]/5 hover:to-transparent",
-                    !notification.read && "border-[#fbbf24]/10 shadow-[0_0_20px_rgba(251,191,36,0.03)]"
+                    "bg-[#1C1B1B] rounded-2xl sm:rounded-[2rem] p-0.5 transition-all border border-white/[0.02]",
+                    !notification.read && "border-[#fbbf24]/10"
                   )}
                 >
-                  <div className="bg-[#1C1B1B] rounded-[1.9rem] p-6 lg:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                  <div className="bg-[#1C1B1B] rounded-[1.2rem] sm:rounded-[1.9rem] p-4 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
                     {/* Icon */}
                     <div className={cn(
-                      "w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 border border-white/5",
+                      "w-10 h-10 sm:w-14 sm:h-14 rounded-xl sm:rounded-2xl flex items-center justify-center shrink-0 border border-white/5",
                       getColor(notification.type)
                     )}>
                       {getIcon(notification.type)}
                     </div>
 
                     {/* Content */}
-                    <div className="flex-1 space-y-2">
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-black text-lg text-white tracking-tight uppercase">{notification.title}</h4>
-                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">
+                    <div className="flex-1 min-w-0 space-y-1 sm:space-y-2">
+                      <div className="flex items-center justify-between gap-4">
+                        <h4 className="font-black text-sm sm:text-lg text-white tracking-tight uppercase truncate">{notification.title}</h4>
+                        <span className="text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 shrink-0">
                           {timeAgo(notification.created_at)}
                         </span>
                       </div>
-                      <p className="text-sm text-[#D3C5AC]/80 leading-relaxed font-light">
+                      <p className="text-[10px] sm:text-sm text-[#D3C5AC]/80 leading-relaxed font-light line-clamp-2 sm:line-clamp-none">
                         {notification.message}
                       </p>
                     </div>
 
                     {/* Actions */}
-                    <div className="flex sm:flex-col gap-2 w-full sm:w-auto pt-4 sm:pt-0 border-t sm:border-t-0 border-white/5">
+                    <div className="flex sm:flex-col gap-2 w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-t-0 border-white/5">
                       {!notification.read && (
                         <button 
                           onClick={() => handleMarkRead(notification.id)}
-                          className="flex-1 sm:w-10 sm:h-10 rounded-xl bg-[#fbbf24]/10 text-[#fbbf24] flex items-center justify-center hover:bg-[#fbbf24]/20 transition-all group relative"
-                          title="Marcar como lida"
+                          className="flex-1 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-[#fbbf24]/10 text-[#fbbf24] flex items-center justify-center hover:bg-[#fbbf24]/20 transition-all py-2 sm:py-0"
                         >
-                          <Check className="w-5 h-5" />
+                          <Check className="w-4 h-4 sm:w-5 sm:h-5" />
                         </button>
                       )}
                       <button 
                         onClick={() => handleDelete(notification.id)}
-                        className="flex-1 sm:w-10 sm:h-10 rounded-xl bg-white/5 text-zinc-500 flex items-center justify-center hover:bg-red-500/10 hover:text-red-500 transition-all"
-                        title="Remover"
+                        className="flex-1 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl bg-white/5 text-zinc-500 flex items-center justify-center hover:bg-red-500/10 hover:text-red-500 transition-all py-2 sm:py-0"
                       >
-                        <Trash2 className="w-5 h-5" />
+                        <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
                       </button>
                     </div>
                   </div>

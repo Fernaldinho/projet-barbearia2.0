@@ -109,7 +109,7 @@ export function SettingsPage() {
   }
 
   return (
-    <div className="animate-fade-in pb-20 space-y-16 mt-8">
+    <div className="animate-fade-in pb-10 sm:pb-20 space-y-8 sm:space-y-16 mt-4 sm:mt-8">
       {/* Search Header Style (Consistent) */}
       <div className="flex items-center px-4 lg:px-0 mb-12">
         <div className="relative flex items-center group flex-1 max-w-xl">
@@ -122,28 +122,28 @@ export function SettingsPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 lg:px-0">
-        <div className="mb-16">
-          <span className="text-xs font-label text-[#fbbf24] uppercase tracking-[0.3em] font-black mb-4 block">Preferências do Sistema</span>
-          <h2 className="text-6xl font-headline font-black text-[#E5E2E1] tracking-tighter uppercase leading-none">Configurações</h2>
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-0">
+        <div className="mb-8 sm:mb-16">
+          <span className="text-[8px] sm:text-xs font-label text-[#fbbf24] uppercase tracking-[0.3em] font-black mb-2 sm:4 block">Preferências</span>
+          <h2 className="text-2xl sm:text-6xl font-headline font-black text-[#E5E2E1] tracking-tighter uppercase leading-none">Configurações</h2>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-16 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 sm:gap-16 items-start">
           {/* Vertical Tabs */}
-          <nav className="w-full lg:w-72 space-y-3 flex-shrink-0">
+          <nav className="w-full lg:w-72 flex lg:flex-col gap-2 overflow-x-auto pb-2 scrollbar-hide shrink-0">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={cn(
-                  "w-full flex items-center gap-4 px-6 py-4 rounded-2xl transition-all font-black text-[10px] tracking-widest text-left uppercase border border-transparent shadow-lg",
+                  "flex-1 lg:w-full flex items-center gap-2 sm:gap-4 px-3 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl transition-all font-black text-[8px] sm:text-[10px] tracking-widest text-left uppercase border border-transparent shadow-lg whitespace-nowrap",
                   activeTab === tab.id
-                    ? "bg-[#fbbf24] text-[#402D00] shadow-[#fbbf24]/10"
-                    : "bg-[#1C1B1B] text-zinc-500 hover:text-white hover:border-white/5"
+                    ? "bg-[#fbbf24] text-[#402D00]"
+                    : "bg-[#1C1B1B] text-zinc-500"
                 )}
               >
-                {tab.icon}
-                {tab.label}
+                <span className="shrink-0">{tab.icon}</span>
+                {tab.label.split(' ')[0]}
               </button>
             ))}
           </nav>
@@ -151,49 +151,46 @@ export function SettingsPage() {
           {/* Form Area (Bento Grid Style) */}
           <div className="flex-1 space-y-8 min-w-0">
             {activeTab === 'company' && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                 <section className="col-span-1 md:col-span-2 bg-[#1C1B1B] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
-                  <div className="flex justify-between items-start mb-12">
-                    <div>
-                      <h3 className="text-2xl font-black font-headline text-white uppercase tracking-tighter mb-2">Perfil da Barbearia</h3>
-                      <p className="text-zinc-500 text-sm font-medium">Gerencie as informações públicas e de contato do seu negócio.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
+                 <section className="col-span-1 md:col-span-2 bg-[#1C1B1B] p-4 sm:p-10 rounded-3xl sm:rounded-[2.5rem] border border-white/5 shadow-2xl">
+                  <div className="flex justify-between items-start mb-6 sm:mb-12 gap-4">
+                    <div className="min-w-0">
+                      <h3 className="text-lg sm:text-2xl font-black font-headline text-white uppercase tracking-tighter mb-1 sm:mb-2">Perfil</h3>
+                      <p className="text-zinc-500 text-[10px] sm:text-sm font-medium line-clamp-1 sm:line-clamp-none">Gerencie as informações do seu negócio.</p>
                     </div>
-                    <div className="w-24 h-24 rounded-2xl bg-[#0e0e0e] relative overflow-hidden group cursor-pointer border border-white/5 shadow-inner">
+                    <div className="w-16 h-16 sm:w-24 sm:h-24 rounded-xl sm:rounded-2xl bg-[#0e0e0e] relative overflow-hidden group cursor-pointer border border-white/5 shrink-0">
                       {company?.logo_url ? (
                         <img src={company.logo_url} alt="Logo" className="w-full h-full object-cover grayscale" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-zinc-900 text-[#fbbf24]/40">
-                          <span className="material-symbols-outlined text-4xl">storefront</span>
+                          <span className="material-symbols-outlined text-2xl">storefront</span>
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span className="material-symbols-outlined text-white">edit</span>
-                      </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="space-y-3">
-                      <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Nome do Estabelecimento</label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8">
+                    <div className="space-y-2 sm:space-y-3">
+                      <label className="text-[8px] sm:text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Nome</label>
                       <input 
-                        className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none" 
+                        className="w-full bg-[#0e0e0e] border border-white/5 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none text-xs sm:text-sm" 
                         type="text" 
                         value={companyName}
                         onChange={(e) => setCompanyName(e.target.value)}
                       />
                     </div>
-                    <div className="space-y-3">
-                      <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Telefone de Contato</label>
+                    <div className="space-y-2 sm:space-y-3">
+                      <label className="text-[8px] sm:text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Telefone</label>
                       <input 
-                        className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none" 
+                        className="w-full bg-[#0e0e0e] border border-white/5 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none text-xs sm:text-sm" 
                         type="text" 
                         value={companyPhone}
                         onChange={(e) => setCompanyPhone(e.target.value)}
                       />
                     </div>
-                    <div className="space-y-3">
-                      <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Endereço Completo</label>
+                    <div className="space-y-2 sm:space-y-3">
+                      <label className="text-[8px] sm:text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Endereço</label>
                       <input 
-                        className="w-full bg-[#0e0e0e] border border-white/5 rounded-2xl px-5 py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none" 
+                        className="w-full bg-[#0e0e0e] border border-white/5 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:ring-1 focus:ring-[#fbbf24] transition-all text-[#E5E2E1] outline-none text-xs sm:text-sm" 
                         type="text" 
                         value={companyAddress}
                         onChange={(e) => setCompanyAddress(e.target.value)}
@@ -306,14 +303,13 @@ export function SettingsPage() {
 
 
             {/* Action Bar */}
-            <div className="flex justify-end gap-6 mt-12 bg-[#0e0e0e]/40 p-6 rounded-[2rem] border border-white/5 backdrop-blur-xl sticky bottom-4 z-10 shadow-2xl">
-              <button className="px-8 py-4 text-zinc-500 font-black text-[10px] tracking-widest uppercase hover:text-white transition-all">Descartar</button>
+            <div className="flex justify-end gap-3 sm:gap-6 mt-8 sm:mt-12 bg-[#0e0e0e]/40 p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] border border-white/5 backdrop-blur-xl sticky bottom-4 z-10 shadow-2xl">
               <button 
                 onClick={handleSaveCompany}
                 disabled={loading}
-                className="px-12 py-4 bg-[#fbbf24] text-[#402D00] font-black text-[10px] tracking-widest uppercase rounded-full hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 shadow-xl shadow-[#fbbf24]/10 disabled:opacity-50"
+                className="w-full sm:w-auto px-12 py-3 sm:py-4 bg-[#fbbf24] text-[#402D00] font-black text-[10px] tracking-widest uppercase rounded-full shadow-xl shadow-[#fbbf24]/10 disabled:opacity-50"
               >
-                {loading ? 'Salvando...' : 'Salvar Alterações'}
+                {loading ? '...' : 'SALVAR'}
               </button>
             </div>
           </div>

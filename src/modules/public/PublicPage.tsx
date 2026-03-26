@@ -112,7 +112,7 @@ export function PublicPage() {
   const bannerToDisplay = company?.banner_url || defaultBanner
 
   return (
-    <div className="animate-fade-in pb-20 space-y-16 mt-8">
+    <div className="animate-fade-in pb-10 space-y-4 sm:space-y-16 mt-4 sm:mt-8">
       {/* Search Header Style (Consistent) */}
       <div className="flex items-center px-4 lg:px-0 mb-12">
         <div className="relative flex items-center group flex-1 max-w-xl">
@@ -125,45 +125,45 @@ export function PublicPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 lg:px-0">
-        <header className="mb-16 flex flex-col md:flex-row justify-between items-end gap-8">
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-0">
+        <header className="mb-8 sm:mb-16 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 sm:gap-8">
           <div>
-            <span className="text-[#fbbf24] text-xs font-black uppercase tracking-[0.3em] mb-4 block">Personalização</span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-headline font-black text-[#E5E2E1] tracking-tighter uppercase leading-none">Página Pública</h1>
+            <span className="text-[#fbbf24] text-[8px] sm:text-xs font-black uppercase tracking-[0.3em] mb-2 sm:4 block">Personalização</span>
+            <h1 className="text-xl sm:text-4xl md:text-5xl lg:text-6xl font-headline font-black text-[#E5E2E1] tracking-tighter uppercase leading-none">Página Pública</h1>
           </div>
           <a 
             href={`/portal/${generatedSlug}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-[#fbbf24] text-[#402D00] px-10 py-5 rounded-full font-black text-sm flex items-center gap-3 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 group shadow-xl shadow-[#fbbf24]/10"
+            className="w-full sm:w-auto bg-[#fbbf24] text-[#402D00] px-6 sm:px-10 py-3 sm:py-5 rounded-full font-black text-[10px] sm:text-sm flex items-center justify-center gap-3 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 group shadow-xl shadow-[#fbbf24]/10"
           >
             VISUALIZAR PÁGINA
-            <ExternalLink className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+            <ExternalLink className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
           </a>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-16 items-start">
           {/* Settings Column */}
-          <div className="lg:col-span-7 space-y-12">
+          <div className="lg:col-span-7 space-y-6 sm:space-y-12">
             
             {/* URL Configuration */}
-            <section className="bg-[#1C1B1B] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
-              <div className="flex items-center gap-4 mb-10">
-                <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner text-[#fbbf24]">
-                  <LinkIcon className="w-6 h-6" />
+            <section className="bg-[#1C1B1B] p-4 sm:p-10 rounded-3xl sm:rounded-[2.5rem] border border-white/5 shadow-2xl">
+              <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-10">
+                <div className="p-2 sm:p-3 bg-[#fbbf24]/10 rounded-xl sm:rounded-2xl shadow-inner text-[#fbbf24]">
+                  <LinkIcon className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <h2 className="text-2xl font-black font-headline text-white uppercase tracking-tighter">Links Públicos</h2>
+                <h2 className="text-lg sm:text-2xl font-black font-headline text-white uppercase tracking-tighter">Links Públicos</h2>
               </div>
               
-              <div className="space-y-10">
+              <div className="space-y-6 sm:space-y-10">
                 {/* Portal Link */}
-                <div className="space-y-6">
-                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Link do Portal do Cliente</label>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                     <div className="flex group flex-1 opacity-80">
-                        <span className="bg-[#0e0e0e] px-6 py-5 rounded-l-2xl text-zinc-600 border border-white/5 border-r-0 text-sm font-black flex items-center">/portal/</span>
+                <div className="space-y-4 sm:space-y-6">
+                  <label className="text-[8px] sm:text-[10px] font-black text-zinc-500 uppercase tracking-widest block ml-1">Link do Portal do Cliente</label>
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                     <div className="flex group flex-1 opacity-80 shrink-0">
+                        <span className="bg-[#0e0e0e] px-3 sm:px-6 py-3 sm:py-5 rounded-l-xl sm:rounded-l-2xl text-zinc-600 border border-white/5 border-r-0 text-[10px] sm:text-sm font-black flex items-center shrink-0">/p/</span>
                         <input 
-                          className="flex-1 bg-[#0e0e0e] border border-white/5 rounded-r-2xl py-5 px-6 text-zinc-400 font-black cursor-not-allowed outline-none text-sm" 
+                          className="w-full bg-[#0e0e0e] border border-white/5 rounded-r-xl sm:rounded-r-2xl py-3 sm:py-5 px-3 sm:px-6 text-zinc-400 font-black cursor-not-allowed outline-none text-[10px] sm:text-sm" 
                           type="text" 
                           value={generatedSlug}
                           readOnly
@@ -172,30 +172,29 @@ export function PublicPage() {
                      </div>
                      <button 
                        onClick={copyPortalLink}
-                       className="bg-white/5 border border-white/5 text-zinc-400 hover:text-[#fbbf24] hover:border-[#fbbf24]/20 px-6 py-5 rounded-2xl transition-all flex items-center gap-2 text-[10px] font-black uppercase tracking-widest"
+                       className="bg-white/5 border border-white/5 text-zinc-400 hover:text-[#fbbf24] hover:border-[#fbbf24]/20 px-4 sm:px-6 py-3 sm:py-5 rounded-xl sm:rounded-2xl transition-all flex items-center justify-center gap-2 text-[8px] sm:text-[10px] font-black uppercase tracking-widest"
                      >
-                        <Copy className="w-4 h-4" /> Copiar Link
+                        <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" /> Copiar
                      </button>
                   </div>
-                  <p className="text-xs text-zinc-600 font-medium ml-1">Seu link oficial: <span className="text-[#fbbf24]/60">{window.location.origin}/portal/{generatedSlug}</span></p>
                 </div>
               </div>
             </section>
 
             {/* Appearance and Identity */}
-            <section className="bg-[#1C1B1B] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
-              <div className="flex items-center gap-4 mb-10">
-                <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner text-[#fbbf24]">
-                  <Palette className="w-6 h-6" />
+            <section className="bg-[#1C1B1B] p-4 sm:p-10 rounded-3xl sm:rounded-[2.5rem] border border-white/5 shadow-2xl">
+              <div className="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-10">
+                <div className="p-2 sm:p-3 bg-[#fbbf24]/10 rounded-xl sm:rounded-2xl shadow-inner text-[#fbbf24]">
+                  <Palette className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <h2 className="text-2xl font-black font-headline text-white uppercase tracking-tighter">Aparência e Identidade</h2>
+                <h2 className="text-lg sm:text-2xl font-black font-headline text-white uppercase tracking-tighter">Aparência</h2>
               </div>
-              <div className="space-y-10">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+              <div className="space-y-6 sm:space-y-10">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10">
                   <div className="md:col-span-2">
-                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-6 ml-1">Banner de Capa (Noir Style)</label>
+                    <label className="text-[8px] sm:text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-4 sm:mb-6 ml-1">Banner de Capa</label>
                     <label 
-                      className="relative h-64 rounded-[2rem] overflow-hidden group cursor-pointer border-2 border-dashed border-white/5 hover:border-[#fbbf24]/30 transition-all shadow-inner block"
+                      className="relative h-40 sm:h-64 rounded-2xl sm:rounded-[2rem] overflow-hidden group cursor-pointer border-2 border-dashed border-white/5 hover:border-[#fbbf24]/30 transition-all shadow-inner block"
                     >
                       <input 
                         type="file" 
@@ -205,9 +204,9 @@ export function PublicPage() {
                         disabled={loading}
                       />
                       <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 backdrop-blur-sm">
-                        <CloudUpload className={cn("text-[#fbbf24] w-10 h-10 mb-4", loading && "animate-bounce")} />
-                        <span className="text-white text-[10px] font-black uppercase tracking-[0.2em]">
-                          {loading ? 'ENVIANDO...' : 'ALTERAR BANNER'}
+                        <CloudUpload className={cn("text-[#fbbf24] w-6 h-6 sm:w-10 sm:h-10 mb-2 sm:mb-4", loading && "animate-bounce")} />
+                        <span className="text-white text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em]">
+                          {loading ? 'ENVIANDO...' : 'ALTERAR'}
                         </span>
                       </div>
                       <img 
@@ -218,9 +217,9 @@ export function PublicPage() {
                   </div>
 
                   <div>
-                    <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-6 ml-1">Logo (Quadrada)</label>
+                    <label className="text-[8px] sm:text-[10px] font-black text-zinc-500 uppercase tracking-widest block mb-4 sm:mb-6 ml-1">Logo</label>
                     <label 
-                      className="relative h-64 rounded-[2rem] overflow-hidden group cursor-pointer border-2 border-dashed border-white/5 hover:border-[#fbbf24]/30 transition-all shadow-inner block"
+                      className="relative h-40 sm:h-64 rounded-2xl sm:rounded-[2rem] overflow-hidden group cursor-pointer border-2 border-dashed border-white/5 hover:border-[#fbbf24]/30 transition-all shadow-inner block"
                     >
                       <input 
                         type="file" 
@@ -230,58 +229,56 @@ export function PublicPage() {
                         disabled={loading}
                       />
                       <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10 backdrop-blur-sm">
-                        <CloudUpload className={cn("text-[#fbbf24] w-10 h-10 mb-4", loading && "animate-bounce")} />
-                        <span className="text-white text-[10px] font-black uppercase tracking-[0.2em]">
-                          {loading ? 'LOGO...' : 'ALTERAR LOGO'}
+                        <CloudUpload className={cn("text-[#fbbf24] w-6 h-6 sm:w-10 sm:h-10 mb-2 sm:mb-4", loading && "animate-bounce")} />
+                        <span className="text-white text-[8px] sm:text-[10px] font-black uppercase tracking-[0.2em]">
+                          {loading ? 'LOGO...' : 'ALTERAR'}
                         </span>
                       </div>
-                      <div className="w-full h-full flex items-center justify-center bg-[#0e0e0e] p-10">
+                      <div className="w-full h-full flex items-center justify-center bg-[#0e0e0e] p-4 sm:p-10">
                         {company?.logo_url ? (
                           <img 
                             className="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all duration-500" 
                             src={company.logo_url} 
                           />
                         ) : (
-                          <Scissors className="w-16 h-16 text-zinc-800" />
+                          <Scissors className="w-8 h-8 sm:w-16 sm:h-16 text-zinc-800" />
                         )}
                       </div>
                     </label>
                   </div>
+                </div>
                 </div>
 
               </div>
             </section>
 
             {/* Business Hours */}
-            <section className="bg-[#1C1B1B] p-10 rounded-[2.5rem] border border-white/5 shadow-2xl">
-              <div className="flex justify-between items-center mb-10">
-                <div className="flex items-center gap-4">
-                  <div className="p-3 bg-[#fbbf24]/10 rounded-2xl shadow-inner text-[#fbbf24]">
-                    <Clock className="w-6 h-6" />
+            <section className="bg-[#1C1B1B] p-4 sm:p-10 rounded-3xl sm:rounded-[2.5rem] border border-white/5 shadow-2xl">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-10">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="p-2 sm:p-3 bg-[#fbbf24]/10 rounded-xl sm:rounded-2xl shadow-inner text-[#fbbf24]">
+                    <Clock className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
-                  <h2 className="text-2xl font-black font-headline text-white uppercase tracking-tighter">Horário de Atendimento</h2>
+                  <h2 className="text-lg sm:text-2xl font-black font-headline text-white uppercase tracking-tighter">Horário</h2>
                 </div>
-                <button className="text-[#fbbf24] text-[10px] font-black uppercase tracking-widest hover:underline py-2 px-4 rounded-xl hover:bg-[#fbbf24]/5 transition-all">CONFIGURAÇÃO EM MASSA</button>
+                <button className="text-[#fbbf24] text-[8px] sm:text-[10px] font-black uppercase tracking-widest hover:underline py-2 px-3 sm:px-4 rounded-xl hover:bg-[#fbbf24]/5 transition-all text-left">CONFIGURAÇÃO</button>
               </div>
-              <div className="grid grid-cols-1 gap-4">
+              <div className="grid grid-cols-1 gap-2 sm:gap-4">
                 {/* Sunday Off */}
-                <div className="flex items-center justify-between p-6 bg-[#0e0e0e] rounded-3xl opacity-50 border border-white/[0.02]">
-                  <span className="text-sm font-black text-zinc-400 uppercase tracking-widest">Domingo</span>
-                  <span className="text-[10px] uppercase font-black tracking-[0.2em] text-zinc-600">F E C H A D O</span>
-                  <div className="w-12 h-6 bg-zinc-900 rounded-full relative shadow-inner">
-                    <div className="absolute left-1 top-1 w-4 h-4 bg-zinc-700 rounded-full"></div>
+                <div className="flex items-center justify-between p-3 sm:p-6 bg-[#0e0e0e] rounded-2xl sm:rounded-3xl opacity-50 border border-white/[0.02]">
+                  <span className="text-xs sm:text-sm font-black text-zinc-400 uppercase tracking-widest">Dom</span>
+                  <span className="text-[8px] sm:text-[10px] uppercase font-black tracking-[0.2em] text-zinc-600">F E C H A D O</span>
+                  <div className="w-8 sm:w-12 h-4 sm:h-6 bg-zinc-900 rounded-full relative shadow-inner">
+                    <div className="absolute left-1 top-1 w-2 sm:w-4 h-2 sm:h-4 bg-zinc-700 rounded-full"></div>
                   </div>
                 </div>
                 {/* Weekdays */}
-                <div className="flex items-center justify-between p-6 bg-[#0e0e0e] rounded-3xl border border-[#fbbf24]/10 group hover:border-[#fbbf24]/30 transition-all shadow-xl">
-                  <span className="text-sm font-black text-white uppercase tracking-widest">Seg - Sex</span>
-                  <div className="flex items-center gap-6">
-                    <span className="text-sm font-black px-6 py-3 bg-[#1C1B1B] rounded-2xl text-[#fbbf24] border border-[#fbbf24]/10 shadow-inner">09:00</span>
-                    <span className="text-zinc-700 font-black text-[10px]">A S</span>
-                    <span className="text-sm font-black px-6 py-3 bg-[#1C1B1B] rounded-2xl text-[#fbbf24] border border-[#fbbf24]/10 shadow-inner">20:00</span>
-                  </div>
-                  <div className="w-12 h-6 bg-[#fbbf24]/20 rounded-full relative shadow-inner">
-                    <div className="absolute right-1 top-1 w-4 h-4 bg-[#fbbf24] rounded-full shadow-lg"></div>
+                <div className="flex items-center justify-between p-3 sm:p-6 bg-[#0e0e0e] rounded-2xl sm:rounded-3xl border border-[#fbbf24]/10 group hover:border-[#fbbf24]/30 transition-all shadow-xl">
+                  <span className="text-xs sm:text-sm font-black text-white uppercase tracking-widest">Seg-Sex</span>
+                  <div className="flex items-center gap-2 sm:gap-6">
+                    <span className="text-[10px] sm:text-sm font-black px-2 sm:px-6 py-1.5 sm:py-3 bg-[#1C1B1B] rounded-lg sm:rounded-2xl text-[#fbbf24] border border-[#fbbf24]/10 shadow-inner">09:00</span>
+                    <span className="text-zinc-700 font-black text-[8px] sm:text-[10px]">-</span>
+                    <span className="text-[10px] sm:text-sm font-black px-2 sm:px-6 py-1.5 sm:py-3 bg-[#1C1B1B] rounded-lg sm:rounded-2xl text-[#fbbf24] border border-[#fbbf24]/10 shadow-inner">20:00</span>
                   </div>
                 </div>
               </div>
@@ -394,18 +391,15 @@ export function PublicPage() {
       </div>
 
       {/* Action Bar */}
-      <div className="max-w-7xl mx-auto px-4 lg:px-0 mt-16">
-        <div className="bg-[#1C1B1B]/80 backdrop-blur-2xl p-6 sm:p-8 rounded-[3rem] border border-white/5 flex flex-col md:flex-row items-center justify-between gap-8 shadow-2xl">
-          <div className="flex items-center gap-6">
-            <div className="h-4 w-4 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
-            <p className="text-sm font-black text-white uppercase tracking-tighter">Alterações salvas automaticamente</p>
+      <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-0 mt-8 sm:mt-16">
+        <div className="bg-[#1C1B1B]/80 backdrop-blur-2xl p-4 sm:p-8 rounded-[2rem] sm:rounded-[3rem] border border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-8 shadow-2xl">
+          <div className="flex items-center gap-3 sm:gap-6">
+            <div className="h-3 w-3 sm:h-4 sm:w-4 rounded-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]"></div>
+            <p className="text-[10px] sm:text-sm font-black text-white uppercase tracking-tighter text-center">Salvo automaticamente</p>
           </div>
-          <div className="flex gap-6">
-            <button className="px-10 py-5 rounded-full border border-white/5 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-all shadow-lg active:scale-95">DESCARTAR</button>
-            <button 
-              className="px-16 py-5 rounded-full bg-[#fbbf24] text-[#402D00] text-[10px] font-black uppercase tracking-widest shadow-xl shadow-[#fbbf24]/20 hover:shadow-[#fbbf24]/40 transition-all active:scale-95"
-            >
-              SALVAR ALTERAÇÕES
+          <div className="flex gap-3 sm:gap-6 w-full sm:w-auto">
+            <button className="flex-1 sm:flex-none px-6 sm:px-16 py-3 sm:py-5 rounded-full bg-[#fbbf24] text-[#402D00] text-[10px] font-black uppercase tracking-widest shadow-xl shadow-[#fbbf24]/20 transition-all active:scale-95">
+              SALVAR
             </button>
           </div>
         </div>

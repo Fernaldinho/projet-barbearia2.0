@@ -64,11 +64,11 @@ export function BillingPage() {
   }, [company?.id])
 
   return (
-    <div className="space-y-4 animate-fade-in px-4 lg:px-0">
+    <div className="space-y-4 animate-fade-in px-2 sm:px-4 lg:px-0">
       {/* Header */}
       <div className="mt-2 sm:mt-8">
-        <h1 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tighter">Faturamento</h1>
-        <p className="text-zinc-500 mt-0.5 uppercase text-[8px] sm:text-[10px] font-black tracking-widest leading-none">Acompanhe receitas e plano atual</p>
+        <h1 className="text-xl sm:text-4xl font-black text-white uppercase tracking-tighter">Faturamento</h1>
+        <p className="text-zinc-500 mt-0.5 uppercase text-[7px] sm:text-[10px] font-black tracking-widest leading-none">Receitas e plano atual</p>
       </div>
 
       {/* Stats */}
@@ -79,7 +79,7 @@ export function BillingPage() {
               <DollarSign className="w-4 h-4 sm:w-6 sm:h-6 text-success-500" />
             </div>
           </div>
-          <p className="text-lg sm:text-3xl font-black text-white mb-0.5 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.total).replace('R$', '')}</p>
+          <p className="text-base sm:text-3xl font-black text-white mb-0.5 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.total).replace('R$', '')}</p>
           <p className="text-[7px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Previsão</p>
         </div>
 
@@ -89,7 +89,7 @@ export function BillingPage() {
               <TrendingUp className="w-4 h-4 sm:w-6 sm:h-6 text-[#fbbf24]" />
             </div>
           </div>
-          <p className="text-lg sm:text-3xl font-black text-white mb-0.5 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.received).replace('R$', '')}</p>
+          <p className="text-base sm:text-3xl font-black text-white mb-0.5 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.received).replace('R$', '')}</p>
           <p className="text-[7px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Efetuada</p>
         </div>
 
@@ -99,22 +99,23 @@ export function BillingPage() {
               <Clock className="w-4 h-4 sm:w-6 sm:h-6 text-zinc-500" />
             </div>
           </div>
-          <p className="text-lg sm:text-3xl font-black text-white mb-0.5 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.pending).replace('R$', '')}</p>
+          <p className="text-base sm:text-3xl font-black text-white mb-0.5 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.pending).replace('R$', '')}</p>
           <p className="text-[7px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Pendente</p>
         </div>
       </div>
 
-      {/* Plan Info *      <div className="card p-5 sm:p-10 border border-white/5 rounded-3xl bg-gradient-to-br from-[#1C1B1B] via-[#1C1B1B] to-transparent relative overflow-hidden">
+      {/* Plan Info */}
+      <div className="card p-5 sm:p-10 border border-white/5 rounded-3xl bg-gradient-to-br from-[#1C1B1B] via-[#1C1B1B] to-transparent relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#fbbf24]/5 rounded-full blur-[120px] -mr-48 -mt-48"></div>
         
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 sm:gap-10 relative">
-          <div className="flex items-center gap-4 sm:gap-6">
-            <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-xl sm:rounded-[1.5rem] bg-[#fbbf24] text-[#402D00] flex items-center justify-center shadow-2xl shadow-[#fbbf24]/20">
-              <CreditCard className="w-5 h-5 sm:w-8 sm:h-8" />
+          <div className="flex items-center gap-3 sm:gap-6">
+            <div className="w-8 h-8 sm:w-16 sm:h-16 rounded-lg sm:rounded-[1.5rem] bg-[#fbbf24] text-[#402D00] flex items-center justify-center shadow-2xl shadow-[#fbbf24]/20">
+              <CreditCard className="w-4 h-4 sm:w-8 sm:h-8" />
             </div>
             <div>
-              <span className="text-[8px] sm:text-[10px] font-black text-[#fbbf24] uppercase tracking-[0.3em] mb-1 sm:mb-2 block">Ativa</span>
-              <h3 className="text-xl sm:text-4xl font-black text-white uppercase tracking-tighter leading-none">Plano {plan.name}</h3>
+              <span className="text-[7px] sm:text-[10px] font-black text-[#fbbf24] uppercase tracking-[0.3em] mb-0.5 sm:mb-2 block leading-none">Ativa</span>
+              <h3 className="text-lg sm:text-4xl font-black text-white uppercase tracking-tighter leading-none">Plano {plan.name}</h3>
             </div>
           </div>
 
@@ -159,15 +160,14 @@ export function BillingPage() {
             </a>
           </div>
         )}
-      </div>
+      
 
-      {/* Invoices List */}
-      <div className="pt-8">
-        <div className="flex items-center justify-between mb-8">
+      <div className="pt-4 sm:pt-8">
+        <div className="flex items-center justify-between mb-4 sm:mb-8">
           <div>
-            <h3 className="text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-3">
+            <h3 className="text-lg sm:text-2xl font-black text-white uppercase tracking-tighter flex items-center gap-2 sm:gap-3">
               Histórico
-              <span className="text-[10px] font-black bg-white/5 border border-white/5 px-3 py-1 rounded-full text-zinc-500 uppercase tracking-widest">{invoices.length} Faturas</span>
+              <span className="text-[7px] sm:text-[10px] font-black bg-white/5 border border-white/5 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-zinc-500 uppercase tracking-widest">{invoices.length}</span>
             </h3>
           </div>
         </div>

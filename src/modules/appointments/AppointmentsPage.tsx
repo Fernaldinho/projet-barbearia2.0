@@ -416,23 +416,7 @@ export function AppointmentsPage() {
         </div>
       </div>
 
-      {/* Floating Analytics Summary */}
-      <div className="fixed bottom-4 right-4 sm:bottom-12 sm:right-12 z-20">
-        <div className="bg-[#1C1B1B]/90 backdrop-blur-2xl px-4 py-2.5 sm:px-8 sm:py-5 rounded-xl sm:rounded-[2rem] shadow-2xl border border-white/10 flex items-center gap-6 sm:gap-10 hover:scale-105 transition-transform cursor-pointer">
-          <div>
-            <p className="text-[8px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black mb-0.5">Extra</p>
-            <p className="text-sm sm:text-2xl font-headline font-black text-[#fbbf24] tracking-tighter text-nowrap">{appointments.length} Ag</p>
-          </div>
-          <div className="w-[1px] h-6 sm:h-10 bg-white/10"></div>
-          <div>
-            <p className="text-[8px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black mb-0.5">Ocupação</p>
-            <div className="flex items-center gap-1.5 sm:gap-3">
-              <p className="text-sm sm:text-2xl font-headline font-black text-white tracking-tighter">84%</p>
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+
 
       {showForm && (
         <AppointmentForm
