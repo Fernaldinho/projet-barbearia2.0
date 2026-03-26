@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Building2, Phone, ArrowRight, Loader2, Scissors, Sparkles, ShieldCheck, MapPin } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
-import { useAuth } from '@/hooks'
+import { useAuth, useCompany } from '@/hooks'
 import { generateSlug } from '@/utils/helpers'
 
 export default function OnboardingPage() {
   const { user } = useAuth()
+  const { refreshCompany } = useCompany()
   const navigate = useNavigate()
   
   const [loading, setLoading] = useState(false)
@@ -81,7 +82,8 @@ export default function OnboardingPage() {
       if (profileError) throw profileError
 
       // 3. Success!
-      window.location.href = '/dashboard'
+      await refreshCompany()
+      navigate('/dashboard')
     } catch (err: any) {
       console.error('Onboarding error:', err)
       setError(err.message || 'Erro ao configurar sua empresa. Tente novamente.')
