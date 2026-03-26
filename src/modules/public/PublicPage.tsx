@@ -247,8 +247,6 @@ export function PublicPage() {
                     </label>
                   </div>
                 </div>
-                </div>
-
               </div>
             </section>
 
