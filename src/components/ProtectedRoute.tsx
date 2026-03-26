@@ -9,10 +9,17 @@ interface ProtectedRouteProps {
 
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const { user, loading } = useAuth()
-  const { company, loading: companyLoading } = useCompany()
+  const { company, loading: companyLoading, initializedForUser } = useCompany()
   const location = useLocation()
 
-  if (loading || (companyLoading && !company)) {
+  const isAuthFinished = !loading
+  const hasUser = !!user
+  
+  // A empresa foi carregada ou falhou para o usuário atual?
+  const isCompanyInitialized = initializedForUser === (user?.id || 'none')
+
+  // Se o Auth ainda não acabou OU se temos Usuário mas a Empresa ainda está sendo buscada para este usuário específico
+  if (!isAuthFinished || (hasUser && !isCompanyInitialized)) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#0c0c0c]">
         <div className="flex flex-col items-center gap-4 animate-fade-in">
@@ -23,7 +30,9 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     )
   }
 
-  if (!user || (!company && !companyLoading)) {
+  // Se chegamos aqui, isAuthFinished é true e (se houver user) isCompanyInitialized é true.
+  // Então redirecionamos para login se: não houver user OU (houver user mas não tiver empresa encontrada)
+  if (!user || !company) {
     return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />
   }
   

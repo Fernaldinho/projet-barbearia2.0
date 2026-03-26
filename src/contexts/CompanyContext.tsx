@@ -17,6 +17,7 @@ interface CompanyContextType {
   }
   refreshCompany: () => Promise<void>
   updateCompany: (data: Partial<Company>) => Promise<void>
+  initializedForUser: string | null
 }
 
 const CompanyContext = createContext<CompanyContextType | undefined>(undefined)
@@ -25,6 +26,7 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
   const { user } = useAuth()
   const [company, setCompany] = useState<Company | null>(null)
   const [loading, setLoading] = useState(true)
+  const [checkedForUserId, setCheckedForUserId] = useState<string | null>(null)
 
   const plan = company
     ? PLAN_FEATURES[company.plan as keyof typeof PLAN_FEATURES]
@@ -77,6 +79,7 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
       setCompany(null)
     } finally {
       setLoading(false)
+      setCheckedForUserId(user?.id || 'none')
     }
   }
 
@@ -97,8 +100,11 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
+    // Se o auth ainda está carregando, não faz nada
+    if (user === undefined) return 
+
     fetchCompany()
-  }, [user])
+  }, [user?.id])
 
   return (
     <CompanyContext.Provider
@@ -107,8 +113,9 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
         plan,
         loading,
         features,
-        refreshCompany,
+        refreshCompany: fetchCompany,
         updateCompany,
+        initializedForUser: checkedForUserId
       }}
     >
       {children}
