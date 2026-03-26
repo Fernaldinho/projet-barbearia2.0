@@ -26,31 +26,21 @@ export function SubscriptionPage() {
 
       <div className="max-w-7xl mx-auto px-4 lg:px-0">
         {/* Hero Section */}
-        <header className="mb-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <span className="text-[#fbbf24] text-xs font-black uppercase tracking-[0.3em] mb-4 block">Eleve o Nível do seu Negócio</span>
-              <h1 className="text-6xl font-headline font-black text-[#E5E2E1] tracking-tighter uppercase leading-none mb-8">
-                AgendaAI <span className="text-[#fbbf24]">PRO</span>
-              </h1>
-              <div className="space-y-6">
-                {benefits.map((b, i) => (
-                    <div key={i} className="flex items-start gap-4">
-                        <div className="p-2 bg-[#fbbf24]/10 rounded-lg text-[#fbbf24] mt-1">{b.icon}</div>
-                        <div>
-                            <p className="font-black text-white text-sm uppercase tracking-tighter">{b.title}</p>
-                            <p className="text-zinc-500 text-xs font-medium">{b.desc}</p>
-                        </div>
-                    </div>
-                ))}
-              </div>
-            </div>
-            <div className="relative hidden lg:block">
-                <div className="absolute inset-0 bg-gradient-to-r from-[#131313] to-transparent z-10"></div>
-                <img 
-                    src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2070&auto=format&fit=crop" 
-                    alt="Barbearia Profissional" 
-                    className="w-full h-[400px] object-cover rounded-[3rem] grayscale opacity-40"
-                />
+        <header className="mb-20 flex flex-col items-center text-center max-w-2xl mx-auto">
+            <span className="text-[#fbbf24] text-xs font-black uppercase tracking-[0.3em] mb-4 block">Eleve o Nível do seu Negócio</span>
+            <h1 className="text-6xl font-headline font-black text-[#E5E2E1] tracking-tighter uppercase leading-none mb-12">
+              AgendaAI <span className="text-[#fbbf24]">PRO</span>
+            </h1>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 w-full">
+              {benefits.map((b, i) => (
+                  <div key={i} className="flex flex-col items-center gap-3">
+                      <div className="p-3 bg-[#fbbf24]/10 rounded-2xl text-[#fbbf24]">{b.icon}</div>
+                      <div>
+                          <p className="font-black text-white text-[10px] uppercase tracking-tighter">{b.title}</p>
+                          <p className="text-zinc-500 text-[9px] font-medium leading-tight">{b.desc}</p>
+                      </div>
+                  </div>
+              ))}
             </div>
         </header>
 
