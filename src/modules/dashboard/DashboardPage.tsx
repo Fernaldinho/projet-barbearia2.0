@@ -14,6 +14,7 @@ import {
   getDailyAppointments,
   getTopServices,
   getTodaySchedule,
+  checkBirthdays,
   type DashboardMetrics,
   type DailyRevenuePoint,
   type DailyAppointmentsPoint,
@@ -60,6 +61,7 @@ export function DashboardPage() {
       const [m, schedule] = await Promise.all([
         getDashboardMetrics(company.id),
         getTodaySchedule(company.id),
+        checkBirthdays(company.id)
       ])
       setMetrics(m)
       setTodayScheduleData(schedule)

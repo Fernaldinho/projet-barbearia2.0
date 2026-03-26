@@ -298,3 +298,53 @@ export async function getTodaySchedule(companyId: string): Promise<TodayAppointm
     service_name: (a.service as any)?.name || 'Serviço',
   }))
 }
+
+// ============================================
+// Birthday Sync Logic
+// ============================================
+
+export async function checkBirthdays(companyId: string): Promise<void> {
+  const today = new Date()
+  const todayStr = today.toISOString().split('T')[0]
+  const todayMonth = today.getMonth()
+  const todayDay = today.getDate()
+
+  // 1. Check if we already created a birthday notification today to avoid spam
+  const { data: existing } = await supabase
+    .from('notifications')
+    .select('id')
+    .eq('company_id', companyId)
+    .eq('type', 'birthday')
+    .gte('created_at', todayStr + 'T00:00:00')
+    .limit(1)
+
+  if (existing && existing.length > 0) return
+
+  // 2. Fetch all clients (we'll filter in JS since PG month/day extraction is complex via RPC-less Supabase)
+  const { data: clients } = await supabase
+    .from('clients')
+    .select('name, birth_date')
+    .eq('company_id', companyId)
+    .not('birth_date', 'is', null)
+
+  const birthdayBoys = (clients || []).filter(c => {
+    const d = new Date(c.birth_date)
+    return d.getMonth() === todayMonth && d.getDate() === todayDay
+  })
+
+  if (birthdayBoys.length === 0) return
+
+  // 3. Create the notification
+  const names = birthdayBoys.map(c => c.name).join(', ')
+  const title = birthdayBoys.length === 1 ? 'Aniversariante do Dia!' : 'Aniversariantes do Dia!'
+  const message = birthdayBoys.length === 1 
+    ? `Hoje é aniversário de ${names}. Que tal enviar um parabéns? 🎂`
+    : `Hoje temos ${birthdayBoys.length} clientes soprando velinhas: ${names}. 🎉`
+
+  await supabase.from('notifications').insert({
+    company_id: companyId,
+    title,
+    message,
+    type: 'birthday'
+  })
+}
