@@ -145,7 +145,7 @@ export function BusinessHoursPage() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="btn-primary whitespace-nowrap disabled:opacity-50"
+          className="w-full sm:w-auto px-8 h-12 bg-primary-container text-on-primary font-bold rounded-full transition-all hover:brightness-110 active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-primary-container/10 disabled:opacity-50"
         >
           <Save className="w-5 h-5" />
           {saving ? 'Salvando...' : 'Salvar horários'}
