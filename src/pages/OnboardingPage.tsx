@@ -47,10 +47,10 @@ export default function OnboardingPage() {
 
       if (companyError) throw companyError
 
-      // 2. Create the user profile
+      // 2. Create/Update the user profile
       const { error: profileError } = await supabase
         .from('users')
-        .insert([
+        .upsert([
           {
             id: user.id,
             company_id: company.id,
@@ -58,7 +58,7 @@ export default function OnboardingPage() {
             email: user.email!,
             role: 'owner',
           }
-        ])
+        ], { onConflict: 'id' })
 
       if (profileError) throw profileError
 
