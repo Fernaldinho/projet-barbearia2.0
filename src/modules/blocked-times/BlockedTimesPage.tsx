@@ -75,25 +75,29 @@ export function BlockedTimesPage() {
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-white">Bloqueios de Horário</h1>
-          <p className="text-dark-300 mt-1">Gerencie os horários bloqueados para agendamento</p>
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-12">
+        <div className="space-y-2">
+          <h1 className="text-4xl md:text-5xl font-headline font-bold text-white tracking-tight">
+            Bloqueios de Horário
+          </h1>
+          <p className="text-dark-400 text-lg max-w-md leading-relaxed">
+            Gestão cirúrgica de indisponibilidade para garantir a excelência do atendimento.
+          </p>
         </div>
-        <div className="flex flex-col sm:flex-row items-center gap-3">
-          <div className="relative w-full sm:w-auto">
-            <Search className="w-5 h-5 text-dark-400 absolute left-3 top-1/2 -translate-y-1/2" />
+        <div className="flex flex-col sm:flex-row items-center gap-4">
+          <div className="relative w-full sm:w-auto overflow-hidden rounded-full transition-all focus-within:ring-1 focus-within:ring-primary-container/30">
+            <Search className="w-5 h-5 text-dark-500 absolute left-4 top-1/2 -translate-y-1/2 z-10" />
             <input
               type="text"
               placeholder="Buscar por data ou motivo..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="input-field pl-10 w-full sm:w-64 !bg-dark-800"
+              className="w-full sm:w-72 bg-surface-container-low border-none h-12 pl-12 pr-6 text-sm text-on-surface placeholder:text-dark-500 focus:outline-none transition-all"
             />
           </div>
           <button
             onClick={() => setShowForm(true)}
-            className="btn-primary whitespace-nowrap w-full sm:w-auto justify-center"
+            className="w-full sm:w-auto px-8 h-12 bg-primary-container text-on-primary font-bold rounded-full transition-all hover:brightness-110 active:scale-95 flex items-center justify-center gap-2 shadow-lg shadow-primary-container/10"
           >
             <Plus className="w-5 h-5" />
             Novo Bloqueio
@@ -101,21 +105,6 @@ export function BlockedTimesPage() {
         </div>
       </div>
 
-      {/* Info card */}
-      <div className="card p-4 border-dark-700/30">
-        <div className="flex items-start gap-3">
-          <div className="w-8 h-8 rounded-lg bg-danger-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-            <CalendarOff className="w-4 h-4 text-danger-400" />
-          </div>
-          <div>
-            <p className="text-sm font-medium text-white">Sobre os bloqueios</p>
-            <p className="text-xs text-dark-400 mt-1">
-              Bloqueios impedem que clientes façam agendamentos nos horários definidos. Use para feriados,
-              almoço, compromissos pessoais ou qualquer indisponibilidade.
-            </p>
-          </div>
-        </div>
-      </div>
 
       {/* Content */}
       {loading ? (

@@ -27,92 +27,97 @@ function isPast(dateStr: string): boolean {
 export function BlockedTimesTable({ blockedTimes, onEdit, onDelete }: BlockedTimesTableProps) {
   if (blockedTimes.length === 0) {
     return (
-      <div className="card p-12 text-center">
-        <div className="w-16 h-16 rounded-2xl bg-dark-800 border border-dark-700 flex items-center justify-center mx-auto mb-4">
-          <Calendar className="w-8 h-8 text-dark-500" />
+    return (
+      <div className="bg-surface-container-low p-20 text-center rounded-3xl animate-scale-in">
+        <div className="w-20 h-20 rounded-full bg-surface-container-highest flex items-center justify-center mx-auto mb-6 shadow-xl shadow-black/20">
+          <Calendar className="w-10 h-10 text-dark-500" />
         </div>
-        <p className="text-dark-400 text-lg mb-2">Nenhum bloqueio cadastrado</p>
-        <p className="text-dark-500 text-sm">Adicione bloqueios para impedir agendamentos em horários específicos.</p>
+        <p className="text-white text-xl font-headline font-bold mb-2">Nenhum bloqueio cadastrado</p>
+        <p className="text-dark-400 text-sm max-w-xs mx-auto">Adicione bloqueios para impedir agendamentos em horários específicos.</p>
       </div>
+    )
     )
   }
 
   return (
-    <div className="card overflow-hidden">
+    <div className="bg-surface-container-low rounded-[2rem] overflow-hidden shadow-2xl shadow-black/40">
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full border-collapse">
           <thead>
-            <tr className="border-b border-dark-700/50">
-              <th className="text-left text-xs font-semibold text-dark-400 uppercase tracking-wider px-6 py-4">
+            <tr className="bg-surface-container/30">
+              <th className="text-left text-[10px] font-bold text-dark-500 uppercase tracking-[0.2em] px-8 py-5">
                 Data
               </th>
-              <th className="text-left text-xs font-semibold text-dark-400 uppercase tracking-wider px-6 py-4">
+              <th className="text-left text-[10px] font-bold text-dark-500 uppercase tracking-[0.2em] px-8 py-5">
                 Horário
               </th>
-              <th className="text-left text-xs font-semibold text-dark-400 uppercase tracking-wider px-6 py-4">
+              <th className="text-left text-[10px] font-bold text-dark-500 uppercase tracking-[0.2em] px-8 py-5">
                 Motivo
               </th>
-              <th className="text-right text-xs font-semibold text-dark-400 uppercase tracking-wider px-6 py-4">
+              <th className="text-right text-[10px] font-bold text-dark-500 uppercase tracking-[0.2em] px-8 py-5">
                 Ações
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-dark-700/10">
             {blockedTimes.map((item) => {
               const past = isPast(item.date)
               return (
                 <tr
                   key={item.id}
-                  className={`border-b border-dark-700/30 hover:bg-dark-800/50 transition-colors ${
-                    past ? 'opacity-50' : ''
+                  className={`group transition-all duration-300 hover:bg-surface-container-highest/20 ${
+                    past ? 'opacity-30' : ''
                   }`}
                 >
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-4">
                       <div
-                        className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                        className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110 ${
                           past
-                            ? 'bg-dark-800 border border-dark-700'
-                            : 'bg-gradient-to-br from-danger-500/20 to-danger-700/20 border border-danger-500/10'
+                            ? 'bg-surface-container text-dark-500'
+                            : 'bg-primary-container/10 text-primary-container'
                         }`}
                       >
-                        <Calendar
-                          className={`w-4 h-4 ${past ? 'text-dark-500' : 'text-danger-400'}`}
-                        />
+                        <Calendar className="w-5 h-5" />
                       </div>
                       <div>
-                        <p className="font-medium text-white text-sm">{formatDateBR(item.date)}</p>
-                        <p className="text-xs text-dark-400 capitalize">{formatWeekday(item.date)}</p>
+                        <p className="font-headline font-bold text-white text-base leading-tight">
+                          {formatDateBR(item.date)}
+                        </p>
+                        <p className="text-[10px] font-bold text-dark-500 uppercase tracking-widest mt-1">
+                          {formatWeekday(item.date)}
+                        </p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2 text-sm text-dark-200">
-                      <Clock className="w-3.5 h-3.5 text-dark-400" />
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-3 text-sm text-dark-100 font-medium">
+                      <div className="w-1.5 h-1.5 rounded-full bg-primary-container/40" />
                       {item.start_time.slice(0, 5)} - {item.end_time.slice(0, 5)}
                     </div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-8 py-6">
                     {item.reason ? (
-                      <div className="flex items-center gap-2 text-sm text-dark-300">
-                        <MessageSquare className="w-3.5 h-3.5 text-dark-400 flex-shrink-0" />
-                        <span className="truncate max-w-[200px]">{item.reason}</span>
+                      <div className="flex items-center gap-3 text-sm text-dark-300">
+                        <span className="truncate max-w-[240px] italic">"{item.reason}"</span>
                       </div>
                     ) : (
-                      <span className="text-sm text-dark-500">—</span>
+                      <span className="text-xs font-bold text-dark-600 uppercase tracking-wider">Sem Motivo</span>
                     )}
                   </td>
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex items-center justify-end gap-2">
+                  <td className="px-8 py-6 text-right">
+                    <div className="flex items-center justify-end gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
                       <button
                         onClick={() => onEdit(item)}
-                        className="p-2 rounded-lg text-dark-400 hover:bg-dark-700 hover:text-white transition-all"
+                        className="w-10 h-10 rounded-full flex items-center justify-center text-dark-400 hover:bg-surface-container-highest hover:text-white transition-all"
+                        title="Editar"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => onDelete(item.id)}
-                        className="p-2 rounded-lg text-dark-400 hover:bg-danger-600/10 hover:text-danger-500 transition-all"
+                        className="w-10 h-10 rounded-full flex items-center justify-center text-dark-400 hover:bg-danger-500/10 hover:text-danger-500 transition-all"
+                        title="Excluir"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
