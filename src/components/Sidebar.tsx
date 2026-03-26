@@ -13,7 +13,8 @@ import {
   Sparkles,
   X,
   Globe,
-  Crown
+  Crown,
+  Bell
 } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { useCompany } from '@/contexts/CompanyContext'
@@ -31,6 +32,7 @@ const navItems = [
   { path: ROUTES.SUBSCRIPTION, label: 'Assinatura', icon: Crown },
   { path: ROUTES.BILLING, label: 'Faturamento', icon: CreditCard },
   { path: ROUTES.PUBLIC_PAGE, label: 'Página Pública', icon: Globe },
+  { path: ROUTES.NOTIFICATIONS, label: 'Notificações', icon: Bell },
   { path: ROUTES.SETTINGS, label: 'Configurações', icon: Settings },
 ]
 

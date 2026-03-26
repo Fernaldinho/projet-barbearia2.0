@@ -138,24 +138,21 @@ export async function getDashboardMetrics(companyId: string): Promise<DashboardM
     }
   }
 
-  const totalMonth = allAppts.length
+  const totalMonth = allAppts.filter(a => a.status !== 'cancelled').length
   const completedMonth = allAppts.filter(isActuallyDone).length
-  const cancelledMonth = allAppts.filter((a) => a.status === 'cancelled' || a.status === 'no_show').length
-  const countable = totalMonth - cancelledMonth
-  const attendanceRate = countable > 0 ? (completedMonth / countable) * 100 : 0
+  const attendanceRate = totalMonth > 0 ? (completedMonth / totalMonth) * 100 : 0
 
   const monthlyRevenue = allAppts
     .filter(isActuallyDone)
     .reduce((sum, a: any) => {
-      // Handle both object and array response from Supabase
       const serviceData = Array.isArray(a.service) ? a.service[0] : a.service
       return sum + (Number(serviceData?.price) || 0)
     }, 0)
 
+  // Projected revenue should be scheduled/confirmed appointments from TODAY onwards that are not done
   const projectedRevenue = allAppts
     .filter((a) => !isActuallyDone(a) && ['scheduled', 'confirmed'].includes(a.status))
     .reduce((sum, a: any) => {
-      // Handle both object and array response from Supabase
       const serviceData = Array.isArray(a.service) ? a.service[0] : a.service
       return sum + (Number(serviceData?.price) || 0)
     }, 0)

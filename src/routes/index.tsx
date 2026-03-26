@@ -17,6 +17,7 @@ import { DashboardPage } from '@/modules/dashboard/DashboardPage'
 import OnboardingPage from '@/pages/OnboardingPage'
 import { ServicesPage } from '@/modules/services/ServicesPage'
 import { ClientsPage } from '@/modules/clients/ClientsPage'
+import { BirthdaysPage } from '@/modules/clients/BirthdaysPage'
 import { AppointmentsPage } from '@/modules/appointments/AppointmentsPage'
 import { StaffPage } from '@/modules/staff/StaffPage'
 import { BusinessHoursPage } from '@/modules/business-hours/BusinessHoursPage'
@@ -26,6 +27,7 @@ import { SubscriptionPage } from '@/modules/billing/SubscriptionPage'
 import { SettingsPage } from '@/modules/settings/SettingsPage'
 import { PublicPage } from '@/modules/public/PublicPage'
 import { ClientPortal } from '@/modules/client/ClientPortal'
+import { NotificationsPage } from '@/modules/notifications/NotificationsPage'
 
 export const router = createBrowserRouter([
   // Public routes
@@ -86,6 +88,10 @@ export const router = createBrowserRouter([
         element: <ClientsPage />,
       },
       {
+        path: '/birthdays',
+        element: <BirthdaysPage />,
+      },
+      {
         path: '/appointments',
         element: <AppointmentsPage />,
       },
@@ -116,6 +122,10 @@ export const router = createBrowserRouter([
       {
         path: '/public-page',
         element: <PublicPage />,
+      },
+      {
+        path: '/notifications',
+        element: <NotificationsPage />,
       },
     ],
   },

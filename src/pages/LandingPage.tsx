@@ -251,7 +251,7 @@ export function LandingPage() {
                   <h3 className="text-[#e5e2e1] font-headline font-bold text-2xl mb-2 uppercase">PROFISSIONAL</h3>
                   <p className="text-[#d3c5ac] text-sm mb-8 italic">Para barbearias em crescimento</p>
                   <div className="mb-10">
-                    <span className="text-[#e5e2e1] font-headline font-bold text-4xl">R$ 49</span>
+                    <span className="text-[#e5e2e1] font-headline font-bold text-4xl">R$ 59</span>
                     <span className="text-[#d3c5ac] text-sm">/mês</span>
                   </div>
                   <ul className="space-y-4 mb-12 text-left">
@@ -261,14 +261,14 @@ export function LandingPage() {
                     <li className="flex items-center gap-3 text-[#e5e2e1]"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Link personalizado</li>
                     <li className="flex items-center gap-3 text-[#e5e2e1]"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Dashboard completo</li>
                   </ul>
-                  <Link to={ROUTES.REGISTER} className="mt-auto w-full bg-[#fbbf24] text-[#402d00] py-4 rounded-xl font-headline font-bold hover:shadow-[0_0_30px_rgba(251,191,36,0.3)] transition-all text-center">Assinar PRO</Link>
+                  <Link to={ROUTES.REGISTER} className="mt-auto w-full bg-[#fbbf24] text-[#402d00] py-4 rounded-xl font-headline font-bold hover:shadow-[0_0_30_rgba(251,191,36,0.3)] transition-all text-center">Assinar PRO</Link>
                 </div>
 
                 <div className="bg-[#1C1B1B] border border-[#4f4633]/10 rounded-2xl p-10 flex flex-col text-center">
                   <h3 className="text-[#e5e2e1] font-headline font-bold text-2xl mb-2 uppercase">ENTERPRISE</h3>
                   <p className="text-[#d3c5ac] text-sm mb-8 italic">Para grandes operações</p>
                   <div className="mb-10">
-                    <span className="text-[#e5e2e1] font-headline font-bold text-4xl">R$ 99</span>
+                    <span className="text-[#e5e2e1] font-headline font-bold text-4xl">R$ 149</span>
                     <span className="text-[#d3c5ac] text-sm">/mês</span>
                   </div>
                   <ul className="space-y-4 mb-12 text-left text-[#e5e2e1]">

@@ -36,7 +36,7 @@ export function ServicesTable({ services, onEdit, onDelete, onToggleStatus, maxS
           <div 
             key={service.id} 
             className={cn(
-              "group p-4 sm:p-6 lg:p-8 rounded-2xl sm:rounded-[2.5rem] transition-all duration-700 flex flex-col justify-between min-h-[380px] lg:h-[450px] relative border overflow-hidden",
+              "group p-4 sm:p-6 rounded-2xl sm:rounded-[2rem] transition-all duration-700 flex flex-col min-h-[250px] lg:min-h-[300px] relative border overflow-hidden",
               isBestseller 
                 ? "bg-gradient-to-br from-[#1C1B1B] to-[#FBBF24]/5 hover:to-[#FBBF24]/10 border-[#FBBF24]/20 shadow-2xl hover:shadow-[#FBBF24]/10" 
                 : "bg-[#1C1B1B] hover:bg-[#201F1F] border-transparent hover:border-[#4F4633]/20 shadow-lg hover:shadow-black/40",
@@ -85,7 +85,7 @@ export function ServicesTable({ services, onEdit, onDelete, onToggleStatus, maxS
             </div>
 
             {/* Middle: Name and Description */}
-            <div className="mt-8 relative z-10 flex-1">
+            <div className="mt-6 relative z-10">
               {isBestseller && (
                 <div className="flex items-center gap-2 mb-4">
                    <div className="h-1 w-8 bg-[#FBBF24] rounded-full"></div>
@@ -105,7 +105,7 @@ export function ServicesTable({ services, onEdit, onDelete, onToggleStatus, maxS
 
             {/* Price and Edit Button Area */}
             <div className={cn(
-              "mt-auto pt-8 flex items-end justify-between border-t transition-colors",
+              "mt-auto pt-6 flex items-end justify-between border-t transition-colors",
               isBestseller ? "border-[#FBBF24]/10" : "border-[#4F4633]/10"
             )}>
                <div className="flex flex-col">

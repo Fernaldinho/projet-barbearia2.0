@@ -22,6 +22,7 @@ export const ROUTES = {
   SUBSCRIPTION: '/subscription',
   PUBLIC_PAGE: '/public-page',
   ONBOARDING: '/onboarding',
+  NOTIFICATIONS: '/notifications',
 } as const
 
 export const PLANS = {

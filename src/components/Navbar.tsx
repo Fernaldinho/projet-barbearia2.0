@@ -1,7 +1,7 @@
 import { Bell, Menu, X, CheckCircle, Info, AlertTriangle, MessageSquare } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { getInitials, cn } from '@/utils/helpers'
-import { useLocation } from 'react-router-dom'
+import { useLocation, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useCompany } from '@/contexts/CompanyContext'
@@ -17,6 +17,7 @@ const routeTitles: Record<string, string> = {
   '/billing': 'FATURAMENTO',
   '/settings': 'CONFIGURAÇÕES',
   '/public-page': 'PÁGINA PÚBLICA',
+  '/notifications': 'NOTIFICAÇÕES',
 }
 
 interface NavbarProps {
@@ -40,7 +41,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
     const sub = supabase
       .channel('notifications')
       .on('postgres_changes', { 
-        event: 'INSERT', 
+        event: '*', 
         schema: 'public', 
         table: 'notifications',
         filter: `company_id=eq.${company.id}`
@@ -64,8 +65,16 @@ export function Navbar({ onMenuClick }: NavbarProps) {
     
     if (data) {
       setNotifications(data)
-      setUnreadCount(data.filter(n => !n.read).length)
     }
+    
+    // Fetch total unread count across all notifications
+    const { count } = await supabase
+      .from('notifications')
+      .select('*', { count: 'exact', head: true })
+      .eq('company_id', company.id)
+      .eq('read', false)
+      
+    setUnreadCount(count || 0)
   }
 
   const markAllRead = async () => {
@@ -77,6 +86,16 @@ export function Navbar({ onMenuClick }: NavbarProps) {
       .eq('read', false)
     
     loadNotifications()
+  }
+  
+  const markSingleRead = async (id: string) => {
+    await supabase
+      .from('notifications')
+      .update({ read: true })
+      .eq('id', id)
+    
+    loadNotifications()
+    setShowNotifications(false)
   }
 
   const userName = user?.user_metadata?.full_name || user?.email || 'Usuário'
@@ -114,7 +133,6 @@ export function Navbar({ onMenuClick }: NavbarProps) {
             <button 
               onClick={() => {
                 setShowNotifications(!showNotifications)
-                if (!showNotifications && unreadCount > 0) markAllRead()
               }}
               className={cn(
                 "relative p-2 rounded-lg text-dark-400 hover:bg-dark-800 hover:text-white transition-all",
@@ -133,7 +151,17 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                 <div className="fixed inset-0 z-40 bg-transparent" onClick={() => setShowNotifications(false)} />
                 <div className="absolute right-0 mt-2 w-80 bg-[#1A1A1A] border border-[#262626] rounded-xl shadow-2xl z-50 overflow-hidden animate-fade-in animate-scale-in">
                   <div className="p-4 border-b border-[#262626] flex items-center justify-between bg-[#1f1f1f]">
-                    <h3 className="text-xs font-black tracking-widest uppercase text-white mb-0">Notificações</h3>
+                    <div className="flex flex-col">
+                      <h3 className="text-xs font-black tracking-widest uppercase text-white mb-0">Notificações</h3>
+                      {unreadCount > 0 && (
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); markAllRead() }}
+                          className="text-[9px] font-black uppercase text-[#fbbf24] hover:underline mt-1 text-left"
+                        >
+                          Marcar todas como lidas
+                        </button>
+                      )}
+                    </div>
                     <button onClick={() => setShowNotifications(false)} className="text-dark-400 hover:text-white"><X className="w-4 h-4" /></button>
                   </div>
                   
@@ -164,13 +192,28 @@ export function Navbar({ onMenuClick }: NavbarProps) {
                               <p className="text-[11px] text-dark-400 leading-snug">{n.message}</p>
                               <p className="text-[9px] text-dark-500 uppercase font-black">{timeAgo(n.created_at)}</p>
                             </div>
+                            {!n.read && (
+                              <button 
+                                onClick={(e) => { e.stopPropagation(); markSingleRead(n.id) }}
+                                className="w-8 h-8 rounded-lg flex items-center justify-center bg-[#fbbf24]/10 text-[#fbbf24] hover:bg-[#fbbf24]/20 transition-all ml-auto self-center"
+                              >
+                                <CheckCircle className="w-4 h-4" />
+                              </button>
+                            )}
                           </div>
                         ))}
                       </div>
                     )}
                   </div>
                   
-                  <div className="p-3 bg-[#131313] border-t border-[#262626] text-center">
+                  <div className="p-3 bg-[#131313] border-t border-[#262626] text-center flex flex-col gap-2">
+                    <Link 
+                      to="/notifications" 
+                      onClick={() => setShowNotifications(false)}
+                      className="text-[10px] font-black uppercase tracking-widest text-[#fbbf24] hover:underline"
+                    >
+                      Ver todas as notificações
+                    </Link>
                     <p className="text-[9px] font-black uppercase tracking-widest text-dark-500">AgendaAI Pro System</p>
                   </div>
                 </div>

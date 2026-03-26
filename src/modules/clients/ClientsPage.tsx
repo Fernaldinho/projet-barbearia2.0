@@ -1,22 +1,22 @@
-import { useEffect, useState, useMemo, useCallback } from 'react'
-import { Plus, UserPlus, Search, Users, TrendingUp, ShieldCheck, Lightbulb, Sparkles, ArrowRight } from 'lucide-react'
-import toast from 'react-hot-toast'
+import { useState, useCallback, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { Plus, Search, ArrowRight, ShieldCheck, Users, TrendingUp, Cake } from 'lucide-react'
+import { toast } from 'react-hot-toast'
 import { useCompany } from '@/contexts/CompanyContext'
+import { getClients, createClient, updateClient, deleteClient } from './clients.api'
 import { ClientsTable } from './ClientsTable'
 import { ClientsForm } from './ClientsForm'
-import { getClients, createClient, updateClient, deleteClient } from './clients.api'
-import type { Client, ClientFormData } from '@/types'
-import { cn } from '@/utils/helpers'
 import { ClientHistoryModal } from './ClientHistoryModal'
+import type { Client, ClientFormData } from '@/types'
 
 export function ClientsPage() {
   const { company, features } = useCompany()
   const [clients, setClients] = useState<Client[]>([])
   const [loading, setLoading] = useState(true)
+  const [searchTerm, setSearchTerm] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [editingClient, setEditingClient] = useState<Client | null>(null)
   const [historyClient, setHistoryClient] = useState<Client | null>(null)
-  const [searchTerm, setSearchTerm] = useState('')
 
   const loadClients = useCallback(async () => {
     if (!company?.id) return
@@ -25,7 +25,7 @@ export function ClientsPage() {
       const data = await getClients(company.id)
       setClients(data)
     } catch (err) {
-      console.error('Error loading clients:', err)
+      console.error(err)
     } finally {
       setLoading(false)
     }
@@ -35,12 +35,14 @@ export function ClientsPage() {
     loadClients()
   }, [loadClients])
 
+  const filteredClients = clients.filter(c => 
+    c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    c.phone?.includes(searchTerm) ||
+    (c.email && c.email.toLowerCase().includes(searchTerm.toLowerCase()))
+  )
+
   const handleCreate = async (data: ClientFormData) => {
     if (!company?.id) return
-    if (features.maxClients !== -1 && clients.length >= features.maxClients) {
-       toast.error(`Aviso: Seu plano permite apenas ${features.maxClients} clientes. Faça o upgrade para adicionar mais.`)
-       return
-    }
     await createClient(company.id, data)
     toast.success('Cliente cadastrado com sucesso!')
     setShowForm(false)
@@ -62,91 +64,73 @@ export function ClientsPage() {
       toast.success('Cliente removido.')
       await loadClients()
     } catch (err: any) {
-      toast.error('Erro ao excluir cliente: ' + err.message)
+      toast.error('Erro ao excluir: ' + err.message)
     }
   }
 
-  const filteredClients = useMemo(() => {
-    if (!searchTerm) return clients
-    const lower = searchTerm.toLowerCase()
-    return clients.filter(c => 
-      c.name.toLowerCase().includes(lower) || 
-      (c.phone && c.phone.replace(/\D/g, '').includes(searchTerm.replace(/\D/g, '')))
-    )
-  }, [clients, searchTerm])
-
-  const novosEsteMes = useMemo(() => {
-    const now = new Date();
-    return clients.filter(c => {
-      const d = new Date(c.created_at)
-      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
-    }).length
-  }, [clients])
-
-  const taxaFidelidade = useMemo(() => {
-    if (!clients.length) return 0
-    const fieis = clients.filter(c => c.appointments && c.appointments.length > 1).length
-    return Math.round((fieis / clients.length) * 100)
-  }, [clients])
+  const totalClients = clients.length
+  const activeThisMonth = clients.filter(c => {
+    const appointments = c.appointments || []
+    if (appointments.length === 0) return false
+    
+    return appointments.some(app => {
+      if (!app.date) return false
+      const date = new Date(app.date)
+      const now = new Date()
+      return date.getMonth() === now.getMonth() && date.getFullYear() === now.getFullYear()
+    })
+  }).length
+  
+  const taxaFidelidade = totalClients > 0 ? Math.round((activeThisMonth / totalClients) * 100) : 0
 
   return (
-    <div className="animate-fade-in pb-20 space-y-12 mt-8">
-      {/* Search Bar Section */}
-      <div className="flex items-center px-4 lg:px-0">
-        <div className="relative flex items-center group flex-1 max-w-xl">
-          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#fbbf24] transition-colors">search</span>
-          <input 
-            className="w-full bg-[#0e0e0e] border-none py-3.5 pl-12 pr-6 rounded-full text-sm focus:ring-1 focus:ring-[#fbbf24] placeholder:text-zinc-600 transition-all outline-none text-[#E5E2E1]" 
-            placeholder="Pesquisar clientes por nome ou telefone..." 
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+    <div className="animate-fade-in pb-20 space-y-16 mt-8">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row justify-between items-end gap-8 px-4 lg:px-0">
+        <div className="space-y-4">
+          <span className="text-xs tracking-[0.3em] uppercase font-label text-[#fbbf24] font-bold block">Gestão de Relacionamento</span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black font-headline tracking-tighter text-[#E5E2E1] uppercase leading-none">Clientes</h1>
+          <p className="text-[#D3C5AC] text-lg font-light leading-relaxed max-w-2xl">
+            Sua base de dados premium. Acompanhe a jornada de cada cliente e antecipe suas necessidades.
+          </p>
         </div>
+        <button 
+          onClick={() => setShowForm(true)} 
+          className="bg-[#fbbf24] text-[#402D00] font-headline font-bold px-8 py-4 rounded-full flex items-center gap-3 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 group"
+        >
+          <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform" />
+          ADICIONAR CLIENTE
+        </button>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 lg:px-0">
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
-          <div className="text-left">
-            <span className="text-xs font-label text-[#fbbf24] uppercase tracking-[0.3em] font-black block mb-4">CRM & Relacionamento</span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-headline font-black text-[#E5E2E1] leading-none tracking-tighter uppercase">Gerenciador de Clientes</h1>
-          </div>
-          <button 
-            onClick={() => {
-              if (features.maxClients !== -1 && clients.length >= features.maxClients) {
-                toast.error(`Plano Gratuito atinge o limite máximo de ${features.maxClients} clientes.`)
-              }
-              setShowForm(true)
-            }}
-            className="bg-[#fbbf24] text-[#402D00] px-8 py-4 rounded-full font-bold flex items-center gap-3 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 group"
-          >
-            <span className="material-symbols-outlined group-hover:rotate-90 transition-transform">person_add</span>
-            NOVO CLIENTE
-          </button>
-        </div>
-
-        {/* Dashboard Stats Summary (Bento Lite) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mb-8 sm:mb-12 lg:mb-16">
-          <div className="bg-[#1C1B1B] p-4 sm:p-6 lg:p-8 rounded-[2rem] flex items-center justify-between group hover:bg-[#201F1F] transition-all border border-white/5">
+      {/* Stats Quick Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 px-4 lg:px-0">
+        <div className="bg-[#1C1B1B] p-8 rounded-[2rem] border border-white/5 group hover:bg-[#201F1F] transition-all">
+          <div className="flex justify-between items-start">
             <div>
               <p className="text-zinc-500 text-[10px] uppercase tracking-[0.2em] font-black mb-2">Total de Clientes</p>
-              <p className="text-3xl lg:text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{clients.length}</p>
+              <p className="text-3xl lg:text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{totalClients}</p>
             </div>
-            <div className="bg-[#fbbf24]/10 p-3 sm:p-5 rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
+            <div className="bg-[#353534] p-3 sm:p-5 rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
               <Users className="w-6 h-6 sm:w-8 h-8" />
             </div>
           </div>
-          <div className="bg-[#1C1B1B] p-4 sm:p-6 lg:p-8 rounded-[2rem] flex items-center justify-between group hover:bg-[#201F1F] transition-all border border-white/5">
+        </div>
+
+        <div className="bg-[#1C1B1B] p-8 rounded-[2rem] border border-white/5 group hover:bg-[#201F1F] transition-all">
+          <div className="flex justify-between items-start">
             <div>
-              <p className="text-zinc-500 text-[10px] uppercase tracking-[0.2em] font-black mb-2">Novos este Mês</p>
-              <p className="text-3xl lg:text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{novosEsteMes}</p>
+              <p className="text-zinc-500 text-[10px] uppercase tracking-[0.2em] font-black mb-2">Ativos este Mês</p>
+              <p className="text-3xl lg:text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{activeThisMonth}</p>
             </div>
-            <div className="bg-[#fbbf24]/10 p-3 sm:p-5 rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
+            <div className="bg-[#353534] p-3 sm:p-5 rounded-2xl text-emerald-500 group-hover:scale-110 transition-transform shadow-inner">
               <TrendingUp className="w-6 h-6 sm:w-8 h-8" />
             </div>
           </div>
-          <div className="bg-[#1C1B1B] p-4 sm:p-6 lg:p-8 rounded-[2rem] flex items-center justify-between group hover:bg-[#201F1F] transition-all border border-white/5 sm:col-span-2 lg:col-span-1">
+        </div>
+
+        <div className="bg-[#1C1B1B] p-8 rounded-[2rem] border border-white/5 group hover:bg-[#201F1F] transition-all">
+          <div className="flex justify-between items-start">
             <div>
               <p className="text-zinc-500 text-[10px] uppercase tracking-[0.2em] font-black mb-2">Taxa de Fidelidade</p>
               <p className="text-3xl lg:text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{taxaFidelidade}%</p>
@@ -156,75 +140,47 @@ export function ClientsPage() {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Client Table Container */}
+      {/* Main Content Area */}
+      <div className="px-4 lg:px-0 space-y-12">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-1 relative group">
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-zinc-600 w-5 h-5 group-focus-within:text-[#fbbf24] transition-colors" />
+            <input 
+              type="text" 
+              placeholder="Pesquisar por nome, email ou telefone..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full bg-[#1C1B1B] border border-white/5 rounded-3xl py-6 pl-16 pr-8 text-white focus:border-[#fbbf24]/50 transition-all outline-none font-medium text-lg placeholder:text-zinc-700"
+            />
+          </div>
+          <Link 
+            to="/birthdays"
+            className="bg-[#1C1B1B] border border-white/5 rounded-3xl px-8 py-6 flex items-center gap-4 text-white hover:border-[#fbbf24]/30 transition-all group"
+          >
+            <div className="w-10 h-10 rounded-xl bg-[#fbbf24]/10 flex items-center justify-center text-[#fbbf24] group-hover:scale-110 transition-transform">
+              <Cake className="w-5 h-5" />
+            </div>
+            <div className="text-left">
+              <p className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Próximos</p>
+              <p className="text-sm font-bold uppercase tracking-tight">Aniversários</p>
+            </div>
+            <ArrowRight className="w-5 h-5 text-[#fbbf24]" />
+          </Link>
+        </div>
+
         {loading ? (
           <div className="bg-[#1C1B1B] rounded-[2.5rem] h-96 animate-pulse" />
         ) : (
           <ClientsTable 
             clients={filteredClients} 
-            maxClients={features.maxClients}
+            maxClients={features?.maxClients}
             onEdit={(c) => setEditingClient(c)} 
             onDelete={handleDelete} 
             onViewHistory={(c) => setHistoryClient(c)}
           />
         )}
-
-        {/* Contextual Insights Section */}
-        <div className="mt-20 grid grid-cols-1 lg:grid-cols-2 gap-10">
-          <div className="p-6 sm:p-10 rounded-[2rem] sm:rounded-[2.5rem] bg-gradient-to-br from-[#1C1B1B] to-[#131313] border border-white/5 shadow-2xl">
-            <h3 className="font-headline text-xl sm:text-2xl font-black text-white uppercase tracking-tighter mb-6 sm:mb-8 bg-zinc-900/50 p-3 sm:p-4 rounded-2xl inline-block -ml-2 sm:-ml-4">
-              Insights de Clientes
-            </h3>
-            <div className="space-y-4 sm:space-y-6">
-              <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 p-4 sm:p-6 rounded-3xl bg-[#0e0e0e] border border-white/[0.02] hover:border-[#fbbf24]/20 transition-all group">
-                <div className="bg-[#fbbf24]/10 p-3 rounded-xl text-[#fbbf24] group-hover:scale-110 transition-transform">
-                  <Lightbulb className="w-5 h-5 sm:w-6 sm:h-6" />
-                </div>
-                <div>
-                  <p className="text-base sm:text-lg font-bold text-white tracking-tight">Oportunidade de Reengajamento</p>
-                  <p className="text-xs sm:text-sm text-zinc-500 mt-1 sm:text-sm text-zinc-500 mt-2 leading-relaxed">
-                    12 clientes fiéis não agendam há mais de 30 dias. Considere enviar uma oferta personalizada via WhatsApp.
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-start gap-6 p-6 rounded-3xl bg-[#0e0e0e] border border-white/[0.02] hover:border-[#fbbf24]/20 transition-all group">
-                <div className="bg-[#fbbf24]/10 p-3 rounded-xl text-[#fbbf24] group-hover:scale-110 transition-transform">
-                  <Sparkles className="w-6 h-6" />
-                </div>
-                <div>
-                  <p className="text-lg font-bold text-white tracking-tight">Aniversários da Semana</p>
-                  <p className="text-sm text-zinc-500 mt-2 leading-relaxed">
-                    5 clientes fazem aniversário nos próximos 7 dias. Prepare o brinde de fidelidade especial!
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="relative overflow-hidden rounded-[2.5rem] group border border-white/5 shadow-2xl h-full min-h-[400px]">
-            <img 
-              className="absolute inset-0 w-full h-full object-cover opacity-30 scale-105 group-hover:scale-110 transition-transform duration-1000" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAB1CDi9QrKlkvk8BKnZ3-M6T6TKVKVByml0IhIno84riqyH_S1_-9qKsxHUDsQPHuOj23W19Ju_dEYspFYprToowk9DdMuY3vd8kIPem-wxUNKO7LVMg1YOReSuxLNu3haELSJ-f0GtXaWTvtRpVWqFNq2YyNrMcCK1RNl3dX5pJmyzA1MQ-5a4upK3R47mDfBsjH0-SyjrlsBs9GVC9fPxM9zpx7lQLsLkQ7Q91nvrgi77Pjuh4Lffc-aZvXOGRoMxqE3DUjSOY5c" 
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-[#0e0e0e]/40 to-transparent"></div>
-            <div className="relative p-6 sm:p-12 flex flex-col h-full justify-between">
-              <div>
-                <span className="bg-[#fbbf24] text-[#402D00] px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em]">Premium AI</span>
-                <h3 className="font-headline text-2xl sm:text-3xl lg:text-4xl font-black mt-4 sm:mt-6 leading-none text-white tracking-tighter uppercase">Relatórios Avançados<br/>de Consumo</h3>
-              </div>
-              <div className="space-y-6">
-                <p className="text-zinc-400 text-base font-medium max-w-sm leading-relaxed">
-                  Analise o comportamento de compra e as preferências de estilo de cada cliente de forma automática com nossa IA.
-                </p>
-                <a className="text-[#fbbf24] flex items-center gap-2 font-black text-sm group-hover:gap-6 transition-all uppercase tracking-widest" href="#">
-                  Ver Relatórios Detalhados
-                  <ArrowRight className="w-5 h-5" />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <footer className="mt-20 px-10 py-10 border-t border-white/5 text-center">

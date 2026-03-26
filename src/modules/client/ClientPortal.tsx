@@ -99,6 +99,7 @@ export function ClientPortal() {
       
       // Auto-trigger review modal for the last unreviewed completed/past appointment
       const lastUnreviewed = data.find(app => {
+        if (app.status === 'cancelled') return false
         const finished = app.status === 'completed' || isPastAppointment(app.date, app.start_time)
         return finished && (!app.reviews || app.reviews.length === 0)
       })
@@ -143,6 +144,10 @@ export function ClientPortal() {
 
   const confirmCancelAppointment = async () => {
     if (!appToCancel) return
+    if (!cancelReason.trim()) {
+      toast.error('Informe o motivo do cancelamento')
+      return
+    }
     try {
       const { error } = await supabase
         .from('appointments')
@@ -604,8 +609,9 @@ export function ClientPortal() {
             <p className="text-zinc-500 text-sm font-medium mb-10 leading-relaxed text-center">Esta ação não pode ser desfeita e o horário será liberado para outros clientes.</p>
             
             <div className="space-y-4 mb-8">
-              <label className="text-[10px] uppercase font-black tracking-widest text-[#E5E2E1]/40 block text-left ml-4">Motivo (Opcional)</label>
+              <label className="text-[10px] uppercase font-black tracking-widest text-[#E5E2E1]/40 block text-left ml-4">Motivo do Cancelamento</label>
               <textarea 
+                required
                 value={cancelReason}
                 onChange={(e) => setCancelReason(e.target.value)}
                 placeholder="Por que você está cancelando?"
