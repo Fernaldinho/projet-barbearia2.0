@@ -27,25 +27,43 @@ export default function OnboardingPage() {
     setError(null)
 
     try {
-      const slug = generateSlug(formData.companyName)
-      
-      // 1. Create the company
-      const { data: company, error: companyError } = await supabase
-        .from('companies')
-        .insert([
-          {
-            name: formData.companyName,
-            slug,
-            phone: formData.phone,
-            address: formData.address,
-            email: user.email, // Use account email as default company email
-            created_by: user.id
-          }
-        ])
-        .select()
-        .single()
+      let baseSlug = generateSlug(formData.companyName)
+      let finalSlug = baseSlug
+      let retryCount = 0
+      let success = false
+      let company = null
 
-      if (companyError) throw companyError
+      // Keep trying with a new slug if it collides (limited retries)
+      while (!success && retryCount < 5) {
+        const { data: newCompany, error: companyError } = await supabase
+          .from('companies')
+          .insert([
+            {
+              name: formData.companyName,
+              slug: finalSlug,
+              phone: formData.phone,
+              address: formData.address,
+              email: user.email, 
+              created_by: user.id
+            }
+          ])
+          .select()
+          .single()
+
+        if (!companyError) {
+          company = newCompany
+          success = true
+        } else if (companyError.code === '23505' && companyError.message.includes('slug')) {
+          // Slug collision! Tack on a random suffix
+          const randomSuffix = Math.floor(Math.random() * 1000).toString()
+          finalSlug = `${baseSlug}-${randomSuffix}`
+          retryCount++
+        } else {
+          throw companyError
+        }
+      }
+
+      if (!company) throw new Error('Não foi possível criar sua empresa. Tente usar outro nome.')
 
       // 2. Create/Update the user profile
       const { error: profileError } = await supabase
