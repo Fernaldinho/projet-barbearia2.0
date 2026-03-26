@@ -110,9 +110,9 @@ export function DashboardPage() {
   const userName = user?.user_metadata?.full_name || 'Usuário'
 
   return (
-    <div className="space-y-[32px] animate-fade-in pb-10">
+    <div className="space-y-6 animate-fade-in pb-12">
       {/* Editorial Header */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6 ml-1">
         <div className="space-y-1">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-black font-headline tracking-tighter text-[#E5E2E1]">
             {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(metrics.monthlyRevenue)}
@@ -154,7 +154,7 @@ export function DashboardPage() {
       </section>
 
       {/* Main Grid: Split Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 items-start">
         
         {/* Left Column: Appointments (Large) */}
         <div className="lg:col-span-2 space-y-8">
@@ -165,7 +165,7 @@ export function DashboardPage() {
           )}
 
           {/* Revenue Chart Section */}
-          <section className="p-[24px] rounded-2xl bg-surface-container-low">
+          <section className="p-5 rounded-[1.5rem] bg-surface-container-low border border-white/5">
              <h3 className="!mb-6 font-headline text-xl text-white">Fluxo de Caixa</h3>
              {chartsLoading ? (
                <div className="h-[250px] w-full bg-surface-container/30 rounded-xl animate-pulse" />
@@ -178,7 +178,7 @@ export function DashboardPage() {
         {/* Right Column: Insights & Performance (Small) */}
         <div className="space-y-8">
           {/* Appointments Distribution Chart */}
-          <div className="bg-[#1C1B1B] p-4 sm:p-6 lg:p-8 rounded-[2rem] border border-white/5">
+          <div className="p-5 rounded-[1.5rem] bg-surface-container-low border border-white/5">
             <h3 className="text-lg font-black font-headline text-[#E5E2E1] uppercase tracking-tighter mb-6 sm:mb-8">Demanda por Período</h3>
             {chartsLoading ? (
                <div className="h-[250px] sm:h-[300px]">

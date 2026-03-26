@@ -11,13 +11,13 @@ export function SubscriptionPage() {
   ]
 
   return (
-    <div className="animate-fade-in pb-20 space-y-16 mt-8">
+    <div className="animate-fade-in pb-12 space-y-8 mt-4 sm:mt-8">
       {/* Search Header Style (Consistent) */}
-      <div className="flex items-center px-4 lg:px-0 mb-12">
+      <div className="flex items-center px-4 lg:px-0 mb-8 sm:mb-12">
         <div className="relative flex items-center group flex-1 max-w-xl">
-          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#fbbf24] transition-colors">search</span>
+          <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#fbbf24] transition-colors text-lg">search</span>
           <input 
-            className="w-full bg-[#0e0e0e] border-none py-3.5 pl-12 pr-6 rounded-full text-sm focus:ring-1 focus:ring-[#fbbf24] placeholder:text-zinc-600 transition-all outline-none text-[#E5E2E1]" 
+            className="w-full bg-[#0e0e0e] border-none py-3 pl-12 pr-6 rounded-full text-xs sm:text-sm focus:ring-1 focus:ring-[#fbbf24] placeholder:text-zinc-600 transition-all outline-none text-[#E5E2E1]" 
             placeholder="Pesquisar nos planos..." 
             type="text"
           />
@@ -26,18 +26,18 @@ export function SubscriptionPage() {
 
       <div className="max-w-7xl mx-auto px-4 lg:px-0">
         {/* Hero Section */}
-        <header className="mb-20 flex flex-col items-center text-center max-w-2xl mx-auto">
-            <span className="text-[#fbbf24] text-xs font-black uppercase tracking-[0.3em] mb-4 block">Eleve o Nível do seu Negócio</span>
-            <h1 className="text-6xl font-headline font-black text-[#E5E2E1] tracking-tighter uppercase leading-none mb-12">
+        <header className="mb-10 sm:mb-20 flex flex-col items-center text-center max-w-2xl mx-auto">
+            <span className="text-[#fbbf24] text-[10px] sm:text-xs font-black uppercase tracking-[0.2em] mb-2 sm:mb-4 block">Eleve o Nível do seu Negócio</span>
+            <h1 className="text-4xl sm:text-6xl font-headline font-black text-[#E5E2E1] tracking-tighter uppercase leading-none mb-8 sm:mb-12">
               AgendaAI <span className="text-[#fbbf24]">PRO</span>
             </h1>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 w-full">
               {benefits.map((b, i) => (
-                  <div key={i} className="flex flex-col items-center gap-3">
-                      <div className="p-3 bg-[#fbbf24]/10 rounded-2xl text-[#fbbf24]">{b.icon}</div>
+                  <div key={i} className="flex flex-col items-center gap-2 sm:gap-3">
+                      <div className="p-2 sm:p-3 bg-[#fbbf24]/10 rounded-xl sm:rounded-2xl text-[#fbbf24]">{b.icon}</div>
                       <div>
-                          <p className="font-black text-white text-[10px] uppercase tracking-tighter">{b.title}</p>
-                          <p className="text-zinc-500 text-[9px] font-medium leading-tight">{b.desc}</p>
+                          <p className="font-black text-white text-[9px] sm:text-[10px] uppercase tracking-tighter">{b.title}</p>
+                          <p className="text-zinc-500 text-[8px] sm:text-[9px] font-medium leading-tight">{b.desc}</p>
                       </div>
                   </div>
               ))}

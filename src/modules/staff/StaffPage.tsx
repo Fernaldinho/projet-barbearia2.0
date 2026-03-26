@@ -60,21 +60,19 @@ export function StaffPage() {
   }
 
   return (
-    <div className="animate-fade-in pb-20 space-y-16 mt-8">
+    <div className="animate-fade-in pb-12 space-y-8 mt-4 sm:mt-8">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-end gap-8 px-4 lg:px-0">
-        <div className="space-y-4">
-          <span className="text-xs tracking-[0.3em] uppercase font-label text-[#fbbf24] font-bold block">Equipe de Elite</span>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black font-headline tracking-tighter text-[#E5E2E1] uppercase leading-none">Profissionais</h1>
-          <p className="text-[#D3C5AC] text-lg font-light leading-relaxed max-w-2xl">
-            Gerencie sua equipe de especialistas com visão 360°. Acompanhe performance, horários e avaliações.
-          </p>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 gap-4 md:gap-8 px-4 lg:px-0">
+        <div className="max-w-2xl text-left">
+          <span className="font-label text-[10px] sm:text-xs tracking-[0.2em] uppercase text-[#fbbf24] mb-2 sm:mb-4 block">Equipe de Elite</span>
+          <h1 className="font-headline text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#E5E2E1] leading-none mb-2 sm:mb-6 tracking-tighter">Profissionais</h1>
+          <p className="text-[#D3C5AC]/80 text-sm sm:text-lg font-light leading-relaxed">Gerencie sua equipe de especialistas com visão 360°.</p>
         </div>
         <button 
           onClick={() => setShowForm(true)} 
-          className="bg-[#fbbf24] text-[#402D00] font-headline font-bold px-8 py-4 rounded-full flex items-center gap-3 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 group"
+          className="w-full md:w-auto group relative flex items-center justify-center gap-3 bg-[#fbbf24] text-[#402D00] px-6 py-3 sm:px-8 sm:py-4 rounded-full font-headline font-bold text-base sm:text-lg transition-all duration-300 active:scale-95 shadow-xl shadow-[#fbbf24]/10"
         >
-          <span className="material-symbols-outlined group-hover:rotate-90 transition-transform">add</span>
+          <span className="material-symbols-outlined text-xl">add</span>
           NOVO PROFISSIONAL
         </button>
       </div>
@@ -95,21 +93,21 @@ export function StaffPage() {
             <div 
               key={s.id} 
               className={cn(
-                "bg-[#1C1B1B] rounded-[2rem] p-4 sm:p-6 lg:p-8 group hover:bg-[#201F1F] transition-all duration-500 flex flex-col sm:flex-row items-start lg:items-center gap-6 lg:gap-8 border border-transparent hover:border-[#4F4633]/20 cursor-pointer relative",
+                "bg-[#1C1B1B] rounded-[1.5rem] p-4 sm:p-6 group hover:bg-[#201F1F] transition-all duration-500 flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 border border-transparent hover:border-[#4F4633]/20 cursor-pointer relative",
                 !s.active && "opacity-60"
               )}
               onClick={() => setEditing(s)}
             >
               <div className="relative shrink-0">
-                <div className="w-28 h-28 rounded-2xl overflow-hidden bg-[#353534] flex items-center justify-center relative shadow-inner">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl overflow-hidden bg-[#353534] flex items-center justify-center relative shadow-inner">
                   {s.avatar_url ? (
                     <img src={s.avatar_url} alt={s.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
                   ) : (
-                    <span className="text-4xl font-headline font-black text-[#fbbf24]/50">{s.name.charAt(0)}</span>
+                    <span className="text-2xl sm:text-3xl font-headline font-black text-[#fbbf24]/50">{s.name.charAt(0)}</span>
                   )}
                 </div>
                 <div className={cn(
-                  "absolute -bottom-2 -right-2 font-bold text-[10px] px-3 py-1 rounded-lg uppercase font-label tracking-tighter",
+                  "absolute -bottom-1 -right-1 font-bold text-[8px] px-2 py-0.5 rounded-lg uppercase font-label tracking-tighter",
                   s.active ? "bg-[#fbbf24] text-[#402D00]" : "bg-zinc-600 text-white"
                 )}>
                   {s.active ? 'Ativo' : 'Folga'}
@@ -132,14 +130,14 @@ export function StaffPage() {
                   </div>
                 </div>
 
-                <div className="flex gap-4">
-                  <div className="bg-[#0e0e0e] px-4 py-3 rounded-2xl flex flex-col flex-1">
-                    <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-1">Agendamentos</span>
-                    <span className="text-sm font-black text-[#E5E2E1]">{s.appointments?.filter((a:any) => new Date(a.date).getMonth() === new Date().getMonth()).length || 0}/mês</span>
+                <div className="flex gap-2 sm:gap-4">
+                  <div className="bg-[#0e0e0e] px-3 py-2 sm:px-4 sm:py-3 rounded-xl flex flex-col flex-1">
+                    <span className="text-[8px] sm:text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5 sm:mb-1">Agend.</span>
+                    <span className="text-xs sm:text-sm font-black text-[#E5E2E1] truncate">{s.appointments?.filter((a:any) => new Date(a.date).getMonth() === new Date().getMonth()).length || 0}/mês</span>
                   </div>
-                  <div className="bg-[#0e0e0e] px-4 py-3 rounded-2xl flex flex-col flex-1">
-                    <span className="text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-1">Especialidade</span>
-                    <span className="text-sm font-black text-[#E5E2E1]">Master Fade</span>
+                  <div className="bg-[#0e0e0e] px-3 py-2 sm:px-4 sm:py-3 rounded-xl flex flex-col flex-1">
+                    <span className="text-[8px] sm:text-[10px] text-zinc-500 uppercase font-bold tracking-widest mb-0.5 sm:mb-1">Espec.</span>
+                    <span className="text-xs sm:text-sm font-black text-[#E5E2E1] truncate">Master Fade</span>
                   </div>
                 </div>
 

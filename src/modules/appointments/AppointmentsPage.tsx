@@ -147,13 +147,13 @@ export function AppointmentsPage() {
   }, [appointments, statusFilter])
 
   return (
-    <div className="animate-fade-in pb-20 mt-8">
+    <div className="animate-fade-in pb-12 mt-4 sm:mt-8">
       {/* Search Header */}
-      <div className="flex items-center px-4 lg:px-0 mb-12">
+      <div className="flex items-center px-4 lg:px-0 mb-6 sm:mb-10">
         <div className="relative flex items-center group flex-1 max-w-xl">
           <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-[#fbbf24] transition-colors">search</span>
           <input 
-            className="w-full bg-[#0e0e0e] border-none py-3.5 pl-12 pr-6 rounded-full text-sm focus:ring-1 focus:ring-[#fbbf24] placeholder:text-zinc-600 transition-all outline-none text-[#E5E2E1]" 
+            className="w-full bg-[#0e0e0e] border-none py-3 pl-12 pr-6 rounded-full text-xs sm:text-sm focus:ring-1 focus:ring-[#fbbf24] placeholder:text-zinc-600 transition-all outline-none text-[#E5E2E1]" 
             placeholder="Pesquisar agendamentos ou clientes..." 
             type="text"
           />
@@ -162,36 +162,35 @@ export function AppointmentsPage() {
 
       <div className="max-w-7xl mx-auto px-4 lg:px-0">
         {/* Page Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-12 gap-4 md:gap-8">
           <div className="text-left">
-            <span className="text-xs font-label text-[#fbbf24] uppercase tracking-[0.3em] font-black block mb-4">Calendário de Gestão</span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-headline font-black text-[#E5E2E1] leading-none tracking-tighter uppercase">Agendamentos</h1>
+            <span className="text-[10px] font-label text-[#fbbf24] uppercase tracking-[0.2em] font-black block mb-2 sm:mb-4">Calendário de Gestão</span>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-headline font-black text-[#E5E2E1] leading-none tracking-tighter uppercase">Agendamentos</h1>
           </div>
           <button 
             onClick={() => {
-              // Note: the true check happens in handleCreate, here we just show a mild warning if they try
               if (features.maxAppointmentsPerMonth !== -1 && appointments.length >= features.maxAppointmentsPerMonth) {
-                 alert(`Lembrete: Seu plano tem limite de ${features.maxAppointmentsPerMonth} agendamentos/mês. Podem haver bloqueios caso já tenha atingido o teto.`)
+                 alert(`Lembrete: Seu plano tem limite de ${features.maxAppointmentsPerMonth} agendamentos/mês.`)
               }
               setShowForm(true)
             }}
-            className="bg-[#fbbf24] text-[#402D00] px-8 py-4 rounded-full font-bold flex items-center gap-3 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 group shadow-xl shadow-[#fbbf24]/10"
+            className="w-full md:w-auto bg-[#fbbf24] text-[#402D00] px-6 py-3 sm:px-8 sm:py-4 rounded-full font-bold flex items-center justify-center gap-2 sm:gap-3 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 group shadow-xl shadow-[#fbbf24]/10 text-xs sm:text-sm"
           >
-            <span className="material-symbols-outlined group-hover:rotate-90 transition-transform">add</span>
+            <span className="material-symbols-outlined group-hover:rotate-90 transition-transform text-lg sm:text-xl">add</span>
             NOVO AGENDAMENTO
           </button>
         </div>
 
-        <div className="grid grid-cols-12 gap-12">
+        <div className="grid grid-cols-12 gap-6 md:gap-12">
           {/* Filters Sidebar */}
-          <div className="col-span-12 lg:col-span-3 space-y-10">
-            <div className="bg-[#1C1B1B] rounded-[2rem] p-4 sm:p-6 lg:p-8 border border-white/5 shadow-xl">
-              <div className="flex items-center gap-3 mb-8">
+          <div className="col-span-12 lg:col-span-3 space-y-6">
+            <div className="bg-[#1C1B1B] rounded-[1.5rem] p-4 sm:p-6 lg:p-8 border border-white/5 shadow-xl">
+              <div className="flex items-center gap-3 mb-6">
                 <Filter className="w-5 h-5 text-[#fbbf24]" />
-                <h3 className="font-headline text-xl font-black text-white uppercase tracking-tighter">Filtros</h3>
+                <h3 className="font-headline text-lg font-black text-white uppercase tracking-tighter">Filtros</h3>
               </div>
               
-              <div className="space-y-8">
+              <div className="space-y-6">
                 <div className="space-y-4">
                   <label className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Status</label>
                   <div className="flex flex-wrap gap-2">
@@ -233,7 +232,7 @@ export function AppointmentsPage() {
             </div>
 
             {/* Mini Calendar Visual */}
-            <div className="bg-[#1C1B1B] rounded-[2rem] p-4 sm:p-6 lg:p-8 border border-white/5 shadow-xl relative overflow-hidden group">
+            <div className="bg-[#1C1B1B] rounded-[1.5rem] p-4 sm:p-6 lg:p-8 border border-white/5 shadow-xl relative overflow-hidden group">
               <div className="absolute -right-4 -top-4 w-24 h-24 bg-[#fbbf24]/5 rounded-full blur-2xl group-hover:bg-[#fbbf24]/10 transition-colors"></div>
               
               {(() => {
@@ -294,16 +293,16 @@ export function AppointmentsPage() {
           <div className="col-span-12 lg:col-span-9">
             <div className="space-y-8">
               {/* Day Header */}
-              <div className="flex items-center gap-6">
-                <span className="text-lg font-black text-white uppercase tracking-tighter whitespace-nowrap">
+              <div className="flex items-center gap-4 sm:gap-6">
+                <span className="text-base sm:text-lg font-black text-white uppercase tracking-tighter whitespace-nowrap">
                   {formatDisplayDate(selectedDate)}
                 </span>
                 <div className="flex gap-2">
-                  <button onClick={goPrevDay} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/10 transition-all">
-                    <span className="material-symbols-outlined text-sm">chevron_left</span>
+                  <button onClick={goPrevDay} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/5 flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/10 transition-all">
+                    <span className="material-symbols-outlined text-xs sm:text-sm">chevron_left</span>
                   </button>
-                  <button onClick={goNextDay} className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/10 transition-all">
-                    <span className="material-symbols-outlined text-sm">chevron_right</span>
+                  <button onClick={goNextDay} className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/5 flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/10 transition-all">
+                    <span className="material-symbols-outlined text-xs sm:text-sm">chevron_right</span>
                   </button>
                 </div>
                 <div className="flex-1 h-[1px] bg-white/5"></div>
@@ -320,75 +319,69 @@ export function AppointmentsPage() {
                   <p className="text-zinc-500 font-medium tracking-wide">Nenhum agendamento para este período.</p>
                 </div>
               ) : (
-                <div className="space-y-6">
+                <div className="space-y-4">
                   {filteredAppointments.map((app, index) => (
                     <div 
                       key={app.id} 
                       className={cn(
-                        "group bg-[#1C1B1B] rounded-[2rem] p-1 transition-all hover:bg-gradient-to-r hover:from-[#fbbf24]/10 hover:to-transparent border border-white/[0.02]",
+                        "group bg-[#1C1B1B] rounded-[1.2rem] p-1 transition-all hover:bg-gradient-to-r hover:from-[#fbbf24]/10 hover:to-transparent border border-white/[0.02]",
                         features.maxAppointmentsPerMonth !== -1 && index >= features.maxAppointmentsPerMonth
                           ? "blur-[4px] opacity-40 select-none pointer-events-none"
                           : ""
                       )}
                     >
-                      <div className="bg-[#1C1B1B] rounded-[1.9rem] p-4 sm:p-6 lg:p-8 flex flex-col md:flex-row items-center justify-between group-hover:translate-x-2 transition-transform duration-500 gap-6">
-                        <div className="flex flex-col sm:flex-row items-center gap-6 lg:gap-10 w-full md:w-auto">
-                          <div className="text-center min-w-[80px]">
-                            <p className="text-2xl sm:text-3xl font-headline font-black text-white tracking-tighter">{app.start_time.slice(0, 5)}</p>
-                            <p className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-bold mt-1">45 min</p>
+                      <div className="bg-[#1C1B1B] rounded-[1.1rem] p-4 sm:p-5 lg:p-6 flex flex-col md:flex-row items-center justify-between transition-transform duration-500 gap-4 sm:gap-6">
+                        <div className="flex items-center gap-4 sm:gap-8 w-full md:w-auto">
+                          <div className="text-center min-w-[70px]">
+                            <p className="text-xl sm:text-3xl font-headline font-black text-white tracking-tighter leading-tight">{app.start_time.slice(0, 5)}</p>
+                            <p className="text-[9px] text-zinc-500 uppercase tracking-[0.15em] font-bold mt-0.5">45 min</p>
                           </div>
-                          <div className="hidden sm:block w-[1px] h-12 bg-white/5"></div>
-                          <div className="flex items-center gap-4 sm:gap-6">
-                            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-[#0e0e0e] overflow-hidden border border-white/5 group-hover:border-[#fbbf24]/30 transition-all flex-shrink-0">
+                          <div className="w-[1px] h-8 sm:h-12 bg-white/5"></div>
+                          <div className="flex items-center gap-3 sm:gap-4 overflow-hidden">
+                            <div className="w-10 h-10 sm:w-14 sm:h-14 rounded-2xl bg-[#0e0e0e] overflow-hidden border border-white/5 flex-shrink-0">
                               {app.client?.name ? (
-                                <div className="w-full h-full flex items-center justify-center bg-[#1c1c1c] text-[#fbbf24] font-black text-lg shadow-inner">
+                                <div className="w-full h-full flex items-center justify-center bg-[#1c1c1c] text-[#fbbf24] font-black text-sm sm:text-lg">
                                   {app.client.name.substring(0, 2).toUpperCase()}
                                 </div>
                               ) : (
                                 <span className="material-symbols-outlined text-zinc-700 m-auto">person</span>
                               )}
                             </div>
-                            <div>
-                              <h4 className="font-black text-lg sm:text-xl text-white tracking-tight group-hover:text-[#fbbf24] transition-colors capitalize">{app.client?.name || 'Cliente'}</h4>
-                              <p className="text-[10px] sm:text-xs text-[#D3C5AC]/60 uppercase tracking-widest font-bold mt-1">{app.service?.name || 'Serviço Premium'}</p>
-                              {app.status === 'cancelled' && app.cancellation_reason && (
-                                <p className="text-[10px] text-red-500/80 font-medium italic mt-2 bg-red-500/5 px-3 py-1.5 rounded-lg border border-red-500/10 inline-block">
-                                  Motivo: {app.cancellation_reason}
-                                </p>
-                              )}
+                            <div className="min-w-0">
+                              <h4 className="font-black text-base sm:text-xl text-white tracking-tight truncate group-hover:text-[#fbbf24] transition-colors capitalize">{app.client?.name || 'Cliente'}</h4>
+                              <p className="text-[9px] sm:text-xs text-[#D3C5AC]/60 uppercase tracking-widest font-bold mt-0.5 truncate">{app.service?.name || 'Serviço Premium'}</p>
                             </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center justify-between md:justify-end gap-6 sm:gap-16 w-full md:w-auto mt-4 md:mt-0 pt-4 md:pt-0 border-t md:border-t-0 border-white/5">
+                        <div className="flex items-center justify-between md:justify-end gap-4 w-full md:w-auto mt-2 md:mt-0 pt-3 md:pt-0 border-t md:border-t-0 border-white/5">
                           <div className="hidden xl:block">
-                            <p className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black mb-2">Especialista</p>
-                            <div className="flex items-center gap-3">
-                              <div className="w-6 h-6 rounded-lg bg-[#fbbf24]/10 flex items-center justify-center group-hover:bg-[#fbbf24]/20 transition-all">
-                                <Scissors className="w-3 h-3 text-[#fbbf24]" />
+                            <div className="flex items-center gap-2">
+                              <div className="w-5 h-5 rounded-lg bg-[#fbbf24]/10 flex items-center justify-center group-hover:bg-[#fbbf24]/20 transition-all">
+                                <Scissors className="w-2.5 h-2.5 text-[#fbbf24]" />
                               </div>
-                              <span className="text-sm font-bold text-white/80">{app.staff?.name || 'Algum prof'}</span>
+                              <span className="text-xs font-bold text-white/80">{app.staff?.name || 'Prof'}</span>
                             </div>
                           </div>
                           
-                          <div className="flex items-center gap-8">
+                          <div className="flex items-center gap-4 ml-auto md:ml-0">
                             <span className={cn(
-                              "px-3 py-1.5 sm:px-5 sm:py-2 text-[9px] sm:text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg",
+                              "px-3 py-1 text-[8px] sm:text-[10px] font-black uppercase tracking-widest rounded-full",
                               app.status === 'confirmed' ? "bg-blue-500/10 text-blue-400" : 
                               app.status === 'completed' ? "bg-emerald-500/10 text-emerald-400" :
                               app.status === 'scheduled' ? "bg-[#fbbf24]/10 text-[#fbbf24]" :
                               "bg-red-500/10 text-red-500"
                             )}>
-                              {app.status === 'confirmed' ? 'Confirmado' : 
-                               app.status === 'completed' ? 'Concluído' :
-                               app.status === 'scheduled' ? 'Agendado' : 'Cancelado'}
+                              {app.status === 'confirmed' ? 'Conf' : 
+                               app.status === 'completed' ? 'Conc' :
+                               app.status === 'scheduled' ? 'Agend' : 'Canc'}
                             </span>
                             <div className="relative">
                               <button 
                                 onClick={(e) => { e.stopPropagation(); setOpenMenuId(openMenuId === app.id ? null : app.id); }}
-                                className="w-12 h-12 rounded-2xl flex items-center justify-center hover:bg-white/5 transition-all text-zinc-500 hover:text-white"
+                                className="w-10 h-10 rounded-xl flex items-center justify-center hover:bg-white/5 transition-all text-zinc-500 hover:text-white"
                               >
-                                <MoreVertical className="w-6 h-6" />
+                                <MoreVertical className="w-5 h-5" />
                               </button>
                               
                               {openMenuId === app.id && (

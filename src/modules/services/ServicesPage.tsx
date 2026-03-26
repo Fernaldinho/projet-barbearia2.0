@@ -101,23 +101,23 @@ export function ServicesPage() {
 
       <div className="max-w-7xl mx-auto px-4 lg:px-0">
         {/* Hero Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 sm:mb-12 gap-4 md:gap-8">
           <div className="max-w-2xl text-left">
-            <span className="font-label text-xs tracking-[0.3em] uppercase text-[#ffe1a7] mb-4 block">Gestão de Portfólio</span>
-            <h1 className="font-headline text-4xl md:text-5xl lg:text-6xl font-black text-[#E5E2E1] leading-none mb-4 sm:mb-6 tracking-tighter">SERVIÇOS</h1>
-            <p className="text-[#D3C5AC] text-base sm:text-lg font-light leading-relaxed">Gerencie seu menu de experiências com precisão cirúrgica. Defina valores, tempos e ativações premium.</p>
+            <span className="font-label text-[10px] sm:text-xs tracking-[0.2em] uppercase text-[#ffe1a7] mb-2 sm:mb-4 block">Gestão de Portfólio</span>
+            <h1 className="font-headline text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#E5E2E1] leading-none mb-2 sm:mb-6 tracking-tighter">SERVIÇOS</h1>
+            <p className="text-[#D3C5AC]/80 text-sm sm:text-lg font-light leading-relaxed">Gerencie seu menu de experiências com precisão cirúrgica.</p>
           </div>
 
           <button 
             onClick={() => {
               if (features.maxServices !== -1 && services.length >= features.maxServices) {
-                alert(`Plano Gratuito atinge o limite máximo de ${features.maxServices} serviços. O próximo seria borrado.`)
+                alert(`Plano Gratuito atinge o limite máximo de ${features.maxServices} serviços.`)
               }
               setShowForm(true)
             }}
-            className="group relative flex items-center gap-3 bg-[#fbbf24] text-[#402D00] px-8 py-4 rounded-full font-headline font-bold text-lg hover:pr-10 transition-all duration-300 active:scale-95 shadow-xl shadow-[#fbbf24]/10"
+            className="w-full md:w-auto group relative flex items-center justify-center gap-3 bg-[#fbbf24] text-[#402D00] px-6 py-3 sm:px-8 sm:py-4 rounded-full font-headline font-bold text-base sm:text-lg transition-all duration-300 active:scale-95 shadow-xl shadow-[#fbbf24]/10"
           >
-            <span className="material-symbols-outlined">add</span>
+            <span className="material-symbols-outlined text-xl">add</span>
             NOVO SERVIÇO
           </button>
         </div>

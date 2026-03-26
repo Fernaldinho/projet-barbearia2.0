@@ -125,8 +125,8 @@ export function AppointmentForm({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in overflow-y-auto py-8">
       <div className="card w-full max-w-[500px] p-0 mx-4 animate-scale-in flex flex-col overflow-hidden">
-        <div className="flex items-center justify-between p-6 border-b border-dark-800">
-          <h2 className="!mb-0">
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-dark-800">
+          <h2 className="!mb-0 text-lg sm:text-xl">
             {initialData ? 'Editar Agendamento' : 'Novo Agendamento'}
           </h2>
           <button onClick={onClose} className="p-2 -mr-2 rounded-lg text-dark-400 hover:bg-dark-800 hover:text-white transition-all">
@@ -134,9 +134,9 @@ export function AppointmentForm({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 sm:space-y-6">
           {error && (
-            <div className="mb-4 p-3 bg-danger-500/10 border border-danger-500/20 rounded-lg flex items-center gap-2 text-danger-500 text-sm">
+            <div className="mb-4 p-2.5 bg-danger-500/10 border border-danger-500/20 rounded-lg flex items-center gap-2 text-danger-500 text-xs sm:text-sm">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <p>{error}</p>
             </div>
@@ -180,20 +180,20 @@ export function AppointmentForm({
               <Scissors className="w-4 h-4 inline mr-1.5" />
               Serviço
             </label>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2">
               {services.map((svc) => (
                 <button key={svc.id} type="button"
                   onClick={() => { setServiceId(svc.id); setStartTime('') }}
-                  className={`text-left p-3 rounded-xl border transition-all ${
+                  className={`text-left p-2.5 rounded-xl border transition-all ${
                     serviceId === svc.id
                       ? 'border-primary-500/30 bg-primary-500/10 shadow-lg shadow-primary-500/5'
                       : 'border-dark-700 bg-dark-800 hover:border-dark-600'
                   }`}
                 >
-                  <p className={`font-medium text-sm ${serviceId === svc.id ? 'text-primary-400' : 'text-white'}`}>{svc.name}</p>
-                  <div className="flex items-center gap-3 mt-1">
-                    <span className="text-xs text-dark-400">{svc.duration}min</span>
-                    <span className="text-xs text-primary-400 font-medium">{formatCurrency(svc.price)}</span>
+                  <p className={`font-medium text-[13px] leading-tight ${serviceId === svc.id ? 'text-primary-400' : 'text-white'}`}>{svc.name}</p>
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-[10px] text-dark-400">{svc.duration}min</span>
+                    <span className="text-[10px] text-primary-400 font-bold">{formatCurrency(svc.price)}</span>
                   </div>
                 </button>
               ))}
@@ -210,24 +210,24 @@ export function AppointmentForm({
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 <button type="button"
                   onClick={() => { setStaffId(''); setStartTime('') }}
-                  className={`text-left p-3 rounded-xl border transition-all ${
+                  className={`text-left p-2.5 rounded-xl border transition-all ${
                     !staffId ? 'border-primary-500/30 bg-primary-500/10' : 'border-dark-700 bg-dark-800 hover:border-dark-600'
                   }`}
                 >
-                  <p className={`font-medium text-sm ${!staffId ? 'text-primary-400' : 'text-white'}`}>Qualquer</p>
-                  <p className="text-xs text-dark-400 mt-0.5">Sem preferência</p>
+                  <p className={`font-medium text-[13px] ${!staffId ? 'text-primary-400' : 'text-white'}`}>Qualquer</p>
+                  <p className="text-[10px] text-dark-400">Sem pref.</p>
                 </button>
                 {staffList.map((s) => (
                   <button key={s.id} type="button"
                     onClick={() => { setStaffId(s.id); setStartTime('') }}
-                    className={`text-left p-3 rounded-xl border transition-all ${
+                    className={`text-left p-2.5 rounded-xl border transition-all ${
                       staffId === s.id
                         ? 'border-primary-500/30 bg-primary-500/10'
                         : 'border-dark-700 bg-dark-800 hover:border-dark-600'
                     }`}
                   >
-                    <p className={`font-medium text-sm ${staffId === s.id ? 'text-primary-400' : 'text-white'}`}>{s.name}</p>
-                    {s.role && <p className="text-xs text-dark-400 mt-0.5">{s.role}</p>}
+                    <p className={`font-medium text-[13px] truncate ${staffId === s.id ? 'text-primary-400' : 'text-white'}`}>{s.name}</p>
+                    {s.role && <p className="text-[10px] text-dark-400 truncate">{s.role}</p>}
                   </button>
                 ))}
               </div>
@@ -265,11 +265,11 @@ export function AppointmentForm({
                 <p className="text-dark-400 text-sm">Nenhum horário disponível nesta data.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-40 overflow-y-auto">
+              <div className="grid grid-cols-4 sm:grid-cols-6 gap-2 max-h-32 overflow-y-auto">
                 {availableSlots.map((slot) => (
                   <button key={slot.start_time} type="button"
                     onClick={() => setStartTime(slot.start_time)}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all ${
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                       startTime === slot.start_time
                         ? 'bg-primary-500 text-dark-950 shadow-lg shadow-primary-500/30'
                         : 'bg-dark-800 border border-dark-700 text-dark-200 hover:border-primary-500/30 hover:text-white'

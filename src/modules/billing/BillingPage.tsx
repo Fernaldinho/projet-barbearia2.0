@@ -66,41 +66,41 @@ export function BillingPage() {
   return (
     <div className="space-y-8 animate-fade-in px-4 lg:px-0">
       {/* Header */}
-      <div className="mt-8">
-        <h1 className="text-4xl font-black text-white uppercase tracking-tighter">Faturamento</h1>
-        <p className="text-zinc-500 mt-1 uppercase text-[10px] font-black tracking-widest leading-none">Acompanhe receitas e plano atual</p>
+      <div className="mt-4 sm:mt-8">
+        <h1 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tighter">Faturamento</h1>
+        <p className="text-zinc-500 mt-1 uppercase text-[8px] sm:text-[10px] font-black tracking-widest leading-none">Acompanhe receitas e plano atual</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div className="card p-8 border border-white/5 rounded-[2rem] bg-[#1C1B1B] hover:border-white/10 transition-all">
-          <div className="flex items-start justify-between mb-6">
-            <div className="w-12 h-12 rounded-2xl bg-success-500/10 flex items-center justify-center border border-success-500/10">
-              <DollarSign className="w-6 h-6 text-success-500" />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+        <div className="card p-6 sm:p-8 border border-white/5 rounded-[1.5rem] sm:rounded-[2rem] bg-[#1C1B1B] hover:border-white/10 transition-all">
+          <div className="flex items-start justify-between mb-4 sm:mb-6">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-success-500/10 flex items-center justify-center border border-success-500/10">
+              <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-success-500" />
             </div>
           </div>
-          <p className="text-3xl font-black text-white mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.total)}</p>
-          <p className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Previsão do mês</p>
+          <p className="text-2xl sm:text-3xl font-black text-white mb-1 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.total)}</p>
+          <p className="text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Previsão do mês</p>
         </div>
 
-        <div className="card p-8 border border-white/5 rounded-[2rem] bg-[#1C1B1B] hover:border-white/10 transition-all">
-          <div className="flex items-start justify-between mb-6">
-            <div className="w-12 h-12 rounded-2xl bg-[#fbbf24]/10 flex items-center justify-center border border-[#fbbf24]/10">
-              <TrendingUp className="w-6 h-6 text-[#fbbf24]" />
+        <div className="card p-6 sm:p-8 border border-white/5 rounded-[1.5rem] sm:rounded-[2rem] bg-[#1C1B1B] hover:border-white/10 transition-all">
+          <div className="flex items-start justify-between mb-4 sm:mb-6">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-[#fbbf24]/10 flex items-center justify-center border border-[#fbbf24]/10">
+              <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-[#fbbf24]" />
             </div>
           </div>
-          <p className="text-3xl font-black text-white mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.received)}</p>
-          <p className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Receita Efetuada</p>
+          <p className="text-2xl sm:text-3xl font-black text-white mb-1 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.received)}</p>
+          <p className="text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Receita Efetuada</p>
         </div>
 
-        <div className="card p-8 border border-white/5 rounded-[2rem] bg-[#1C1B1B] hover:border-white/10 transition-all">
-          <div className="flex items-start justify-between mb-6">
-            <div className="w-12 h-12 rounded-2xl bg-zinc-500/10 flex items-center justify-center border border-white/5">
-              <Clock className="w-6 h-6 text-zinc-500" />
+        <div className="card p-6 sm:p-8 border border-white/5 rounded-[1.5rem] sm:rounded-[2rem] bg-[#1C1B1B] hover:border-white/10 transition-all">
+          <div className="flex items-start justify-between mb-4 sm:mb-6">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-zinc-500/10 flex items-center justify-center border border-white/5">
+              <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-zinc-500" />
             </div>
           </div>
-          <p className="text-3xl font-black text-white mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.pending)}</p>
-          <p className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Aguardando Conclusão</p>
+          <p className="text-2xl sm:text-3xl font-black text-white mb-1 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.pending)}</p>
+          <p className="text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Aguardando Conclusão</p>
         </div>
       </div>
 
