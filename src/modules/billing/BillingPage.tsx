@@ -64,96 +64,95 @@ export function BillingPage() {
   }, [company?.id])
 
   return (
-    <div className="space-y-8 animate-fade-in px-4 lg:px-0">
+    <div className="space-y-4 animate-fade-in px-4 lg:px-0">
       {/* Header */}
-      <div className="mt-4 sm:mt-8">
-        <h1 className="text-3xl sm:text-4xl font-black text-white uppercase tracking-tighter">Faturamento</h1>
-        <p className="text-zinc-500 mt-1 uppercase text-[8px] sm:text-[10px] font-black tracking-widest leading-none">Acompanhe receitas e plano atual</p>
+      <div className="mt-2 sm:mt-8">
+        <h1 className="text-2xl sm:text-4xl font-black text-white uppercase tracking-tighter">Faturamento</h1>
+        <p className="text-zinc-500 mt-0.5 uppercase text-[8px] sm:text-[10px] font-black tracking-widest leading-none">Acompanhe receitas e plano atual</p>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-        <div className="card p-6 sm:p-8 border border-white/5 rounded-[1.5rem] sm:rounded-[2rem] bg-[#1C1B1B] hover:border-white/10 transition-all">
-          <div className="flex items-start justify-between mb-4 sm:mb-6">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-success-500/10 flex items-center justify-center border border-success-500/10">
-              <DollarSign className="w-5 h-5 sm:w-6 sm:h-6 text-success-500" />
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-6">
+        <div className="card p-3.5 sm:p-8 border border-white/5 rounded-2xl bg-[#1C1B1B] hover:border-white/10 transition-all">
+          <div className="flex items-start justify-between mb-2 sm:mb-6">
+            <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-success-500/10 flex items-center justify-center border border-success-500/10">
+              <DollarSign className="w-4 h-4 sm:w-6 sm:h-6 text-success-500" />
             </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-black text-white mb-1 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.total)}</p>
-          <p className="text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Previsão do mês</p>
+          <p className="text-lg sm:text-3xl font-black text-white mb-0.5 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.total).replace('R$', '')}</p>
+          <p className="text-[7px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Previsão</p>
         </div>
 
-        <div className="card p-6 sm:p-8 border border-white/5 rounded-[1.5rem] sm:rounded-[2rem] bg-[#1C1B1B] hover:border-white/10 transition-all">
-          <div className="flex items-start justify-between mb-4 sm:mb-6">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-[#fbbf24]/10 flex items-center justify-center border border-[#fbbf24]/10">
-              <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 text-[#fbbf24]" />
+        <div className="card p-3.5 sm:p-8 border border-white/5 rounded-2xl bg-[#1C1B1B] hover:border-white/10 transition-all">
+          <div className="flex items-start justify-between mb-2 sm:mb-6">
+            <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-[#fbbf24]/10 flex items-center justify-center border border-[#fbbf24]/10">
+              <TrendingUp className="w-4 h-4 sm:w-6 sm:h-6 text-[#fbbf24]" />
             </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-black text-white mb-1 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.received)}</p>
-          <p className="text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Receita Efetuada</p>
+          <p className="text-lg sm:text-3xl font-black text-white mb-0.5 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.received).replace('R$', '')}</p>
+          <p className="text-[7px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Efetuada</p>
         </div>
 
-        <div className="card p-6 sm:p-8 border border-white/5 rounded-[1.5rem] sm:rounded-[2rem] bg-[#1C1B1B] hover:border-white/10 transition-all">
-          <div className="flex items-start justify-between mb-4 sm:mb-6">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-zinc-500/10 flex items-center justify-center border border-white/5">
-              <Clock className="w-5 h-5 sm:w-6 sm:h-6 text-zinc-500" />
+        <div className="card p-3.5 sm:p-8 border border-white/5 rounded-2xl bg-[#1C1B1B] hover:border-white/10 transition-all col-span-2 sm:col-span-1">
+          <div className="flex items-start justify-between mb-2 sm:mb-6">
+            <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-2xl bg-zinc-500/10 flex items-center justify-center border border-white/5">
+              <Clock className="w-4 h-4 sm:w-6 sm:h-6 text-zinc-500" />
             </div>
           </div>
-          <p className="text-2xl sm:text-3xl font-black text-white mb-1 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.pending)}</p>
-          <p className="text-[9px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Aguardando Conclusão</p>
+          <p className="text-lg sm:text-3xl font-black text-white mb-0.5 sm:mb-2 uppercase tracking-tighter leading-none">{formatCurrency(stats.pending).replace('R$', '')}</p>
+          <p className="text-[7px] sm:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black">Pendente</p>
         </div>
       </div>
 
-      {/* Plan Info */}
-      <div className="card p-10 border border-white/5 rounded-[3rem] bg-gradient-to-br from-[#1C1B1B] via-[#1C1B1B] to-transparent relative overflow-hidden">
+      {/* Plan Info *      <div className="card p-5 sm:p-10 border border-white/5 rounded-3xl bg-gradient-to-br from-[#1C1B1B] via-[#1C1B1B] to-transparent relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#fbbf24]/5 rounded-full blur-[120px] -mr-48 -mt-48"></div>
         
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-10 relative">
-          <div className="flex items-center gap-6">
-            <div className="w-16 h-16 rounded-[1.5rem] bg-[#fbbf24] text-[#402D00] flex items-center justify-center shadow-2xl shadow-[#fbbf24]/20">
-              <CreditCard className="w-8 h-8" />
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 sm:gap-10 relative">
+          <div className="flex items-center gap-4 sm:gap-6">
+            <div className="w-10 h-10 sm:w-16 sm:h-16 rounded-xl sm:rounded-[1.5rem] bg-[#fbbf24] text-[#402D00] flex items-center justify-center shadow-2xl shadow-[#fbbf24]/20">
+              <CreditCard className="w-5 h-5 sm:w-8 sm:h-8" />
             </div>
             <div>
-              <span className="text-[10px] font-black text-[#fbbf24] uppercase tracking-[0.3em] mb-2 block">Assinatura Ativa</span>
-              <h3 className="text-4xl font-black text-white uppercase tracking-tighter leading-none">Plano {plan.name}</h3>
+              <span className="text-[8px] sm:text-[10px] font-black text-[#fbbf24] uppercase tracking-[0.3em] mb-1 sm:mb-2 block">Ativa</span>
+              <h3 className="text-xl sm:text-4xl font-black text-white uppercase tracking-tighter leading-none">Plano {plan.name}</h3>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full lg:w-auto">
-            <div className="px-6 py-4 rounded-2xl bg-white/[0.02] border border-white/5">
-                <p className="text-[9px] text-zinc-500 uppercase tracking-widest font-black mb-1">Clientes</p>
-                <p className="text-sm font-bold text-white tracking-tight leading-none">{plan.maxClients === -1 ? '∞' : plan.maxClients}</p>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 w-full lg:w-auto">
+            <div className="px-4 py-2 sm:px-6 sm:py-4 rounded-xl bg-white/[0.02] border border-white/5">
+                <p className="text-[8px] sm:text-[9px] text-zinc-500 uppercase tracking-widest font-black mb-0.5 sm:mb-1">Clientes</p>
+                <p className="text-xs sm:text-sm font-bold text-white tracking-tight leading-none">{plan.maxClients === -1 ? '∞' : plan.maxClients}</p>
             </div>
-            <div className="px-6 py-4 rounded-2xl bg-white/[0.02] border border-white/5">
-                <p className="text-[9px] text-zinc-500 uppercase tracking-widest font-black mb-1">Serviços</p>
-                <p className="text-sm font-bold text-white tracking-tight leading-none">{plan.maxServices === -1 ? '∞' : plan.maxServices}</p>
+            <div className="px-4 py-2 sm:px-6 sm:py-4 rounded-xl bg-white/[0.02] border border-white/5">
+                <p className="text-[8px] sm:text-[9px] text-zinc-500 uppercase tracking-widest font-black mb-0.5 sm:mb-1">Serviços</p>
+                <p className="text-xs sm:text-sm font-bold text-white tracking-tight leading-none">{plan.maxServices === -1 ? '∞' : plan.maxServices}</p>
             </div>
-            <div className="px-6 py-4 rounded-2xl bg-white/[0.02] border border-white/5">
-                <p className="text-[9px] text-zinc-500 uppercase tracking-widest font-black mb-1">Limite</p>
-                <p className="text-sm font-bold text-white tracking-tight leading-none">{plan.maxAppointmentsPerMonth === -1 ? '∞' : plan.maxAppointmentsPerMonth}</p>
+            <div className="px-4 py-2 sm:px-6 sm:py-4 rounded-xl bg-white/[0.02] border border-white/5">
+                <p className="text-[8px] sm:text-[9px] text-zinc-500 uppercase tracking-widest font-black mb-0.5 sm:mb-1">Limite</p>
+                <p className="text-xs sm:text-sm font-bold text-white tracking-tight leading-none">{plan.maxAppointmentsPerMonth === -1 ? '∞' : plan.maxAppointmentsPerMonth}</p>
             </div>
-            <div className="px-6 py-4 rounded-2xl bg-white/[0.02] border border-white/5">
-                <p className="text-[9px] text-zinc-500 uppercase tracking-widest font-black mb-1">Relatórios</p>
-                <p className="text-sm font-bold text-white tracking-tight leading-none">{plan.hasReports ? 'SIM' : 'NÃO'}</p>
+            <div className="px-4 py-2 sm:px-6 sm:py-4 rounded-xl bg-white/[0.02] border border-white/5">
+                <p className="text-[8px] sm:text-[9px] text-zinc-500 uppercase tracking-widest font-black mb-0.5 sm:mb-1">Relatórios</p>
+                <p className="text-xs sm:text-sm font-bold text-white tracking-tight leading-none">{plan.hasReports ? 'SIM' : 'NÃO'}</p>
             </div>
           </div>
-        </div>
+        </div>      </div>
 
         {plan.name === 'Gratuito' && (
-          <div className="mt-12 p-1 bg-gradient-to-r from-transparent via-[#fbbf24]/10 to-transparent rounded-full mb-8"></div>
+          <div className="mt-8 p-[1px] bg-gradient-to-r from-transparent via-[#fbbf24]/10 to-transparent rounded-full mb-6"></div>
         )}
 
         {plan.name === 'Gratuito' && (
-          <div className="relative flex flex-col md:flex-row items-center justify-between gap-10">
+          <div className="relative flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="max-w-md text-center md:text-left">
-              <h4 className="text-2xl font-black text-white mb-2 uppercase tracking-tighter">Pronto para crescer?</h4>
-              <p className="text-sm text-zinc-500 font-medium">Libere todas as funcionalidades PRO e remova os limites de agendamentos e clientes agora.</p>
+              <h4 className="text-lg sm:text-2xl font-black text-white mb-1 uppercase tracking-tighter">Pronto para crescer?</h4>
+              <p className="text-[10px] sm:text-sm text-zinc-500 font-medium leading-tight">Libere todas as funcionalidades PRO e remova os limites de agendamentos e clientes agora.</p>
             </div>
             <a 
               href={`https://pay.kirvano.com/435f6ec9-afb0-4405-8e12-8d49bbf652d6?metadata_company_id=${company?.id}`} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="px-12 py-6 bg-[#fbbf24] text-[#402D00] rounded-full font-black text-xs uppercase tracking-widest hover:scale-[1.05] active:scale-95 transition-all text-center shadow-2xl shadow-[#fbbf24]/20 flex items-center justify-center gap-2 group"
+              className="w-full md:w-auto px-8 py-3.5 bg-[#fbbf24] text-[#402D00] rounded-full font-black text-[10px] uppercase tracking-widest hover:scale-[1.05] active:scale-95 transition-all text-center shadow-xl shadow-[#fbbf24]/20 flex items-center justify-center gap-2 group"
             >
               Fazer Upgrade PRO
               <TrendingUp className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
@@ -182,36 +181,32 @@ export function BillingPage() {
         ) : invoices.length > 0 ? (
           <div className="grid grid-cols-1 gap-4">
             {invoices.map((inv) => (
-              <div key={inv.id} className="flex items-center justify-between p-8 bg-[#1C1B1B] border border-white/5 rounded-[2rem] hover:border-white/10 transition-all hover:bg-[#222121] group">
-                <div className="flex items-center gap-6">
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border ${
+              <div key={inv.id} className="flex items-center justify-between p-4 sm:p-8 bg-[#1C1B1B] border border-white/5 rounded-2xl hover:border-white/10 transition-all hover:bg-[#222121] group">
+                <div className="flex items-center gap-4 sm:gap-6">
+                  <div className={`w-10 h-10 sm:w-14 sm:h-14 rounded-xl flex items-center justify-center border ${
                     inv.status === 'paid' 
                       ? 'bg-success-500/10 text-success-500 border-success-500/10' 
                       : 'bg-zinc-500/10 text-zinc-500 border-white/5'
                   }`}>
-                    <CreditCard className="w-6 h-6" />
+                    <CreditCard className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <div>
-                    <p className="font-black text-white uppercase text-sm tracking-tight mb-1">{inv.description}</p>
-                    <div className="flex items-center gap-3">
-                        <span className="text-[9px] text-zinc-600 uppercase tracking-widest font-black">
+                    <p className="font-black text-white uppercase text-xs sm:text-sm tracking-tight mb-0.5 sm:mb-1">{inv.description}</p>
+                    <div className="flex items-center gap-2 sm:gap-3">
+                        <span className="text-[8px] text-zinc-600 uppercase tracking-widest font-black">
                             {new Date(inv.created_at).toLocaleDateString()}
-                        </span>
-                        <span className="w-1 h-1 rounded-full bg-zinc-800"></span>
-                        <span className="text-[9px] text-zinc-600 uppercase tracking-widest font-black">
-                            Ref: {inv.external_id?.substring(0, 8) || 'N/A'}
                         </span>
                     </div>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-black text-2xl text-white uppercase tracking-tighter mb-1">{formatCurrency(inv.amount)}</p>
-                  <span className={`text-[9px] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full border ${
+                  <p className="font-black text-base sm:text-2xl text-white uppercase tracking-tighter mb-0.5 sm:mb-1">{formatCurrency(inv.amount)}</p>
+                  <span className={`text-[8px] font-black uppercase tracking-[0.2em] px-3 py-1 rounded-full border ${
                     inv.status === 'paid' 
                       ? 'bg-success-500/10 text-success-500 border-success-500/10' 
                       : 'bg-zinc-500/10 text-zinc-500 border-white/5'
                   }`}>
-                    {inv.status === 'paid' ? 'Liquidado' : inv.status}
+                    {inv.status === 'paid' ? 'Pago' : inv.status}
                   </span>
                 </div>
               </div>

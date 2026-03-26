@@ -31,15 +31,15 @@ export function TodaySchedule({ appointments }: TodayScheduleProps) {
   })
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 rounded-[2rem] bg-surface-container-low border border-white/5 shadow-2xl">
-      <h3 className="text-lg font-black font-headline text-[#E5E2E1] uppercase tracking-tighter mb-4 sm:mb-6">Próximos Agendamentos</h3>
+    <div className="p-3 sm:p-6 lg:p-8 rounded-2xl bg-surface-container-low border border-white/5 shadow-2xl">
+      <h3 className="text-base font-black font-headline text-[#E5E2E1] uppercase tracking-tighter mb-2 sm:mb-6">Próximos Agendamentos</h3>
 
       {upcomingAppointments.length === 0 ? (
-        <div className="text-center py-10 text-on-surface-variant/50 text-sm italic">
+        <div className="text-center py-6 sm:py-10 text-on-surface-variant/50 text-xs sm:text-sm italic">
           Nenhum agendamento próximo para hoje
         </div>
       ) : (
-        <div className="space-y-[12px]">
+        <div className="space-y-2 sm:space-y-3">
           {upcomingAppointments.map((appt) => {
             const status = statusConfig[appt.status] || statusConfig.scheduled
             const StatusIcon = status.icon
@@ -49,33 +49,33 @@ export function TodaySchedule({ appointments }: TodayScheduleProps) {
               <div
                 key={appt.id}
                 className={cn(
-                  'flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-xl bg-surface-container/30 transition-all hover:bg-surface-container-highest/50',
+                  'flex items-center gap-2 sm:gap-4 p-2.5 sm:p-4 rounded-lg bg-surface-container/30 transition-all hover:bg-surface-container-highest/50',
                   isInactive && 'opacity-40'
                 )}
               >
                 {/* Time */}
-                <div className="flex-shrink-0 text-center min-w-[50px] sm:min-w-[60px]">
-                  <p className="text-sm sm:text-base font-bold text-white font-headline">{appt.start_time.slice(0, 5)}</p>
-                  <p className="text-[10px] sm:text-[11px] text-on-surface-variant/60 font-medium">{appt.end_time.slice(0, 5)}</p>
+                <div className="flex-shrink-0 text-center min-w-[45px] sm:min-w-[60px]">
+                  <p className="text-xs sm:text-base font-bold text-white font-headline">{appt.start_time.slice(0, 5)}</p>
+                  <p className="text-[9px] sm:text-[11px] text-on-surface-variant/60 font-medium">{appt.end_time.slice(0, 5)}</p>
                 </div>
 
-                <div className="w-px h-8 sm:h-10 bg-outline-variant/20 flex-shrink-0" />
+                <div className="w-px h-6 sm:h-10 bg-outline-variant/20 flex-shrink-0" />
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm sm:text-base font-semibold text-white truncate">{appt.client_name}</span>
+                    <span className="text-xs sm:text-base font-semibold text-white truncate">{appt.client_name}</span>
                   </div>
-                  <div className="flex items-center gap-2 mt-0.5 sm:mt-1">
-                    <Scissors className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary-container/70 flex-shrink-0" />
-                    <span className="text-[10px] sm:text-xs text-on-surface-variant font-medium truncate">{appt.service_name}</span>
+                  <div className="flex items-center gap-1.5 mt-0.5 sm:mt-1">
+                    <Scissors className="w-2 h-2 sm:w-3 sm:h-3 text-primary-container/70 flex-shrink-0" />
+                    <span className="text-[9px] sm:text-xs text-on-surface-variant font-medium truncate">{appt.service_name}</span>
                   </div>
                 </div>
 
                 {/* Status */}
-                <div className={cn('flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full text-[9px] sm:text-[11px] font-bold uppercase tracking-wider flex-shrink-0 transition-colors', status.color)}>
+                <div className={cn('flex items-center gap-1 px-1.5 py-0.5 sm:px-3 sm:py-1.5 rounded-full text-[8px] sm:text-[11px] font-bold uppercase tracking-wider flex-shrink-0 transition-colors', status.color)}>
                   <StatusIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                  <span className="hidden xs:inline">{status.label}</span>
+                  <span className="hidden sm:inline">{status.label}</span>
                 </div>
               </div>
             )

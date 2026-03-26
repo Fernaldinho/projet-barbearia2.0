@@ -84,59 +84,59 @@ export function ClientsPage() {
   const taxaFidelidade = totalClients > 0 ? Math.round((activeThisMonth / totalClients) * 100) : 0
 
   return (
-    <div className="animate-fade-in pb-12 space-y-8 mt-4 sm:mt-8">
+    <div className="animate-fade-in pb-8 space-y-4 sm:space-y-8 mt-2 sm:mt-8">
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 md:gap-8 px-4 lg:px-0">
-        <div className="space-y-2 sm:space-y-4">
-          <span className="text-[10px] sm:text-xs tracking-[0.2em] uppercase font-label text-[#fbbf24] font-bold block">Gestão de Relacionamento</span>
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black font-headline tracking-tighter text-[#E5E2E1] uppercase leading-none">Clientes</h1>
-          <p className="text-[#D3C5AC]/80 text-sm sm:text-lg font-light leading-relaxed max-w-2xl">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-3 md:gap-8 px-4 lg:px-0">
+        <div className="space-y-1 sm:space-y-4">
+          <span className="text-[9px] sm:text-xs tracking-[0.2em] uppercase font-label text-[#fbbf24] font-bold block">Gestão de Relacionamento</span>
+          <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-black font-headline tracking-tighter text-[#E5E2E1] uppercase leading-none">Clientes</h1>
+          <p className="text-[#D3C5AC]/80 text-xs sm:text-lg font-light leading-relaxed max-w-2xl">
             Sua base de dados premium. Acompanhe a jornada de cada cliente e antecipe suas necessidades.
           </p>
         </div>
         <button 
           onClick={() => setShowForm(true)} 
-          className="w-full md:w-auto bg-[#fbbf24] text-[#402D00] font-headline font-bold px-6 py-3 sm:px-8 sm:py-4 rounded-full flex items-center justify-center gap-2 sm:gap-3 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 group shadow-xl shadow-[#fbbf24]/10 text-sm sm:text-base"
+          className="w-full md:w-auto bg-[#fbbf24] text-[#402D00] font-headline font-bold px-5 py-2.5 sm:px-8 sm:py-4 rounded-full flex items-center justify-center gap-2 sm:gap-3 hover:shadow-[0_0_20px_rgba(251,191,36,0.15)] transition-all active:scale-95 group shadow-xl shadow-[#fbbf24]/10 text-[10px] sm:text-base"
         >
-          <Plus className="w-4 h-4 sm:w-5 sm:h-5 group-hover:rotate-90 transition-transform" />
+          <Plus className="w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:rotate-90 transition-transform" />
           ADICIONAR CLIENTE
         </button>
       </div>
 
       {/* Stats Quick Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8 px-4 lg:px-0">
-        <div className="bg-[#1C1B1B] p-5 sm:p-8 rounded-[1.5rem] border border-white/5 group hover:bg-[#201F1F] transition-all">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-8 px-4 lg:px-0">
+        <div className="bg-[#1C1B1B] p-3 sm:p-8 rounded-2xl border border-white/5 group hover:bg-[#201F1F] transition-all">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-zinc-500 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] font-black mb-1 sm:mb-2">Total de Clientes</p>
-              <p className="text-2xl sm:text-3xl lg:text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{totalClients}</p>
+              <p className="text-zinc-500 text-[8px] sm:text-[10px] uppercase tracking-[0.2em] font-black mb-1 sm:mb-2">Total</p>
+              <p className="text-lg sm:text-3xl lg:text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{totalClients}</p>
             </div>
-            <div className="bg-[#353534] p-3 sm:p-5 rounded-xl sm:rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
-              <Users className="w-5 h-5 sm:w-8 sm:h-8" />
+            <div className="bg-[#353534] p-2 sm:p-5 rounded-lg sm:rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
+              <Users className="w-4 h-4 sm:w-8 sm:h-8" />
             </div>
           </div>
         </div>
 
-        <div className="bg-[#1C1B1B] p-5 sm:p-8 rounded-[1.5rem] border border-white/5 group hover:bg-[#201F1F] transition-all">
+        <div className="bg-[#1C1B1B] p-3 sm:p-8 rounded-2xl border border-white/5 group hover:bg-[#201F1F] transition-all">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-zinc-500 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] font-black mb-1 sm:mb-2">Ativos este Mês</p>
-              <p className="text-2xl sm:text-3xl lg:text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{activeThisMonth}</p>
+              <p className="text-zinc-500 text-[8px] sm:text-[10px] uppercase tracking-[0.2em] font-black mb-1 sm:mb-2">Ativos</p>
+              <p className="text-lg sm:text-3xl lg:text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{activeThisMonth}</p>
             </div>
-            <div className="bg-[#353534] p-3 sm:p-5 rounded-xl sm:rounded-2xl text-emerald-500 group-hover:scale-110 transition-transform shadow-inner">
-              <TrendingUp className="w-5 h-5 sm:w-8 sm:h-8" />
+            <div className="bg-[#353534] p-2 sm:p-5 rounded-lg sm:rounded-2xl text-emerald-500 group-hover:scale-110 transition-transform shadow-inner">
+              <TrendingUp className="w-4 h-4 sm:w-8 sm:h-8" />
             </div>
           </div>
         </div>
 
-        <div className="bg-[#1C1B1B] p-5 sm:p-8 rounded-[1.5rem] border border-white/5 group hover:bg-[#201F1F] transition-all">
+        <div className="bg-[#1C1B1B] p-3 sm:p-8 rounded-2xl border border-white/5 group hover:bg-[#201F1F] transition-all col-span-2 md:col-span-1">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-zinc-500 text-[9px] sm:text-[10px] uppercase tracking-[0.2em] font-black mb-1 sm:mb-2">Taxa de Fidelidade</p>
-              <p className="text-2xl sm:text-3xl lg:text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{taxaFidelidade}%</p>
+              <p className="text-zinc-500 text-[8px] sm:text-[10px] uppercase tracking-[0.2em] font-black mb-1 sm:mb-2">Fidelidade</p>
+              <p className="text-lg sm:text-3xl lg:text-4xl font-headline font-black text-[#E5E2E1] tracking-tighter">{taxaFidelidade}%</p>
             </div>
-            <div className="bg-[#fbbf24]/10 p-3 sm:p-5 rounded-xl sm:rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
-              <ShieldCheck className="w-5 h-5 sm:w-8 sm:h-8" />
+            <div className="bg-[#fbbf24]/10 p-2 sm:p-5 rounded-lg sm:rounded-2xl text-[#fbbf24] group-hover:scale-110 transition-transform shadow-inner">
+              <ShieldCheck className="w-4 h-4 sm:w-8 sm:h-8" />
             </div>
           </div>
         </div>
