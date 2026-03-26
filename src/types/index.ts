@@ -172,7 +172,13 @@ export interface BlockedTime {
   start_time: string
   end_time: string
   reason: string | null
+  staff_id: string | null
   created_at: string
+  // Relations
+  staff?: {
+    id: string
+    name: string
+  }
 }
 
 // ============================================

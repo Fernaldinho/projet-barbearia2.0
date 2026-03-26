@@ -1,6 +1,8 @@
-import { useState } from 'react'
-import { X, AlertCircle } from 'lucide-react'
-import type { BlockedTime } from '@/types'
+import { useState, useEffect } from 'react'
+import { X, AlertCircle, User } from 'lucide-react'
+import { useCompany } from '@/contexts/CompanyContext'
+import { getActiveStaff } from '@/modules/staff/staff.api'
+import type { BlockedTime, Staff } from '@/types'
 import type { BlockedTimeFormData } from './blocked-times.api'
 
 interface BlockedTimesFormProps {
@@ -10,14 +12,33 @@ interface BlockedTimesFormProps {
 }
 
 export function BlockedTimesForm({ initialData, onSubmit, onClose }: BlockedTimesFormProps) {
+  const { company } = useCompany()
   const [formData, setFormData] = useState<BlockedTimeFormData>({
     date: initialData?.date || '',
     start_time: initialData?.start_time?.slice(0, 5) || '',
     end_time: initialData?.end_time?.slice(0, 5) || '',
     reason: initialData?.reason || '',
+    staff_id: initialData?.staff_id || null,
   })
+  const [staff, setStaff] = useState<Staff[]>([])
   const [loading, setLoading] = useState(false)
+  const [loadingStaff, setLoadingStaff] = useState(true)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function loadStaff() {
+      if (!company?.id) return
+      try {
+        const data = await getActiveStaff(company.id)
+        setStaff(data)
+      } catch (err) {
+        console.error('Error loading staff:', err)
+      } finally {
+        setLoadingStaff(false)
+      }
+    }
+    loadStaff()
+  }, [company?.id])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -72,6 +93,29 @@ export function BlockedTimesForm({ initialData, onSubmit, onClose }: BlockedTime
         )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label htmlFor="staff-selection" className="block text-sm font-medium text-dark-200 mb-2">
+              Profissional
+            </label>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-dark-400" />
+              <select
+                id="staff-selection"
+                value={formData.staff_id || ''}
+                onChange={(e) => setFormData({ ...formData, staff_id: e.target.value || null })}
+                className="input-field pl-10 appearance-none"
+                disabled={loadingStaff}
+              >
+                <option value="">Todos os profissionais</option>
+                {staff.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
           <div>
             <label htmlFor="blocked-date" className="block text-sm font-medium text-dark-200 mb-2">
               Data

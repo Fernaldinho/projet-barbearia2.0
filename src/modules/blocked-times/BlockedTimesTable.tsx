@@ -47,6 +47,9 @@ export function BlockedTimesTable({ blockedTimes, onEdit, onDelete }: BlockedTim
                 Data
               </th>
               <th className="text-left text-[10px] font-bold text-dark-500 uppercase tracking-[0.2em] px-8 py-5">
+                Profissional
+              </th>
+              <th className="text-left text-[10px] font-bold text-dark-500 uppercase tracking-[0.2em] px-8 py-5">
                 Horário
               </th>
               <th className="text-left text-[10px] font-bold text-dark-500 uppercase tracking-[0.2em] px-8 py-5">
@@ -86,6 +89,14 @@ export function BlockedTimesTable({ blockedTimes, onEdit, onDelete }: BlockedTim
                           {formatWeekday(item.date)}
                         </p>
                       </div>
+                    </div>
+                  </td>
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-2">
+                       <div className={`w-1.5 h-1.5 rounded-full ${item.staff_id ? 'bg-primary-container' : 'bg-dark-500'}`} />
+                       <span className="text-dark-200 text-sm font-medium">
+                         {item.staff?.name || 'Todos os profissionais'}
+                       </span>
                     </div>
                   </td>
                   <td className="px-8 py-6">
