@@ -53,8 +53,8 @@ export default function OnboardingPage() {
         if (!companyError) {
           company = newCompany
           success = true
-        } else if (companyError.code === '23505' && companyError.message.includes('slug')) {
-          // Slug collision! Tack on a random suffix
+        } else if (companyError.code === '23505') {
+          // Unique violation (likely slug) - append random suffix and retry
           const randomSuffix = Math.floor(Math.random() * 1000).toString()
           finalSlug = `${baseSlug}-${randomSuffix}`
           retryCount++
