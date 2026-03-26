@@ -63,6 +63,14 @@ export const router = createBrowserRouter([
     path: '/book/:slug',
     element: <BookingPage />,
   },
+  {
+    path: '/onboarding',
+    element: (
+      <ProtectedRoute>
+        <OnboardingPage />
+      </ProtectedRoute>
+    ),
+  },
 
 
 

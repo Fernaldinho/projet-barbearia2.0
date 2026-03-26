@@ -42,7 +42,7 @@ export function RegisterPage() {
       if (regError) {
         setError(regError.message || 'Erro ao criar conta. Tente novamente.')
       } else {
-        navigate('/dashboard')
+        navigate('/onboarding')
       }
     } catch (err: any) {
       setError(err?.message || 'Erro ao criar conta. Tente novamente.')
