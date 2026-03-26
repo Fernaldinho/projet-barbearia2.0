@@ -25,15 +25,21 @@ const cards: CardConfig[] = [
     format: (v) => v.toString(),
   },
   {
+    key: 'totalForecast',
+    title: 'Previsão do mês',
+    icon: TrendingUp,
+    format: (v) => formatter.format(v),
+  },
+  {
     key: 'monthlyRevenue',
-    title: 'Faturamento do mês',
+    title: 'Receita Efetuada',
     icon: DollarSign,
     format: (v) => formatter.format(v),
   },
   {
     key: 'projectedRevenue',
-    title: 'Faturamento previsto',
-    icon: DollarSign,
+    title: 'Aguardando Conclusão',
+    icon: CalendarCheck,
     format: (v) => formatter.format(v),
   },
   {
