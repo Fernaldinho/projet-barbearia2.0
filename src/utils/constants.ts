@@ -41,7 +41,7 @@ export const PLAN_FEATURES = {
     hasReports: false,
     hasBilling: false,
     upgradeLinks: {
-      monthly: 'https://pay.kirvano.com/435f6ec9-afb0-4405-8e12-8d49bbf652d6',
+      monthly: 'https://pay.kirvano.com/bb14fe58-689e-4ef7-80a8-f43bf972a209',
       semiannual: 'https://pay.kirvano.com/f6753696-480f-4b00-9a16-73463b09f9b7'
     }
   },

@@ -150,7 +150,7 @@ export function BillingPage() {
               <p className="text-[10px] sm:text-sm text-zinc-500 font-medium leading-tight">Libere todas as funcionalidades PRO e remova os limites de agendamentos e clientes agora.</p>
             </div>
             <a 
-              href={`https://pay.kirvano.com/435f6ec9-afb0-4405-8e12-8d49bbf652d6?metadata_company_id=${company?.id}`} 
+              href={`https://pay.kirvano.com/bb14fe58-689e-4ef7-80a8-f43bf972a209?metadata_company_id=${company?.id}`} 
               target="_blank" 
               rel="noopener noreferrer"
               className="w-full md:w-auto px-8 py-3.5 bg-[#fbbf24] text-[#402D00] rounded-full font-black text-[10px] uppercase tracking-widest hover:scale-[1.05] active:scale-95 transition-all text-center shadow-xl shadow-[#fbbf24]/20 flex items-center justify-center gap-2 group"
