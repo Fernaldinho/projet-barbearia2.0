@@ -36,9 +36,11 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     maxClients: plan.maxClients,
     maxServices: plan.maxServices,
     maxAppointmentsPerMonth: plan.maxAppointmentsPerMonth,
+    maxBusinessDays: (plan as any).maxBusinessDays || 7,
   }
 
   const fetchCompany = async () => {
+    setLoading(true)
     if (!user) {
       setCompany(null)
       setLoading(false)
