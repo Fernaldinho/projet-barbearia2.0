@@ -245,39 +245,43 @@ export function LandingPage() {
 
                 <div className="bg-[#1C1B1B] border-2 border-[#fbbf24] rounded-2xl p-10 flex flex-col text-center relative shadow-[0_0_40px_rgba(251,191,36,0.1)]">
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#fbbf24] text-[#402d00] px-4 py-1 rounded-full text-xs font-bold flex items-center gap-1 uppercase tracking-wider">
-                    <span className="material-symbols-outlined text-sm">star</span>
+                    <span className="material-symbols-outlined text-sm">bolt</span>
                     Mais Popular
                   </div>
-                  <h3 className="text-[#e5e2e1] font-headline font-bold text-2xl mb-2 uppercase">PROFISSIONAL</h3>
-                  <p className="text-[#d3c5ac] text-sm mb-8 italic">Para barbearias em crescimento</p>
+                  <h3 className="text-[#e5e2e1] font-headline font-bold text-2xl mb-2 uppercase">PRO MENSAL</h3>
+                  <p className="text-[#d3c5ac] text-sm mb-8 italic">Para barbearias profissionais</p>
                   <div className="mb-10">
-                    <span className="text-[#e5e2e1] font-headline font-bold text-4xl">R$ 59</span>
+                    <span className="text-[#e5e2e1] font-headline font-bold text-4xl">R$ 37,99</span>
                     <span className="text-[#d3c5ac] text-sm">/mês</span>
                   </div>
                   <ul className="space-y-4 mb-12 text-left">
                     <li className="flex items-center gap-3 text-[#e5e2e1]"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Serviços ilimitados</li>
                     <li className="flex items-center gap-3 text-[#e5e2e1]"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Clientes ilimitados</li>
-                    <li className="flex items-center gap-3 text-[#e5e2e1]"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Até 5 barbeiros</li>
+                    <li className="flex items-center gap-3 text-[#e5e2e1]"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Agendamentos ilimitados</li>
                     <li className="flex items-center gap-3 text-[#e5e2e1]"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Link personalizado</li>
                     <li className="flex items-center gap-3 text-[#e5e2e1]"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Dashboard completo</li>
                   </ul>
-                  <Link to={ROUTES.REGISTER} className="mt-auto w-full bg-[#fbbf24] text-[#402d00] py-4 rounded-xl font-headline font-bold hover:shadow-[0_0_30_rgba(251,191,36,0.3)] transition-all text-center">Assinar PRO</Link>
+                  <Link to={ROUTES.REGISTER} className="mt-auto w-full bg-[#fbbf24] text-[#402d00] py-4 rounded-xl font-headline font-bold hover:shadow-[0_0_30_rgba(251,191,36,0.3)] transition-all text-center uppercase">Assinar Agora</Link>
                 </div>
 
-                <div className="bg-[#1C1B1B] border border-[#4f4633]/10 rounded-2xl p-10 flex flex-col text-center">
-                  <h3 className="text-[#e5e2e1] font-headline font-bold text-2xl mb-2 uppercase">ENTERPRISE</h3>
-                  <p className="text-[#d3c5ac] text-sm mb-8 italic">Para grandes operações</p>
+                <div className="bg-[#1C1B1B] border border-[#4f4633]/10 rounded-2xl p-10 flex flex-col text-center relative">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#fbbf24] text-[#402d00] px-4 py-1 rounded-full text-xs font-bold flex items-center gap-1 uppercase tracking-wider">
+                    <span className="material-symbols-outlined text-sm">star</span>
+                    Melhor Valor
+                  </div>
+                  <h3 className="text-[#e5e2e1] font-headline font-bold text-2xl mb-2 uppercase">PRO SEMESTRAL</h3>
+                  <p className="text-[#d3c5ac] text-sm mb-8 italic">Pague 6 meses e economize</p>
                   <div className="mb-10">
-                    <span className="text-[#e5e2e1] font-headline font-bold text-4xl">R$ 149</span>
-                    <span className="text-[#d3c5ac] text-sm">/mês</span>
+                    <span className="text-[#e5e2e1] font-headline font-bold text-4xl">R$ 205,00</span>
+                    <p className="text-[#fbbf24] text-[10px] font-black uppercase mt-1">~R$ 34,16/mês</p>
                   </div>
                   <ul className="space-y-4 mb-12 text-left text-[#e5e2e1]">
-                    <li className="flex items-center gap-3"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Tudo do PRO</li>
-                    <li className="flex items-center gap-3"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Barbeiros ilimitados</li>
-                    <li className="flex items-center gap-3"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Múltiplas unidades</li>
-                    <li className="flex items-center gap-3"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Suporte 24/7</li>
+                    <li className="flex items-center gap-3"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Tudo do Plano Mensal</li>
+                    <li className="flex items-center gap-3"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Economia de 10%</li>
+                    <li className="flex items-center gap-3"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Prioridade em Suporte</li>
+                    <li className="flex items-center gap-3"><span className="material-symbols-outlined text-[#fbbf24]">check</span> Consultoria de Gestão</li>
                   </ul>
-                  <a href="#" className="mt-auto w-full border border-[#4f4633]/30 text-[#e5e2e1] py-4 rounded-xl font-headline font-bold hover:bg-[#1c1b1b] transition-all text-center">Falar com Vendas</a>
+                  <Link to={ROUTES.REGISTER} className="mt-auto w-full border border-[#fbbf24]/30 text-[#e5e2e1] py-4 rounded-xl font-headline font-bold hover:bg-[#fbbf24] hover:text-[#402d00] transition-all text-center uppercase">Assinar Semestral</Link>
                 </div>
               </div>
             </div>
