@@ -7,9 +7,8 @@ import { supabase } from '@/lib/supabase'
 export interface DashboardMetrics {
   appointmentsToday: number
   newClientsThisMonth: number
-  monthlyRevenue: number      // Receita Efetuada (Completed)
-  projectedRevenue: number    // Aguardando Conclusão (Scheduled/Confirmed)
-  totalForecast: number       // Previsão do Mês (Sum)
+  monthlyRevenue: number
+  projectedRevenue: number
   attendanceRate: number
   totalAppointmentsMonth: number
   completedAppointmentsMonth: number
@@ -144,14 +143,15 @@ export async function getDashboardMetrics(companyId: string): Promise<DashboardM
   const attendanceRate = totalMonth > 0 ? (completedMonth / totalMonth) * 100 : 0
 
   const monthlyRevenue = allAppts
-    .filter(a => a.status === 'completed')
+    .filter(isActuallyDone)
     .reduce((sum, a: any) => {
       const serviceData = Array.isArray(a.service) ? a.service[0] : a.service
       return sum + (Number(serviceData?.price) || 0)
     }, 0)
 
+  // Projected revenue should be scheduled/confirmed appointments from TODAY onwards that are not done
   const projectedRevenue = allAppts
-    .filter(a => ['scheduled', 'confirmed'].includes(a.status))
+    .filter((a) => !isActuallyDone(a) && ['scheduled', 'confirmed'].includes(a.status))
     .reduce((sum, a: any) => {
       const serviceData = Array.isArray(a.service) ? a.service[0] : a.service
       return sum + (Number(serviceData?.price) || 0)
@@ -162,7 +162,6 @@ export async function getDashboardMetrics(companyId: string): Promise<DashboardM
     newClientsThisMonth: newClients.count || 0,
     monthlyRevenue,
     projectedRevenue,
-    totalForecast: monthlyRevenue + projectedRevenue,
     attendanceRate: Math.round(attendanceRate),
     totalAppointmentsMonth: totalMonth,
     completedAppointmentsMonth: completedMonth,

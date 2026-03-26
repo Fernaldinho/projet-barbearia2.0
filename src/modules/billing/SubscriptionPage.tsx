@@ -47,7 +47,7 @@ export function SubscriptionPage() {
             <div className="relative hidden lg:block">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#131313] to-transparent z-10"></div>
                 <img 
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDQe5SXSxDR04mAagtvJT-0LATw9R2F94QjCfIiTdv2DsFmOgXuxsu2GUKVgtKEjPkVOBbrGZ27UfzR6EXnOkeYAHTeTH5TWbCowpDfO_V-O6-2IjsrGPBFkjMLkdDjDXwkMLFsX-y3akzvCCFQj7lSfCET2LedYFD2WxZ7GujfnFuiNwrp7KK3XEd8EzcLVGyFBfNUYwsRF81Mq72jZKU0mSISsMJ3OFWVF5iDsKwl_-cmoIeXfO_znj12MplyWnc3hWHH0A7UJ1Td" 
+                    src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?q=80&w=2070&auto=format&fit=crop" 
                     alt="Barbearia Profissional" 
                     className="w-full h-[400px] object-cover rounded-[3rem] grayscale opacity-40"
                 />

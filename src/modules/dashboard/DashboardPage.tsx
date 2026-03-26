@@ -44,7 +44,6 @@ export function DashboardPage() {
     newClientsThisMonth: 0,
     monthlyRevenue: 0,
     projectedRevenue: 0,
-    totalForecast: 0,
     attendanceRate: 0,
     totalAppointmentsMonth: 0,
     completedAppointmentsMonth: 0,
@@ -115,13 +114,11 @@ export function DashboardPage() {
       {/* Editorial Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div>
-          <p className="text-xs font-black uppercase tracking-widest text-[#fbbf24] mb-2 font-label">Previsão do Mês</p>
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-headline tracking-tighter text-[#E5E2E1]">
-            {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(metrics.totalForecast)}
+          <h1 className="text-3xl sm:text-4xl font-black font-headline tracking-tighter text-[#E5E2E1]">
+            {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(metrics.monthlyRevenue)}
           </h1>
-          <p className="text-lg text-on-surface-variant font-medium mt-4 max-w-2xl leading-relaxed">
-            Sua barbearia já faturou <span className="text-white font-bold">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(metrics.monthlyRevenue)}</span> (Efetuada). 
-            Você ainda tem <span className="text-[#fbbf24] font-bold">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(metrics.projectedRevenue)}</span> aguardando conclusão hoje.
+          <p className="text-lg text-on-surface-variant font-medium mt-2 max-w-xl">
+            Sua barbearia está com <span className="text-white font-bold">{metrics.attendanceRate}%</span> de ocupação hoje. Você tem <span className="text-[#fbbf24] font-bold">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(metrics.projectedRevenue)}</span> em faturamento previsto.
           </p>
         </div>
 
