@@ -23,15 +23,9 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     )
   }
 
-  if (!user) {
+  if (!user || (!company && !companyLoading)) {
     return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />
   }
-
-  if (!company && location.pathname !== '/onboarding') {
-    return <Navigate to="/onboarding" replace />
-  }
   
-  return <>{children}</>
-
   return <>{children}</>
 }

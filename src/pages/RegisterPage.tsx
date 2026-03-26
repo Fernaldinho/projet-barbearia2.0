@@ -21,6 +21,8 @@ export function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [companyName, setCompanyName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [address, setAddress] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -72,11 +74,11 @@ export function RegisterPage() {
     setLoading(true)
 
     try {
-      const { error: regError } = await register(email, password, name, companyName)
+      const { error: regError } = await register(email, password, name, companyName, phone, address)
       if (regError) {
         setError(regError.message || 'Erro ao criar conta. Tente novamente.')
       } else {
-        navigate('/onboarding')
+        navigate('/dashboard')
       }
     } catch (err: any) {
       setError(err?.message || 'Erro ao criar conta. Tente novamente.')
@@ -186,6 +188,38 @@ export function RegisterPage() {
                     value={companyName}
                     onChange={(e) => setCompanyName(e.target.value)}
                   />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-label uppercase tracking-widest text-[#d3c5ac] ml-1" htmlFor="phone">Telefone / WhatsApp</label>
+                    <input
+                      className="w-full bg-[#0e0e0e] border border-[#4f4633]/20 rounded-xl px-4 py-4 text-[#e5e2e1] placeholder:text-[#d3c5ac]/40 focus:ring-1 focus:ring-[#fbbf24] focus:border-[#fbbf24] transition-all outline-none"
+                      id="phone"
+                      name="phone"
+                      placeholder="(11) 99999-9999"
+                      type="tel"
+                      required
+                      value={phone}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/\D/g, '')
+                        if (val.length <= 11) setPhone(val)
+                      }}
+                    />
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-label uppercase tracking-widest text-[#d3c5ac] ml-1" htmlFor="address">Endereço Completo</label>
+                    <input
+                      className="w-full bg-[#0e0e0e] border border-[#4f4633]/20 rounded-xl px-4 py-4 text-[#e5e2e1] placeholder:text-[#d3c5ac]/40 focus:ring-1 focus:ring-[#fbbf24] focus:border-[#fbbf24] transition-all outline-none"
+                      id="address"
+                      name="address"
+                      placeholder="Rua, Número, Bairro, Cidade"
+                      type="text"
+                      required
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                    />
+                  </div>
                 </div>
 
                 <div className="space-y-1.5">

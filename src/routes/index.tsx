@@ -14,7 +14,6 @@ import { BookingPage } from '@/modules/booking/BookingPage'
 
 // Private Module Pages
 import { DashboardPage } from '@/modules/dashboard/DashboardPage'
-import OnboardingPage from '@/pages/OnboardingPage'
 import { ServicesPage } from '@/modules/services/ServicesPage'
 import { ClientsPage } from '@/modules/clients/ClientsPage'
 import { BirthdaysPage } from '@/modules/clients/BirthdaysPage'
@@ -62,14 +61,6 @@ export const router = createBrowserRouter([
   {
     path: '/book/:slug',
     element: <BookingPage />,
-  },
-  {
-    path: '/onboarding',
-    element: (
-      <ProtectedRoute>
-        <OnboardingPage />
-      </ProtectedRoute>
-    ),
   },
 
 
