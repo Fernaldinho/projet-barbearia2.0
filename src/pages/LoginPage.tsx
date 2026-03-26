@@ -67,21 +67,21 @@ export function LoginPage() {
         </section>
 
         {/* Left Column (Login Form) */}
-        <section className="flex-grow flex flex-col items-center justify-center p-8 md:p-16 bg-[#0c0c0c] min-h-screen">
-          <div className="w-full max-w-md space-y-10">
+        <section className="flex-grow flex flex-col items-center justify-center p-6 sm:p-10 md:p-16 bg-[#0c0c0c] min-h-screen">
+          <div className="w-full max-w-md space-y-8 md:space-y-10">
             {/* Back Link */}
-            <div className="mb-4">
-              <Link to="/" className="flex items-center gap-2 text-[#a0a0a0] hover:text-[#fbbf24] transition-colors text-sm">
-                <span className="material-symbols-outlined text-sm">arrow_back</span>
+            <div className="mb-2">
+              <Link to="/" className="flex items-center gap-2 text-[#a0a0a0] hover:text-[#fbbf24] transition-colors text-xs sm:text-sm group">
+                <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
                 Voltar ao início
               </Link>
             </div>
 
             {/* Header */}
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               <div className="flex items-center gap-2">
-                <div className="bg-[#fbbf24] p-1.5 rounded-lg">
-                  <span className="material-symbols-outlined text-black text-xl">content_cut</span>
+                <div className="bg-[#fbbf24] p-1 rounded-lg">
+                  <span className="material-symbols-outlined text-black text-lg">content_cut</span>
                 </div>
                 <span className="font-headline text-2xl font-black tracking-tight text-white uppercase italic">agendai</span>
               </div>

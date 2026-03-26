@@ -22,11 +22,11 @@ export function DashboardLayout() {
       )}
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 md:ml-[240px] w-full">
+      <div className="flex-1 flex flex-col min-w-0 md:pl-[240px] w-full h-full">
         <Navbar onMenuClick={() => setIsMobileMenuOpen(true)} />
         
-        <main className="flex-1 pt-[80px] pb-12 w-full flex flex-col items-center">
-          <div className="page-container flex-1">
+        <main className="flex-1 pt-[72px] pb-10 w-full flex flex-col">
+          <div className="px-4 sm:px-6 lg:px-8 w-full max-w-7xl mx-auto">
             <Outlet />
           </div>
         </main>

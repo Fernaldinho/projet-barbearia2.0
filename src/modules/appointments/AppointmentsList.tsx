@@ -10,7 +10,7 @@ interface AppointmentsListProps {
 
 const statusConfig: Record<string, { label: string; color: string; icon: any }> = {
   scheduled: { label: 'Agendado', color: 'bg-blue-500/10 text-blue-400', icon: Clock },
-  confirmed: { label: 'Confirmado', color: 'bg-emerald-500/10 text-emerald-400', icon: CheckCircle },
+  confirmed: { label: 'Confirmado', color: 'bg-primary-500/10 text-primary-400', icon: CheckCircle },
   completed: { label: 'Concluído', color: 'bg-emerald-500/10 text-emerald-400', icon: CheckCircle },
   cancelled: { label: 'Cancelado', color: 'bg-danger-500/10 text-danger-500', icon: XCircle },
   no_show: { label: 'Não compareceu', color: 'bg-dark-500/10 text-dark-400', icon: AlertCircle },
@@ -87,7 +87,7 @@ export function AppointmentsList({ appointments, onStatusChange, onEdit }: Appoi
               {appointment.status === 'scheduled' && (
                 <button
                   onClick={() => onStatusChange(appointment.id, 'confirmed')}
-                  className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-all"
+                  className="p-2 rounded-lg bg-primary-500/10 text-primary-400 hover:bg-primary-500/20 transition-all"
                   title="Confirmar"
                 >
                   <CheckCircle className="w-4 h-4" />

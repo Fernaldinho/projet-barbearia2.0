@@ -383,56 +383,59 @@ export function ClientPortal() {
         `}</style>
 
       {/* Header */}
-      <header className="sticky top-0 z-30 bg-black/80 backdrop-blur-2xl border-b border-white/[0.03]">
-        <div className="max-w-4xl mx-auto px-6 py-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex flex-col">
-            <Link to={fallbackTargetSlug ? `/book/${fallbackTargetSlug}` : '/'} className="flex items-center gap-3 group">
+      <header className="sticky top-0 z-40 bg-black/80 backdrop-blur-2xl border-b border-white/[0.03]">
+        <div className="max-w-4xl mx-auto px-4 md:px-6 py-4 md:py-6 flex items-center justify-between gap-4">
+          <div className="flex-1">
+            <Link to={fallbackTargetSlug ? `/book/${fallbackTargetSlug}` : '/'} className="flex items-center gap-3 group shrink-0">
                {companyContext?.logo_url ? (
-                  <img src={companyContext.logo_url} alt={companyContext.name} className="w-10 h-10 rounded-lg object-contain bg-white/5 p-1" />
+                  <img src={companyContext.logo_url} alt={companyContext.name} className="w-9 h-9 md:w-10 md:h-10 rounded-lg object-contain bg-white/5 p-1" />
                ) : (
-                  <div className="w-10 h-10 rounded-lg bg-[#fbbf24]/10 flex items-center justify-center text-[#fbbf24]">
+                  <div className="w-9 h-9 md:w-10 md:h-10 rounded-lg bg-[#fbbf24]/10 flex items-center justify-center text-[#fbbf24]">
                      <Scissors className="w-5 h-5" />
                   </div>
                )}
-               <div className="flex flex-col">
-                  <span className="font-headline font-black text-xl text-white group-hover:text-[#fbbf24] transition-colors tracking-tighter uppercase leading-none">
+               <div className="flex flex-col overflow-hidden">
+                  <span className="font-headline font-black text-lg md:text-xl text-white group-hover:text-[#fbbf24] transition-colors tracking-tighter uppercase leading-none truncate">
                      {companyContext?.name || 'PORTAL DA BARBEARIA'}
                   </span>
-                  <span className="text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black mt-1">Sessão do Cliente</span>
+                  <span className="text-[9px] md:text-[10px] text-zinc-500 uppercase tracking-[0.2em] font-black mt-1">Sessão do Cliente</span>
                </div>
             </Link>
           </div>
-          <div className="flex items-center gap-6">
+          
+          <div className="flex items-center gap-3 md:gap-6">
              <div className="hidden sm:block text-right">
                 <p className="text-[9px] uppercase font-black tracking-widest text-[#fbbf24]">Perfil do Cliente</p>
                 <p className="text-xs font-bold text-white uppercase">{user.user_metadata?.full_name || 'Usuário'}</p>
              </div>
-             <button title="Configurar Perfil" onClick={() => setShowSettings(true)} className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-zinc-500 hover:text-[#fbbf24] transition-all">
-                <Settings className="w-5 h-5" />
-             </button>
-             <button title="Sair" onClick={() => logout()} className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-zinc-500 hover:text-white transition-all">
-                <LogOut className="w-5 h-5" />
-             </button>
+             <div className="flex items-center gap-2">
+                <button title="Configurar Perfil" onClick={() => setShowSettings(true)} className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-zinc-500 hover:text-[#fbbf24] hover:bg-[#fbbf24]/10 transition-all">
+                   <Settings className="w-5 h-5" />
+                </button>
+                <button title="Sair" onClick={() => logout()} className="w-10 h-10 rounded-xl bg-white/5 border border-white/5 flex items-center justify-center text-zinc-500 hover:text-white hover:bg-red-500/10 transition-all">
+                   <LogOut className="w-5 h-5" />
+                </button>
+             </div>
           </div>
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-8 space-y-12">
+      <main className="max-w-4xl mx-auto px-4 md:px-6 py-8 space-y-12">
         {/* Hero Banner */}
-        <section className="relative h-64 md:h-80 rounded-[3rem] overflow-hidden group shadow-2xl">
+        <section className="relative h-72 md:h-80 rounded-[2.5rem] md:rounded-[3rem] overflow-hidden group shadow-2xl">
            <img 
               src={companyContext?.banner_url || "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?auto=format&fit=crop&q=80&w=1200"} 
               alt="Banner" 
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105 transition-all"
            />
-           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
-           <div className="absolute inset-x-0 bottom-0 p-8 md:p-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+           <div className="absolute inset-x-0 bottom-0 p-6 md:p-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
               <div className="space-y-2">
                  <div className="flex items-center gap-2 mb-2">
                     <span className="px-3 py-1 bg-[#fbbf24] text-[#402D00] text-[10px] font-black uppercase tracking-widest rounded-full">Experiência Premium</span>
                  </div>
-                 <h3 className="text-3xl md:text-5xl font-headline font-black text-white uppercase tracking-tighter leading-none">
-                    Redefina seu <span className="text-[#fbbf24]">Estilo</span>.
+                 <h3 className="text-4xl md:text-5xl font-headline font-black text-white uppercase tracking-tighter leading-none">
+                    Redefina seu <br className="md:hidden" /><span className="text-[#fbbf24]">Estilo</span>.
                  </h3>
                  <p className="text-[#D3C5AC] text-sm md:text-base font-light max-w-sm">
                     Faça agora o seu próximo atendimento e garanta o padrão que você merece.
@@ -442,12 +445,12 @@ export function ClientPortal() {
         </section>
 
         {/* Welcome Block */}
-        <section className="flex flex-col md:flex-row md:items-end justify-between gap-8 animate-fade-in">
-           <div className="space-y-4">
-              <h2 className="text-5xl lg:text-7xl font-headline font-black text-white uppercase tracking-tighter leading-none">
-                 Olá, <span className="text-[#fbbf24]">{user.user_metadata?.full_name?.split(' ')[0] || 'Cliente'}</span>.
+        <section className="flex flex-col md:flex-row md:items-end justify-between gap-6 md:gap-8 animate-fade-in">
+           <div className="space-y-3 md:space-y-4">
+              <h2 className="text-4xl sm:text-5xl lg:text-7xl font-headline font-black text-white uppercase tracking-tighter leading-[0.9]">
+                 Olá, <br className="sm:hidden" /><span className="text-[#fbbf24] text-5xl sm:text-inherit">{user.user_metadata?.full_name?.split(' ')[0] || 'Cliente'}</span>.
               </h2>
-              <p className="text-[#D3C5AC] text-xl font-light max-w-xl">
+              <p className="text-[#D3C5AC] text-lg md:text-xl font-light max-w-xl leading-snug">
                  Bem-vindo de volta à sua área exclusiva. O que vamos fazer hoje?
               </p>
            </div>
@@ -460,7 +463,7 @@ export function ClientPortal() {
                  toast.error("Você ainda não possui histórico. Para agendar pela primeira vez, utilize o link da sua barbearia!");
                }
              }}
-             className="bg-[#fbbf24] text-[#402D00] px-10 py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-[#fbbf24]/20 hover:scale-[1.02] transition-all flex items-center gap-3"
+             className="w-full sm:w-auto bg-[#fbbf24] text-[#402D00] px-10 py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-2xl shadow-[#fbbf24]/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-3"
            >
               Faça Novo Agendamento
               <ChevronRight className="w-4 h-4" />

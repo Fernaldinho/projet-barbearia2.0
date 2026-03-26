@@ -100,17 +100,17 @@ export function RegisterPage() {
         {/* Right Side: Form Content */}
         <section className="flex-1 flex flex-col bg-[#131313] overflow-y-auto">
           {/* Top Navigation */}
-          <div className="w-full flex justify-between items-center px-8 py-8 md:px-12">
-            <Link to="/" className="font-headline font-bold text-2xl text-[#fbbf24] tracking-tighter uppercase">
+          <div className="w-full flex justify-between items-center px-6 py-6 md:px-12">
+            <Link to="/" className="font-headline font-bold text-xl md:text-2xl text-[#fbbf24] tracking-tighter uppercase shrink-0">
               agendai
             </Link>
-            <Link to="/" className="flex items-center gap-2 text-[#d3c5ac] hover:text-[#fbbf24] transition-colors text-sm font-label uppercase tracking-wider group">
-              <span className="material-symbols-outlined text-base group-hover:-translate-x-1 transition-transform">arrow_back</span>
+            <Link to="/" className="flex items-center gap-1.5 text-[#d3c5ac] hover:text-[#fbbf24] transition-colors text-[10px] md:text-sm font-label uppercase tracking-wider group shrink-0">
+              <span className="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">arrow_back</span>
               Voltar ao início
             </Link>
           </div>
 
-          <div className="flex-1 flex flex-col justify-center items-center px-8 pb-20 md:px-12">
+          <div className="flex-1 flex flex-col justify-center items-center px-6 pb-16 md:px-12">
             <div className="w-full max-w-md">
               {/* Form Header */}
               <div className="mb-10 text-center md:text-left">

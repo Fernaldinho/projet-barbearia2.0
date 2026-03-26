@@ -28,20 +28,20 @@ export function LandingPage() {
       <div className="bg-[#131313] text-[#e5e2e1] font-body antialiased selection:bg-[#fbbf24] selection:text-[#402d00]">
         {/* Top Navigation Bar */}
         <nav className="fixed top-0 w-full z-50 bg-[#131313]/80 backdrop-blur-xl">
-          <div className="flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+          <div className="flex justify-between items-center px-4 md:px-6 py-4 max-w-7xl mx-auto">
             <div className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-[#fbbf24] text-3xl">content_cut</span>
-              <span className="text-2xl font-bold tracking-tighter text-[#FBBF24] font-headline uppercase">agendai</span>
+              <span className="material-symbols-outlined text-[#fbbf24] text-2xl md:text-3xl">content_cut</span>
+              <span className="text-xl md:text-2xl font-bold tracking-tighter text-[#FBBF24] font-headline uppercase">agendai</span>
             </div>
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden lg:flex items-center gap-8">
               <a className="text-[#FBBF24] font-bold border-b-2 border-[#FBBF24] pb-1 font-headline" href="#">Início</a>
               <a className="text-[#E5E2E1] hover:text-[#FBBF24] transition-colors duration-300 font-headline" href="#recursos">Recursos</a>
               <a className="text-[#E5E2E1] hover:text-[#FBBF24] transition-colors duration-300 font-headline" href="#como-funciona">Como Funciona</a>
               <a className="text-[#E5E2E1] hover:text-[#FBBF24] transition-colors duration-300 font-headline" href="#precos">Preços</a>
             </div>
-            <div className="flex items-center gap-6">
-              <Link to={ROUTES.LOGIN} className="text-[#E5E2E1] hover:text-[#fbbf24] transition-colors font-headline font-bold">Empresas</Link>
-              <Link to={ROUTES.REGISTER} className="bg-[#fbbf24] text-[#402d00] px-6 py-2 rounded-full font-headline font-bold hover:shadow-[0_0_20px_rgba(251,191,36,0.3)] transition-all active:scale-95">Criar Conta</Link>
+            <div className="flex items-center gap-3 md:gap-6">
+              <Link to={ROUTES.LOGIN} className="hidden sm:block text-[#E5E2E1] hover:text-[#fbbf24] transition-colors font-headline font-bold text-sm md:text-base">Empresas</Link>
+              <Link to={ROUTES.REGISTER} className="bg-[#fbbf24] text-[#402d00] px-4 md:px-6 py-2 rounded-full font-headline font-bold text-sm md:text-base hover:shadow-[0_0_20px_rgba(251,191,36,0.3)] transition-all active:scale-95">Criar Conta</Link>
             </div>
           </div>
           <div className="bg-gradient-to-b from-[#1C1B1B] to-transparent h-px w-full opacity-20"></div>

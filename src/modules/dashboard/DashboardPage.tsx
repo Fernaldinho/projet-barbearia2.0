@@ -113,22 +113,22 @@ export function DashboardPage() {
     <div className="space-y-[32px] animate-fade-in pb-10">
       {/* Editorial Header */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-black font-headline tracking-tighter text-[#E5E2E1]">
+        <div className="space-y-1">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black font-headline tracking-tighter text-[#E5E2E1]">
             {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(metrics.monthlyRevenue)}
           </h1>
-          <p className="text-lg text-on-surface-variant font-medium mt-2 max-w-xl">
+          <p className="text-sm sm:text-base lg:text-lg text-on-surface-variant font-medium max-w-xl leading-relaxed">
             Sua barbearia está com <span className="text-white font-bold">{metrics.attendanceRate}%</span> de ocupação hoje. Você tem <span className="text-[#fbbf24] font-bold">{new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(metrics.projectedRevenue)}</span> em faturamento previsto.
           </p>
         </div>
 
         {/* Period selector */}
-        <div className="flex items-center bg-surface-container-low rounded-2xl p-1.5 h-auto self-start lg:self-center backdrop-blur-md">
+        <div className="flex items-center bg-surface-container-low rounded-2xl p-1 backdrop-blur-md overflow-x-auto max-w-full">
           {(Object.keys(periodLabels) as Period[]).map((p) => (
             <button
               key={p}
               onClick={() => setPeriod(p)}
-              className={`px-5 py-2.5 rounded-xl text-sm font-bold tracking-wide transition-all ${
+              className={`px-3 sm:px-5 py-2 rounded-xl text-[10px] sm:text-xs md:text-sm font-bold tracking-wide transition-all whitespace-nowrap ${
                 period === p
                   ? 'bg-primary-container text-on-primary-fixed shadow-lg shadow-primary-container/20'
                   : 'text-on-surface-variant hover:text-white'

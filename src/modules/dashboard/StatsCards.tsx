@@ -50,7 +50,7 @@ interface StatsCardsProps {
 
 export function StatsCards({ metrics }: StatsCardsProps) {
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-5 gap-[20px]">
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-5">
       {cards.map((card) => {
         const Icon = card.icon
         const value = metrics[card.key] as number
@@ -58,17 +58,17 @@ export function StatsCards({ metrics }: StatsCardsProps) {
         return (
           <div 
             key={card.key} 
-            className="p-4 sm:p-5 lg:p-6 rounded-2xl bg-surface-container-low transition-all hover:bg-surface-container-highest group"
+            className="p-3.5 sm:p-5 lg:p-6 rounded-2xl bg-surface-container-low transition-all hover:bg-surface-container-highest group"
           >
-            <div className="flex items-center justify-between mb-3 sm:mb-4">
-              <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 bg-primary-container/10 group-hover:bg-primary-container/20 transition-colors">
-                <Icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0 text-primary-container" />
+            <div className="flex items-center justify-between mb-2 sm:mb-4">
+              <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 bg-primary-container/10 group-hover:bg-primary-container/20 transition-colors">
+                <Icon className="w-3.5 h-3.5 sm:w-5 sm:h-5 shrink-0 text-primary-container" />
               </div>
             </div>
-            <p className="text-2xl sm:text-3xl font-bold text-white mb-0.5 sm:mb-1 font-headline tracking-tighter">
+            <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-0.5 sm:mb-1 font-headline tracking-tighter truncate" title={card.format(value)}>
               {card.format(value)}
             </p>
-            <p className="text-[10px] sm:text-xs font-semibold text-on-surface-variant/70 uppercase tracking-widest">
+            <p className="text-[9px] sm:text-[10px] md:text-xs font-semibold text-on-surface-variant/70 uppercase tracking-widest truncate">
               {card.title}
             </p>
           </div>

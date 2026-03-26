@@ -49,33 +49,33 @@ export function TodaySchedule({ appointments }: TodayScheduleProps) {
               <div
                 key={appt.id}
                 className={cn(
-                  'flex items-center gap-4 p-4 rounded-xl bg-surface-container/30 transition-all hover:bg-surface-container-highest/50',
+                  'flex items-center gap-3 sm:gap-4 p-3.5 sm:p-4 rounded-xl bg-surface-container/30 transition-all hover:bg-surface-container-highest/50',
                   isInactive && 'opacity-40'
                 )}
               >
                 {/* Time */}
-                <div className="flex-shrink-0 text-center min-w-[60px]">
-                  <p className="text-base font-bold text-white font-headline">{appt.start_time.slice(0, 5)}</p>
-                  <p className="text-[11px] text-on-surface-variant/60 font-medium">{appt.end_time.slice(0, 5)}</p>
+                <div className="flex-shrink-0 text-center min-w-[50px] sm:min-w-[60px]">
+                  <p className="text-sm sm:text-base font-bold text-white font-headline">{appt.start_time.slice(0, 5)}</p>
+                  <p className="text-[10px] sm:text-[11px] text-on-surface-variant/60 font-medium">{appt.end_time.slice(0, 5)}</p>
                 </div>
 
-                <div className="w-px h-10 bg-outline-variant/20 flex-shrink-0" />
+                <div className="w-px h-8 sm:h-10 bg-outline-variant/20 flex-shrink-0" />
 
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
-                    <span className="text-base font-semibold text-white truncate">{appt.client_name}</span>
+                    <span className="text-sm sm:text-base font-semibold text-white truncate">{appt.client_name}</span>
                   </div>
-                  <div className="flex items-center gap-2 mt-1">
-                    <Scissors className="w-3 h-3 text-primary-container/70 flex-shrink-0" />
-                    <span className="text-xs text-on-surface-variant font-medium truncate">{appt.service_name}</span>
+                  <div className="flex items-center gap-2 mt-0.5 sm:mt-1">
+                    <Scissors className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary-container/70 flex-shrink-0" />
+                    <span className="text-[10px] sm:text-xs text-on-surface-variant font-medium truncate">{appt.service_name}</span>
                   </div>
                 </div>
 
                 {/* Status */}
-                <div className={cn('flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider flex-shrink-0 transition-colors', status.color)}>
-                  <StatusIcon className="w-3 h-3" />
-                  {status.label}
+                <div className={cn('flex items-center gap-1 px-2 py-1 sm:px-3 sm:py-1.5 rounded-full text-[9px] sm:text-[11px] font-bold uppercase tracking-wider flex-shrink-0 transition-colors', status.color)}>
+                  <StatusIcon className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                  <span className="hidden xs:inline">{status.label}</span>
                 </div>
               </div>
             )

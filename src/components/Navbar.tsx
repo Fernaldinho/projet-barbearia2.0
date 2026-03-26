@@ -112,8 +112,8 @@ export function Navbar({ onMenuClick }: NavbarProps) {
   }
 
   return (
-    <header style={{ backgroundColor: '#121212', borderBottom: '1px solid #262626' }} className="fixed top-0 right-0 z-30 h-[64px] backdrop-blur-lg left-0 md:left-[240px] transition-all">
-      <div className="flex items-center justify-between h-full px-[24px]">
+    <header style={{ backgroundColor: '#121212', borderBottom: '1px solid #262626' }} className="fixed top-0 right-0 z-30 h-[56px] md:h-[64px] backdrop-blur-lg left-0 md:left-[240px] transition-all">
+      <div className="flex items-center justify-between h-full px-4 md:px-6">
         
         {/* Left side: Mobile Hamburger + Title */}
         <div className="flex items-center gap-4 flex-1">

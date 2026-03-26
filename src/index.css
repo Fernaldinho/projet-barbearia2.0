@@ -53,6 +53,9 @@
    --font-headline: "Space Grotesk", sans-serif;
    --font-body: "Inter", sans-serif;
    --font-label: "Inter", sans-serif;
+
+   /* Custom Breakpoints */
+   --breakpoint-xs: 400px;
  }
 
  /* ============================================ */
