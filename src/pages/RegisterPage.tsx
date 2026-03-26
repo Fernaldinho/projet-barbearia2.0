@@ -3,6 +3,17 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { ROUTES } from '@/utils/constants'
 
+function RequirementItem({ met, text }: { met: boolean; text: string }) {
+  return (
+    <div className={`flex items-center gap-1.5 transition-all duration-300 ${met ? 'text-green-500' : 'text-zinc-600'}`}>
+      <span className="material-symbols-outlined text-[10px]">
+        {met ? 'check_circle' : 'circle'}
+      </span>
+      <span className="text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">{met ? text : text}</span>
+    </div>
+  )
+}
+
 export function RegisterPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -16,6 +27,24 @@ export function RegisterPage() {
   const { register } = useAuth()
   const navigate = useNavigate()
 
+  // Password requirements state
+  const passwordRequirements = {
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    number: /[0-9]/.test(password),
+    special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+  }
+
+  const isPasswordStrong = Object.values(passwordRequirements).every(Boolean)
+  const isCommonPassword = ['123456', '12345678', 'senha123', 'password', 'admin123', 'barbeiro123'].includes(password.toLowerCase())
+
+  const getPasswordStrength = () => {
+    const score = Object.values(passwordRequirements).filter(Boolean).length
+    if (score === 0) return 0
+    if (isCommonPassword) return 1
+    return score
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
@@ -25,13 +54,18 @@ export function RegisterPage() {
       return
     }
 
-    if (password !== confirmPassword) {
-      setError('As senhas não coincidem.')
+    if (!isPasswordStrong) {
+      setError('A sua senha não atende aos requisitos de segurança.')
       return
     }
 
-    if (password.length < 8) {
-      setError('A senha deve ter pelo menos 8 caracteres.')
+    if (isCommonPassword) {
+      setError('Esta senha é muito comum e fácil de descobrir. Use algo mais complexo.')
+      return
+    }
+
+    if (password !== confirmPassword) {
+      setError('As senhas não coincidem.')
       return
     }
 
@@ -183,13 +217,51 @@ export function RegisterPage() {
                         onChange={(e) => setPassword(e.target.value)}
                       />
                       <button
-                        className="absolute right-4 top-1/2 -translate-y-1/2 text-[#d3c5ac] hover:text-[#fbbf24] transition-colors"
+                        className="absolute right-4 top-4 text-[#d3c5ac] hover:text-[#fbbf24] transition-colors"
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         <span className="material-symbols-outlined text-xl">{showPassword ? 'visibility_off' : 'visibility'}</span>
                       </button>
                     </div>
+
+                    {/* Password Strength Meter */}
+                    {password && (
+                      <div className="mt-3 space-y-3 animate-fade-in px-1">
+                        <div className="flex gap-1 h-1">
+                          {[1, 2, 3, 4].map((level) => (
+                            <div
+                              key={level}
+                              className={`h-full flex-1 rounded-full transition-all duration-500 ${
+                                getPasswordStrength() >= level
+                                  ? getPasswordStrength() === 4 ? 'bg-green-500' : 'bg-[#fbbf24]'
+                                  : 'bg-white/5'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                          <RequirementItem met={passwordRequirements.length} text="Mín. 8 caracteres" />
+                          <RequirementItem met={passwordRequirements.uppercase} text="Letra maiúscula" />
+                          <RequirementItem met={passwordRequirements.number} text="Um número" />
+                          <RequirementItem met={passwordRequirements.special} text="Caractere especial" />
+                        </div>
+
+                        {isCommonPassword && (
+                          <p className="text-[10px] text-red-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-xs">warning</span>
+                            Senha muito comum / vulnerável
+                          </p>
+                        )}
+                        
+                        {!isPasswordStrong && !isCommonPassword && (
+                          <p className="text-[10px] text-[#fbbf24]/60 font-medium uppercase tracking-wider">
+                            Crie uma senha segura para proteger sua conta
+                          </p>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div className="space-y-1.5">
                     <label className="block text-xs font-label uppercase tracking-widest text-[#d3c5ac] ml-1" htmlFor="confirm_password">Confirmar senha</label>
@@ -208,9 +280,9 @@ export function RegisterPage() {
 
                 <div className="pt-4">
                   <button
-                    className="w-full bg-[#fbbf24] text-[#402d00] hover:bg-[#fbbf24]/90 py-5 rounded-full font-headline font-bold text-base uppercase tracking-widest shadow-lg shadow-[#fbbf24]/10 active:scale-95 transition-all flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-[#fbbf24] text-[#402d00] hover:bg-[#fbbf24]/90 py-5 rounded-full font-headline font-bold text-base uppercase tracking-widest shadow-lg shadow-[#fbbf24]/10 active:scale-95 transition-all flex items-center justify-center disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed"
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || !isPasswordStrong || isCommonPassword}
                   >
                     {loading ? (
                       <div className="w-6 h-6 border-2 border-[#402d00]/30 border-t-[#402d00] rounded-full animate-spin" />

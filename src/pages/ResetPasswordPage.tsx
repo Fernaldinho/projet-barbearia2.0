@@ -4,6 +4,15 @@ import { Sparkles, ShieldCheck, Lock } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import { ROUTES, APP_NAME } from '@/utils/constants'
 
+function RequirementItem({ met, text }: { met: boolean; text: string }) {
+  return (
+    <div className={`flex items-center gap-1.5 transition-all duration-300 ${met ? 'text-green-500' : 'text-zinc-600'}`}>
+      <div className={`w-1 h-1 rounded-full ${met ? 'bg-green-500' : 'bg-zinc-800'}`} />
+      <span className="text-[10px] font-bold uppercase tracking-wider whitespace-nowrap">{text}</span>
+    </div>
+  )
+}
+
 export function ResetPasswordPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -14,17 +23,39 @@ export function ResetPasswordPage() {
   const { updatePassword } = useAuth()
   const navigate = useNavigate()
 
+  const passwordRequirements = {
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    number: /[0-9]/.test(password),
+    special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+  }
+
+  const isPasswordStrong = Object.values(passwordRequirements).every(Boolean)
+  const isCommonPassword = ['123456', '12345678', 'senha123', 'password', 'admin123', 'barbeiro123'].includes(password.toLowerCase())
+
+  const getPasswordStrength = () => {
+    const score = Object.values(passwordRequirements).filter(Boolean).length
+    if (score === 0) return 0
+    if (isCommonPassword) return 1
+    return score
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
 
-    if (password !== confirmPassword) {
-      setError('As senhas não coincidem.')
+    if (!isPasswordStrong) {
+      setError('A sua senha não atende aos requisitos de segurança.')
       return
     }
 
-    if (password.length < 6) {
-      setError('A senha deve ter pelo menos 6 caracteres.')
+    if (isCommonPassword) {
+      setError('Esta senha é muito comum e fácil de descobrir. Use algo mais complexo.')
+      return
+    }
+
+    if (password !== confirmPassword) {
+      setError('As senhas não coincidem.')
       return
     }
 
@@ -106,6 +137,17 @@ export function ResetPasswordPage() {
                       required
                     />
                   </div>
+                  <div className="flex flex-wrap gap-x-4 gap-y-2 pt-1">
+                    <RequirementItem met={passwordRequirements.length} text="8 caracteres" />
+                    <RequirementItem met={passwordRequirements.uppercase} text="Letra maiúscula" />
+                    <RequirementItem met={passwordRequirements.number} text="Número" />
+                    <RequirementItem met={passwordRequirements.special} text="Caractere especial" />
+                  </div>
+                  {password.length > 0 && isCommonPassword && (
+                    <p className="text-red-500 text-xs mt-2 animate-fade-in font-medium">
+                      Esta senha é muito comum e fácil de descobrir.
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -127,8 +169,8 @@ export function ResetPasswordPage() {
 
                 <button
                   type="submit"
-                  disabled={loading}
-                  className="w-full py-4 bg-[#fbbf24] text-black rounded-xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-[#fbbf24]/10 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  disabled={loading || !isPasswordStrong || isCommonPassword}
+                  className="w-full py-4 bg-[#fbbf24] text-black rounded-xl font-black text-xs uppercase tracking-[0.2em] shadow-lg shadow-[#fbbf24]/10 active:scale-[0.98] transition-all disabled:opacity-30 disabled:grayscale disabled:cursor-not-allowed flex items-center justify-center"
                 >
                   {loading ? (
                     <div className="w-5 h-5 border-2 border-black/30 border-t-black rounded-full animate-spin" />
