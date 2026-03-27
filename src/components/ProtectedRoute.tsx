@@ -31,9 +31,18 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   }
 
   // Se chegamos aqui, isAuthFinished é true e (se houver user) isCompanyInitialized é true.
-  // Então redirecionamos para login se: não houver user OU (houver user mas não tiver empresa encontrada)
-  if (!user || !company) {
+  
+  // 1. Se não houver usuário, vai para o login
+  if (!user) {
     return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />
+  }
+
+  // 2. Se houver usuário mas nenhuma empresa vinculada, vai para o onboarding (se já não estiver lá)
+  if (!company) {
+    if (location.pathname === ROUTES.ONBOARDING) {
+       return <>{children}</>
+    }
+    return <Navigate to={ROUTES.ONBOARDING} replace />
   }
   
   return <>{children}</>

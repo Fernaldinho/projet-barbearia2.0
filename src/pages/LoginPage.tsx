@@ -2,10 +2,13 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 import { ROUTES } from '@/utils/constants'
+import { toast } from 'react-hot-toast'
+import { Suspense } from 'react'
 
 export function LoginPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -21,8 +24,12 @@ export function LoginPage() {
       const { error: logError } = await login(email, password)
       if (logError) {
         setError(logError.message || 'Email ou senha incorretos. Tente novamente.')
+        toast.error('Giro de navalha! Verifique suas credenciais.')
       } else {
-        navigate(ROUTES.DASHBOARD)
+        toast.success('Entrada autorizada. Preparando ambiente...')
+        setTimeout(() => {
+          navigate(ROUTES.DASHBOARD)
+        }, 800)
       }
     } catch (err: any) {
       setError(err?.message || 'Erro ao fazer login. Tente novamente.')
