@@ -126,7 +126,7 @@ export async function getDashboardMetrics(companyId: string): Promise<DashboardM
   const allAppts = monthAppts.data || []
   const now = new Date()
 
-  const isActuallyDone = (a: any) => {
+  const isActuallyDone = (a: { status: string; date: string; start_time: string }) => {
     if (a.status === 'completed') return true
     if (a.status !== 'confirmed') return false
     // If confirmed and date/time is past, consider it done for metrics
@@ -138,21 +138,21 @@ export async function getDashboardMetrics(companyId: string): Promise<DashboardM
     }
   }
 
-  const totalMonth = allAppts.filter(a => a.status !== 'cancelled').length
+  const totalMonth = allAppts.filter((a: any) => a.status !== 'cancelled').length
   const completedMonth = allAppts.filter(isActuallyDone).length
   const attendanceRate = totalMonth > 0 ? (completedMonth / totalMonth) * 100 : 0
 
   const monthlyRevenue = allAppts
     .filter(isActuallyDone)
-    .reduce((sum, a: any) => {
+    .reduce((sum: number, a: any) => {
       const serviceData = Array.isArray(a.service) ? a.service[0] : a.service
       return sum + (Number(serviceData?.price) || 0)
     }, 0)
 
   // Projected revenue should be scheduled/confirmed appointments from TODAY onwards that are not done
   const projectedRevenue = allAppts
-    .filter((a) => !isActuallyDone(a) && ['scheduled', 'confirmed'].includes(a.status))
-    .reduce((sum, a: any) => {
+    .filter((a: any) => !isActuallyDone(a) && ['scheduled', 'confirmed'].includes(a.status))
+    .reduce((sum: number, a: any) => {
       const serviceData = Array.isArray(a.service) ? a.service[0] : a.service
       return sum + (Number(serviceData?.price) || 0)
     }, 0)
@@ -320,16 +320,21 @@ export async function checkBirthdays(companyId: string): Promise<void> {
 
   if (existing && existing.length > 0) return
 
-  // 2. Fetch all clients (we'll filter in JS since PG month/day extraction is complex via RPC-less Supabase)
+  // 2. Fetch clients with birthdays today
+  // Note: Since raw Supabase doesn't support complex date functions well without RPC,
+  // we use a more focused fetch.
   const { data: clients } = await supabase
     .from('clients')
     .select('name, birth_date')
     .eq('company_id', companyId)
     .not('birth_date', 'is', null)
+    .limit(100) // Safety limit to avoid huge fetches during login phase
 
   const birthdayBoys = (clients || []).filter(c => {
-    const d = new Date(c.birth_date)
-    return d.getMonth() === todayMonth && d.getDate() === todayDay
+    try {
+      const d = new Date(c.birth_date + 'T12:00:00') // Use T12 to avoid timezone shifts
+      return d.getMonth() === todayMonth && d.getDate() === todayDay
+    } catch { return false }
   })
 
   if (birthdayBoys.length === 0) return

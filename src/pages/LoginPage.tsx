@@ -33,19 +33,6 @@ export function LoginPage() {
 
   return (
     <>
-      <style>{`
-        .font-headline { font-family: 'Space Grotesk', sans-serif; }
-        .font-body { font-family: 'Inter', sans-serif; }
-        .font-label { font-family: 'Inter', sans-serif; }
-        .material-symbols-outlined {
-          font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-          display: inline-block;
-          line-height: 1;
-        }
-        .brand-glow {
-          box-shadow: 0 0 40px rgba(251, 191, 36, 0.2);
-        }
-      `}</style>
       <main className="bg-[#0c0c0c] text-[#e5e2e1] font-body min-h-screen flex flex-col md:flex-row-reverse overflow-hidden">
         {/* Right Column (Visual) */}
         <section className="hidden md:flex md:w-1/2 items-center justify-center p-12 bg-zinc-950 border-l border-zinc-900/50 relative overflow-hidden">
