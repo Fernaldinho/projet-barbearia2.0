@@ -331,31 +331,6 @@ export function BookingPage() {
         )}
 
         {step === 'client' && (
-          <div className="space-y-10">
-            {/* Quick Summary Sticky Head */}
-            <div className="bg-[#1C1B1B] border border-[#fbbf24]/20 rounded-[1.5rem] md:rounded-[2rem] p-4 md:p-6 shadow-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 md:gap-6 overflow-hidden relative">
-               <div className="absolute top-0 right-0 w-24 h-24 bg-[#fbbf24]/5 blur-2xl -mr-12 -mt-12 transition-all"></div>
-               <div className="flex gap-3 md:gap-4 items-center relative z-10 min-w-0">
-                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-[#fbbf24]/10 flex items-center justify-center text-[#fbbf24] shrink-0">
-                     <LayoutGrid className="w-5 h-5 md:w-6 md:h-6" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-[8px] md:text-[10px] font-black uppercase tracking-widest text-zinc-400">Resumo da Escolha</p>
-                    <p className="text-xs md:text-sm font-bold text-white uppercase truncate flex items-center flex-wrap gap-x-1">
-                      <span>{selectedService?.name}</span>
-                      <span className="text-[#fbbf24] font-black mx-1">•</span> 
-                      <span className="text-zinc-400 font-normal normal-case">{selectedStaff ? selectedStaff.name : 'Qualquer Profissional'}</span>
-                    </p>
-                  </div>
-               </div>
-               <button 
-                 onClick={() => setStep('service')} 
-                 className="bg-white/5 px-6 py-3 md:px-4 md:py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-[#fbbf24] sm:text-zinc-400 hover:text-white transition-all w-full sm:w-auto text-center border border-white/5 active:scale-95"
-               >
-                 Alterar
-               </button>
-            </div>
-            
             <ClientForm 
                onSubmit={handleClientSubmit} 
                loading={bookingLoading} 
@@ -364,9 +339,12 @@ export function BookingPage() {
                  name: user.user_metadata?.full_name || '', 
                  email: user.email || '', 
                  phone: user.user_metadata?.phone || '' 
-               } : undefined} 
+               } : undefined}
+               service={selectedService}
+               staff={selectedStaff}
+               date={selectedDate}
+               time={selectedTime}
             />
-          </div>
         )}
 
         {step === 'confirmation' && (
