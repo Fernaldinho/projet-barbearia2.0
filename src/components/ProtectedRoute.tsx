@@ -37,12 +37,9 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />
   }
 
-  // 2. Se houver usuário mas nenhuma empresa vinculada, vai para o onboarding (se já não estiver lá)
+  // 2. Se houver usuário mas nenhuma empresa vinculada, volta para o login (estado inválido)
   if (!company) {
-    if (location.pathname === ROUTES.ONBOARDING) {
-       return <>{children}</>
-    }
-    return <Navigate to={ROUTES.ONBOARDING} replace />
+    return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />
   }
   
   return <>{children}</>

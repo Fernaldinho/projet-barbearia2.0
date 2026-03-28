@@ -21,7 +21,6 @@ export const ROUTES = {
   BILLING: '/billing',
   SUBSCRIPTION: '/subscription',
   PUBLIC_PAGE: '/public-page',
-  ONBOARDING: '/onboarding',
   NOTIFICATIONS: '/notifications',
 } as const
 

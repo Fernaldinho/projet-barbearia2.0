@@ -11,7 +11,6 @@ const LoginPage = lazy(() => import('@/pages/LoginPage').then(m => ({ default: m
 const RegisterPage = lazy(() => import('@/pages/RegisterPage').then(m => ({ default: m.RegisterPage })))
 const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage').then(m => ({ default: m.ForgotPasswordPage })))
 const ResetPasswordPage = lazy(() => import('@/pages/ResetPasswordPage').then(m => ({ default: m.ResetPasswordPage })))
-const OnboardingPage = lazy(() => import('@/pages/OnboardingPage').then(m => ({ default: m.OnboardingPage })))
 const BookingPage = lazy(() => import('@/modules/booking/BookingPage').then(m => ({ default: m.BookingPage })))
 
 // Private Module Pages
@@ -165,10 +164,6 @@ export const router = createBrowserRouter([
       {
         path: '/notifications',
         element: <NotificationsPage />,
-      },
-      {
-        path: '/onboarding',
-        element: <OnboardingPage />,
       },
     ],
   },
