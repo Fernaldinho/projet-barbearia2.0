@@ -39,8 +39,8 @@ export function LandingPage() {
               <a className="text-[#E5E2E1] hover:text-[#FBBF24] transition-colors duration-300 font-headline" href="#como-funciona">Como Funciona</a>
               <a className="text-[#E5E2E1] hover:text-[#FBBF24] transition-colors duration-300 font-headline" href="#precos">Preços</a>
             </div>
-            <div className="flex items-center gap-3 md:gap-6">
-              <Link to={ROUTES.LOGIN} className="hidden sm:block text-[#E5E2E1] hover:text-[#fbbf24] transition-colors font-headline font-bold text-sm md:text-base">Empresas</Link>
+            <div className="flex items-center gap-3 md:gap-4">
+              <Link to={ROUTES.LOGIN} className="text-[#E5E2E1] hover:text-[#fbbf24] border border-[#fbbf24]/20 hover:border-[#fbbf24] px-4 md:px-5 py-2 rounded-full transition-all font-headline font-bold text-sm md:text-base">Entrar</Link>
               <Link to={ROUTES.REGISTER} className="bg-[#fbbf24] text-[#402d00] px-4 md:px-6 py-2 rounded-full font-headline font-bold text-sm md:text-base hover:shadow-[0_0_20px_rgba(251,191,36,0.3)] transition-all active:scale-95">Criar Conta</Link>
             </div>
           </div>

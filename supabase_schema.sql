@@ -48,6 +48,18 @@ CREATE TABLE services (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Table: staff
+CREATE TABLE staff (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  company_id UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+  name TEXT NOT NULL,
+  role TEXT,
+  avatar_url TEXT,
+  active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Table: clients
 CREATE TABLE clients (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -66,11 +78,13 @@ CREATE TABLE appointments (
   company_id UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
   client_id UUID NOT NULL REFERENCES clients(id) ON DELETE CASCADE,
   service_id UUID NOT NULL REFERENCES services(id) ON DELETE CASCADE,
+  staff_id UUID REFERENCES staff(id) ON DELETE SET NULL,
   date DATE NOT NULL,
   start_time TIME NOT NULL,
   end_time TIME NOT NULL,
   status appointment_status NOT NULL DEFAULT 'scheduled',
   notes TEXT,
+  cancellation_reason TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -79,16 +93,18 @@ CREATE TABLE appointments (
 CREATE TABLE business_hours (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   company_id UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+  staff_id UUID REFERENCES staff(id) ON DELETE CASCADE,
   weekday INTEGER NOT NULL CHECK (weekday >= 0 AND weekday <= 6),
   start_time TIME NOT NULL,
   end_time TIME NOT NULL,
-  UNIQUE(company_id, weekday)
+  UNIQUE(company_id, staff_id, weekday)
 );
 
 -- Table: blocked_times
 CREATE TABLE blocked_times (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   company_id UUID NOT NULL REFERENCES companies(id) ON DELETE CASCADE,
+  staff_id UUID REFERENCES staff(id) ON DELETE CASCADE,
   date DATE NOT NULL,
   start_time TIME NOT NULL,
   end_time TIME NOT NULL,
@@ -162,6 +178,7 @@ $$ language 'plpgsql';
 -- Apply updated_at to all relevant tables
 CREATE TRIGGER update_companies_modtime BEFORE UPDATE ON companies FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 CREATE TRIGGER update_users_modtime BEFORE UPDATE ON users FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER update_staff_modtime BEFORE UPDATE ON staff FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 CREATE TRIGGER update_services_modtime BEFORE UPDATE ON services FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 CREATE TRIGGER update_clients_modtime BEFORE UPDATE ON clients FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 CREATE TRIGGER update_appointments_modtime BEFORE UPDATE ON appointments FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
